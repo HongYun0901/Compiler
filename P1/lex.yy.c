@@ -1085,13 +1085,14 @@ case 30:
 YY_RULE_SETUP
 #line 174 "lex.l"
 {
-    tokenString("delimiters",yytext);
+    token(yytext);
+    // tokenString("delimiters",yytext);
 }
 	YY_BREAK
 /* Real Constants and  Integer Constants */
 case 31:
 YY_RULE_SETUP
-#line 179 "lex.l"
+#line 180 "lex.l"
 {
     int tmp;
     sscanf(yytext,"%d",&tmp);
@@ -1100,7 +1101,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 184 "lex.l"
+#line 185 "lex.l"
 {
     double tmp;
     sscanf(yytext,"%lf",&tmp);
@@ -1111,7 +1112,7 @@ YY_RULE_SETUP
 /* boolean */
 case 33:
 YY_RULE_SETUP
-#line 191 "lex.l"
+#line 192 "lex.l"
 {
     tokenString("boolean",yytext);
 }
@@ -1119,23 +1120,23 @@ YY_RULE_SETUP
 /* identifiers */
 case 34:
 YY_RULE_SETUP
-#line 196 "lex.l"
+#line 197 "lex.l"
 {
-    tokenString("identifiers",yytext);
+    tokenString("id",yytext);
     insert(yytext,symboltable);
 }
 	YY_BREAK
 /* comment */
 case 35:
 YY_RULE_SETUP
-#line 204 "lex.l"
+#line 205 "lex.l"
 {
     LIST;
 }
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 208 "lex.l"
+#line 209 "lex.l"
 {
     LIST;
     BEGIN COMMENT;
@@ -1144,7 +1145,7 @@ YY_RULE_SETUP
 /* begin c comment status */
 case 37:
 YY_RULE_SETUP
-#line 213 "lex.l"
+#line 214 "lex.l"
 {
     LIST;
     BEGIN INITIAL;
@@ -1152,7 +1153,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 217 "lex.l"
+#line 218 "lex.l"
 {
     LIST;
 }
@@ -1160,7 +1161,7 @@ YY_RULE_SETUP
 case 39:
 /* rule 39 can match eol */
 YY_RULE_SETUP
-#line 220 "lex.l"
+#line 221 "lex.l"
 {
     LIST;
     printf("%d: %s", linenum++, buf);
@@ -1170,7 +1171,7 @@ YY_RULE_SETUP
 case 40:
 /* rule 40 can match eol */
 YY_RULE_SETUP
-#line 226 "lex.l"
+#line 227 "lex.l"
 {
     char ch = input();
     if(ch=='"'){
@@ -1216,7 +1217,7 @@ YY_RULE_SETUP
 case 41:
 /* rule 41 can match eol */
 YY_RULE_SETUP
-#line 268 "lex.l"
+#line 269 "lex.l"
 {
         LIST;
         printf("%d: %s", linenum++, buf);
@@ -1225,12 +1226,12 @@ YY_RULE_SETUP
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 274 "lex.l"
+#line 275 "lex.l"
 {LIST;}
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 276 "lex.l"
+#line 277 "lex.l"
 {
         LIST;
         printf("%d:%s\n", linenum+1, buf);
@@ -1240,10 +1241,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 282 "lex.l"
+#line 283 "lex.l"
 ECHO;
 	YY_BREAK
-#line 1247 "lex.yy.c"
+#line 1248 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(COMMENT):
 case YY_STATE_EOF(STRING):
@@ -2242,7 +2243,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 282 "lex.l"
+#line 283 "lex.l"
 
 
 

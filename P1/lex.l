@@ -172,7 +172,8 @@ while   {
 
  /* delimiters */
 {delimiters} {
-    tokenString("delimiters",yytext);
+    token(yytext);
+    // tokenString("delimiters",yytext);
 }
 
  /* Real Constants and  Integer Constants */
@@ -194,7 +195,7 @@ while   {
 
  /* identifiers */
 {identifiers} {
-    tokenString("identifiers",yytext);
+    tokenString("id",yytext);
     insert(yytext,symboltable);
 }
 
