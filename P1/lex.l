@@ -223,7 +223,47 @@ while   {
     buf[0] = '\0';
 }
 
+{strings} {
+    char ch = input();
+    if(ch=='"'){
+        unput(ch);
+        yymore();
+        
+    }
+    else{
+        char *tmp = (char *)malloc(yyleng);
+        strcpy(tmp,yytext);
+        // int final_len = strlen(tmp); 
+        // int count = 0;
+        for(int i=0;i<strlen(tmp);i++){
+            if(tmp[i]=='"' && i!= strlen(tmp)-1 && i!=0){
+                // printf("i = %d\n",i);
+                // final_len -=1;
+                char * new_tmp = (char *)malloc(strlen(tmp-1));
 
+                char *left = (char *)malloc(i+1);
+                strncpy(left,tmp,i+1);
+
+                // printf("left = %s\n",left);
+
+                char *right = (char *)malloc(strlen(tmp)-(i+2));
+                strncpy(right,tmp+i+2,strlen(tmp)-(i+2));
+                // printf("right = %s\n",right);
+
+                strcat(new_tmp,left);
+                strcat(new_tmp,right);
+                // printf("new_tmp = %s\n",new_tmp);
+                // without_dbq[final_len] = 0;
+                tmp = new_tmp;
+                // add count and i
+                // count = i;
+            }
+        }
+        tokenString("strings",tmp);
+        unput(ch);
+        free(tmp);
+    }
+}
 
 \n      {
         LIST;
