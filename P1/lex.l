@@ -40,14 +40,16 @@ SymbolTable *symboltable;
 
 %}
 
-
-
-
-
-
-
-
 %x COMMENT
+%x STRING
+
+/* Comments */
+/* c comment */
+c_comment_s "/*"
+c_comment_e "*/"
+/* cpp comment (//) */
+cpp_comment "//".*
+
 /* delimiters */
 delimiters [,:\.;()\[\]\{\}]
 
@@ -70,12 +72,10 @@ identifiers ({letter}({letter}|{digit})*)
 /*Boolean Constants */
 boolean true|false
 
-/* Comments */
-/* block comment */
-bcomment_s "\*"
-bcomment_e "*/"
-/* line comment (//) */
-lcomment "//".*
+
+
+/* string */
+strings \"(\\.|[^"\\])*\"
 
 %%
  /* keyworkds */
@@ -197,6 +197,32 @@ while   {
     tokenString("identifiers",yytext);
     insert(yytext,symboltable);
 }
+
+
+
+ /* comment */
+{cpp_comment} {
+    LIST;
+}
+
+{c_comment_s} {
+    LIST;
+    BEGIN COMMENT;
+}
+ /* begin c comment status */
+<COMMENT>{c_comment_e} {
+    LIST;
+    BEGIN INITIAL;
+}
+<COMMENT>. {
+    LIST;
+}
+<COMMENT>\n {
+    LIST;
+    printf("%d: %s", linenum++, buf);
+    buf[0] = '\0';
+}
+
 
 
 \n      {
