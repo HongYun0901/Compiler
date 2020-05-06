@@ -232,35 +232,41 @@ while   {
         
     }
     else{
-        char *tmp = (char *)malloc(yyleng);
+        char *tmp = (char *)malloc(sizeof(char)*yyleng);
+        // printf("yytext : %s\n",yytext);
+        // printf("yyleng : %lu\n",(yyleng));
         strcpy(tmp,yytext);
-        // int final_len = strlen(tmp); 
-        // int count = 0;
+        // printf("tmp len = %lu\n",strlen(tmp));
+        // printf("tmp len = %lu \n",sizeof(tmp));
+
+        // 消除字串中的"" 把它變成"
         for(int i=0;i<strlen(tmp);i++){
             if(tmp[i]=='"' && i!= strlen(tmp)-1 && i!=0){
-                // printf("i = %d\n",i);
-                // final_len -=1;
-                char * new_tmp = (char *)malloc(strlen(tmp-1));
 
-                char *left = (char *)malloc(i+1);
+                // 每次看到有""存在 開一個新的memory給新字串放，長度為原本的減1
+                char * new_tmp = (char *)malloc(sizeof(char)*(strlen(tmp)-1));
+                // 把"" 左半部拿出來
+                char *left = (char *)malloc(sizeof(char)*(i+1));
                 strncpy(left,tmp,i+1);
-
-                // printf("left = %s\n",left);
-
-                char *right = (char *)malloc(strlen(tmp)-(i+2));
+                // 拿右半部
+                char *right = (char *)malloc(sizeof(char)*(strlen(tmp)-(i+2)));
                 strncpy(right,tmp+i+2,strlen(tmp)-(i+2));
-                // printf("right = %s\n",right);
-
+                // 拼在一起
                 strcat(new_tmp,left);
                 strcat(new_tmp,right);
-                // printf("new_tmp = %s\n",new_tmp);
-                // without_dbq[final_len] = 0;
+                // new_tmp[strlen(tmp-1)] = 0;
                 tmp = new_tmp;
-                // add count and i
-                // count = i;
+                // printf("tmp len = %zu \n",strlen(tmp));
+                free(left);
+                free(right);
+               
             }
         }
-        tokenString("strings",tmp);
+        // printf("tmp len = %zu \n",strlen(tmp));
+        char *result = (char *)malloc(sizeof(char)*(strlen(tmp)-2));
+        strncpy(result,tmp+1, sizeof(char)*(strlen(tmp)-2));
+        // printf(" reuslt :%s\n",result);
+        tokenString("strings",result);
         unput(ch);
         free(tmp);
     }

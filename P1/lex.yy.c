@@ -1180,35 +1180,41 @@ YY_RULE_SETUP
         
     }
     else{
-        char *tmp = (char *)malloc(yyleng);
+        char *tmp = (char *)malloc(sizeof(char)*yyleng);
+        // printf("yytext : %s\n",yytext);
+        // printf("yyleng : %lu\n",(yyleng));
         strcpy(tmp,yytext);
-        // int final_len = strlen(tmp); 
-        // int count = 0;
+        // printf("tmp len = %lu\n",strlen(tmp));
+        // printf("tmp len = %lu \n",sizeof(tmp));
+
+        // 消除字串中的"" 把它變成"
         for(int i=0;i<strlen(tmp);i++){
             if(tmp[i]=='"' && i!= strlen(tmp)-1 && i!=0){
-                // printf("i = %d\n",i);
-                // final_len -=1;
-                char * new_tmp = (char *)malloc(strlen(tmp-1));
 
-                char *left = (char *)malloc(i+1);
+                // 每次看到有""存在 開一個新的memory給新字串放，長度為原本的減1
+                char * new_tmp = (char *)malloc(sizeof(char)*(strlen(tmp)-1));
+                // 把"" 左半部拿出來
+                char *left = (char *)malloc(sizeof(char)*(i+1));
                 strncpy(left,tmp,i+1);
-
-                // printf("left = %s\n",left);
-
-                char *right = (char *)malloc(strlen(tmp)-(i+2));
+                // 拿右半部
+                char *right = (char *)malloc(sizeof(char)*(strlen(tmp)-(i+2)));
                 strncpy(right,tmp+i+2,strlen(tmp)-(i+2));
-                // printf("right = %s\n",right);
-
+                // 拼在一起
                 strcat(new_tmp,left);
                 strcat(new_tmp,right);
-                // printf("new_tmp = %s\n",new_tmp);
-                // without_dbq[final_len] = 0;
+                // new_tmp[strlen(tmp-1)] = 0;
                 tmp = new_tmp;
-                // add count and i
-                // count = i;
+                // printf("tmp len = %zu \n",strlen(tmp));
+                free(left);
+                free(right);
+               
             }
         }
-        tokenString("strings",tmp);
+        // printf("tmp len = %zu \n",strlen(tmp));
+        char *result = (char *)malloc(sizeof(char)*(strlen(tmp)-2));
+        strncpy(result,tmp+1, sizeof(char)*(strlen(tmp)-2));
+        // printf(" reuslt :%s\n",result);
+        tokenString("strings",result);
         unput(ch);
         free(tmp);
     }
@@ -1217,7 +1223,7 @@ YY_RULE_SETUP
 case 41:
 /* rule 41 can match eol */
 YY_RULE_SETUP
-#line 269 "lex.l"
+#line 275 "lex.l"
 {
         LIST;
         printf("%d: %s", linenum++, buf);
@@ -1226,12 +1232,12 @@ YY_RULE_SETUP
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 275 "lex.l"
+#line 281 "lex.l"
 {LIST;}
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 277 "lex.l"
+#line 283 "lex.l"
 {
         LIST;
         printf("%d:%s\n", linenum+1, buf);
@@ -1241,10 +1247,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 283 "lex.l"
+#line 289 "lex.l"
 ECHO;
 	YY_BREAK
-#line 1248 "lex.yy.c"
+#line 1254 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(COMMENT):
 case YY_STATE_EOF(STRING):
@@ -2243,7 +2249,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 283 "lex.l"
+#line 289 "lex.l"
 
 
 
