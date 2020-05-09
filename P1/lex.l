@@ -25,6 +25,7 @@ typedef struct {
     void *prev;
 } SymbolNode;
 
+// symbol node
 typedef struct{
     SymbolNode **table;
     int size;
@@ -236,13 +237,14 @@ while   {
         // printf("yytext : %s\n",yytext);
         // printf("yyleng : %lu\n",(yyleng));
         strcpy(tmp,yytext);
+        // printf("tmp : %s\n",tmp);
         // printf("tmp len = %lu\n",strlen(tmp));
         // printf("tmp len = %lu \n",sizeof(tmp));
 
         // 消除字串中的"" 把它變成"
-        for(int i=0;i<strlen(tmp);i++){
+        for(int i=0;i< strlen(tmp);i++){
             if(tmp[i]=='"' && i!= strlen(tmp)-1 && i!=0){
-
+                // printf("tmp : %s\n",tmp);
                 // 每次看到有""存在 開一個新的memory給新字串放，長度為原本的減1
                 char * new_tmp = (char *)malloc(sizeof(char)*(strlen(tmp)-1));
                 // 把"" 左半部拿出來
@@ -257,11 +259,14 @@ while   {
                 // new_tmp[strlen(tmp-1)] = 0;
                 tmp = new_tmp;
                 // printf("tmp len = %zu \n",strlen(tmp));
-                free(left);
-                free(right);
-               
+                // free(left);
+                // free(right);
+                // printf("tmp : %s\n",tmp);
+
             }
         }
+        // printf("tmp : %s\n",tmp)
+
         // printf("tmp len = %zu \n",strlen(tmp));
         char *result = (char *)malloc(sizeof(char)*(strlen(tmp)-2));
         strncpy(result,tmp+1, sizeof(char)*(strlen(tmp)-2));
@@ -288,24 +293,26 @@ while   {
         }
 %%
 
-
+// 創立hash表，提供指定size 若size滿了，用lin list串起來
 SymbolTable * create(int size){
     SymbolTable *new_symboltable = NULL;
     if (size < 1){
         return NULL;
     }
-	if( ( new_symboltable = malloc( sizeof( SymbolTable ) ) ) == NULL ) {
+	if((new_symboltable = malloc(sizeof( SymbolTable))) == NULL) {
 		return NULL;
 	}
-	if( ( new_symboltable->table = malloc(sizeof(SymbolNode*) * size)) == NULL ) {
+	if((new_symboltable->table = malloc(sizeof(SymbolNode*) * size)) == NULL ) {
 		return NULL;
 	}
+    // 先把每個bucket內的head設為node
 	for(int i = 0; i < size; i++ ) {
 		new_symboltable->table[i] = NULL;
 	}
 	new_symboltable->size = size;
 	return new_symboltable;
 }
+// hash function 
 unsigned int hash(char *key,SymbolTable* symboltable){
     unsigned long long int hashval;
     int i = 0;
@@ -317,7 +324,7 @@ unsigned int hash(char *key,SymbolTable* symboltable){
     return hashval % symboltable->size;
 }
 
-
+// 查找key(及變數名字)
 int lookup(char* key, SymbolTable* symboltable){
     unsigned int idx = hash(key,symboltable);
     SymbolNode * curr = symboltable->table[idx];
@@ -325,6 +332,7 @@ int lookup(char* key, SymbolTable* symboltable){
         if(curr==NULL){
             break;
         }
+        // 一樣即return 1
         if(strcmp(curr->key,key)==0){
                 // key same dont need to create new noed
                 return 1;
@@ -333,9 +341,11 @@ int lookup(char* key, SymbolTable* symboltable){
             curr = curr->next;
         }
     }
+    // 找不到
+
     return 0;
 }
-
+// insert node to table
 int insert(char* key,SymbolTable* symboltable){
     unsigned int idx = hash(key,symboltable);
     SymbolNode * curr = symboltable->table[idx];
@@ -364,6 +374,7 @@ int insert(char* key,SymbolTable* symboltable){
                 curr = curr->next;
             }
         }
+        // 都不存在在table內創一個新的
         SymbolNode *newnode = malloc(sizeof(SymbolNode));
         newnode->key = malloc(yyleng+1);
         strcpy(newnode->key,key);
@@ -373,6 +384,7 @@ int insert(char* key,SymbolTable* symboltable){
         return 1;
     }
 }
+// print symbol table
 void dump(SymbolTable* symboltable){
     printf("dump symboltable:\n");
     for(int i=0;i<symboltable->size;++i){
