@@ -58,7 +58,8 @@ delimiters [,:\.;()\[\]\{\}]
 arithmetic [\+\-\*/%]
 relational <|<=|>=|>|==|!=
 logical "&&"|"||"|"!"
-operators {arithmetic}|{relational}|{logical}
+assign =
+operators {arithmetic}|{relational}|{logical}|{assign}
 
 
 /* Real Constants and  Integer Constants */
@@ -314,13 +315,14 @@ SymbolTable * create(int size){
 }
 // hash function 
 unsigned int hash(char *key,SymbolTable* symboltable){
-    unsigned long long int hashval;
+    unsigned long long int hashval = 0;
     int i = 0;
 	while( hashval < ULONG_MAX && i < strlen( key ) ) {
 		hashval = hashval << 8;
-		hashval += key[ i ];
+		hashval += key[i];
 		i++;
 	}
+    //printf("now hashing key: %s, key length: %d,result: %d\n",key,strlen(key),hashval % symboltable->size);
     return hashval % symboltable->size;
 }
 
@@ -352,7 +354,8 @@ int insert(char* key,SymbolTable* symboltable){
     if(curr == NULL){
         // 這條目前是空的，可以直接新增在第一個
         SymbolNode *newnode = malloc(sizeof(SymbolNode));
-        newnode->key = malloc(yyleng+1);
+        //newnode->key = malloc(yyleng+1);
+        newnode->key = malloc(sizeof(char)*strlen(key));
         strcpy(newnode->key,key);
         newnode->prev = NULL;
         newnode->next = NULL;
@@ -376,7 +379,8 @@ int insert(char* key,SymbolTable* symboltable){
         }
         // 都不存在在table內創一個新的
         SymbolNode *newnode = malloc(sizeof(SymbolNode));
-        newnode->key = malloc(yyleng+1);
+        //newnode->key = malloc(yyleng+1);
+        newnode->key = malloc(sizeof(char)*strlen(key));
         strcpy(newnode->key,key);
         newnode->next = NULL;
         newnode->prev = prev;
@@ -406,8 +410,17 @@ void dump(SymbolTable* symboltable){
 }
 
 int main(int argc, char ** argv) { 
-    symboltable = create(3);
-    yyin = stdin;
+    symboltable = create(5);
+    if(argc>1){
+        yyin = fopen(argv[1],"r");
+        if(!yyin){
+            printf("file open error\n");
+            exit(-1);
+        }
+    }
+    else{
+        yyin = stdin;
+    }
     yylex();
     printf("\n");
     dump(symboltable);

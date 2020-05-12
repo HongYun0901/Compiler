@@ -373,7 +373,7 @@ struct yy_trans_info
 static yyconst flex_int16_t yy_accept[152] =
     {   0,
        42,   42,    0,    0,    0,    0,   45,   43,   42,   41,
-       29,   43,   29,   43,   30,   29,   29,   31,   29,   43,
+       29,   43,   29,   43,   30,   29,   29,   31,   29,   29,
        29,   34,   34,   34,   34,   34,   34,   34,   34,   34,
        34,   34,   34,   34,   34,   34,   43,   38,   39,   38,
        44,   42,   29,    0,   40,    0,   29,    0,   36,   35,
@@ -785,7 +785,7 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 81 "lex.l"
+#line 82 "lex.l"
 
  /* keyworkds */
 #line 792 "lex.yy.c"
@@ -879,196 +879,196 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 83 "lex.l"
+#line 84 "lex.l"
 {
     token("BOOLEAN");
 }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 87 "lex.l"
+#line 88 "lex.l"
 {
     token("BREAK");
 }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 90 "lex.l"
+#line 91 "lex.l"
 {
     token("CHAR");
 }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 93 "lex.l"
+#line 94 "lex.l"
 {
     token("CASE");
 }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 96 "lex.l"
+#line 97 "lex.l"
 {
     token("CLASS");
 }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 99 "lex.l"
+#line 100 "lex.l"
 {
     token("CONTINUE");
 }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 102 "lex.l"
+#line 103 "lex.l"
 {
     token("DEF");
 }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 105 "lex.l"
+#line 106 "lex.l"
 {
     token("DO");
 }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 108 "lex.l"
+#line 109 "lex.l"
 {
     token("ELSE");
 }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 111 "lex.l"
+#line 112 "lex.l"
 {
     token("EXIT");
 }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 114 "lex.l"
+#line 115 "lex.l"
 {
     token("FALSE");
 }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 117 "lex.l"
+#line 118 "lex.l"
 {
     token("FLOAT");
 }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 120 "lex.l"
+#line 121 "lex.l"
 {
     token("FOR");
 }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 123 "lex.l"
+#line 124 "lex.l"
 {
     token("IF");
 }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 126 "lex.l"
+#line 127 "lex.l"
 {
     token("INT");
 }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 129 "lex.l"
+#line 130 "lex.l"
 {
     token("NULL");
 }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 132 "lex.l"
+#line 133 "lex.l"
 {
     token("OBJECT");
 }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 135 "lex.l"
+#line 136 "lex.l"
 {
     token("PRINT");
 }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 138 "lex.l"
+#line 139 "lex.l"
 {
     token("PRINTLN");
 }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 141 "lex.l"
+#line 142 "lex.l"
 {
     token("REPEAT");
 }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 144 "lex.l"
+#line 145 "lex.l"
 {
     token("RETURN");
 }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 147 "lex.l"
+#line 148 "lex.l"
 {
     token("STRING");
 }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 150 "lex.l"
+#line 151 "lex.l"
 {
     token("TO");
 }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 153 "lex.l"
+#line 154 "lex.l"
 {
     token("TRUE");
 }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 156 "lex.l"
+#line 157 "lex.l"
 {
     token("TYPE");
 }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 159 "lex.l"
+#line 160 "lex.l"
 {
     token("VAL");
 }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 162 "lex.l"
+#line 163 "lex.l"
 {
     token("VAR");
 }
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 165 "lex.l"
+#line 166 "lex.l"
 {
     token("WHILE");
 }
@@ -1076,7 +1076,7 @@ YY_RULE_SETUP
 /* operators */
 case 29:
 YY_RULE_SETUP
-#line 170 "lex.l"
+#line 171 "lex.l"
 {
     tokenString("operators",yytext);
 }
@@ -1084,7 +1084,7 @@ YY_RULE_SETUP
 /* delimiters */
 case 30:
 YY_RULE_SETUP
-#line 175 "lex.l"
+#line 176 "lex.l"
 {
     token(yytext);
     // tokenString("delimiters",yytext);
@@ -1093,7 +1093,7 @@ YY_RULE_SETUP
 /* Real Constants and  Integer Constants */
 case 31:
 YY_RULE_SETUP
-#line 181 "lex.l"
+#line 182 "lex.l"
 {
     int tmp;
     sscanf(yytext,"%d",&tmp);
@@ -1102,7 +1102,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 186 "lex.l"
+#line 187 "lex.l"
 {
     double tmp;
     sscanf(yytext,"%lf",&tmp);
@@ -1113,7 +1113,7 @@ YY_RULE_SETUP
 /* boolean */
 case 33:
 YY_RULE_SETUP
-#line 193 "lex.l"
+#line 194 "lex.l"
 {
     tokenString("boolean",yytext);
 }
@@ -1121,7 +1121,7 @@ YY_RULE_SETUP
 /* identifiers */
 case 34:
 YY_RULE_SETUP
-#line 198 "lex.l"
+#line 199 "lex.l"
 {
     tokenString("id",yytext);
     insert(yytext,symboltable);
@@ -1130,14 +1130,14 @@ YY_RULE_SETUP
 /* comment */
 case 35:
 YY_RULE_SETUP
-#line 206 "lex.l"
+#line 207 "lex.l"
 {
     LIST;
 }
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 210 "lex.l"
+#line 211 "lex.l"
 {
     LIST;
     BEGIN COMMENT;
@@ -1146,7 +1146,7 @@ YY_RULE_SETUP
 /* begin c comment status */
 case 37:
 YY_RULE_SETUP
-#line 215 "lex.l"
+#line 216 "lex.l"
 {
     LIST;
     BEGIN INITIAL;
@@ -1154,7 +1154,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 219 "lex.l"
+#line 220 "lex.l"
 {
     LIST;
 }
@@ -1162,7 +1162,7 @@ YY_RULE_SETUP
 case 39:
 /* rule 39 can match eol */
 YY_RULE_SETUP
-#line 222 "lex.l"
+#line 223 "lex.l"
 {
     LIST;
     printf("%d: %s", linenum++, buf);
@@ -1172,7 +1172,7 @@ YY_RULE_SETUP
 case 40:
 /* rule 40 can match eol */
 YY_RULE_SETUP
-#line 228 "lex.l"
+#line 229 "lex.l"
 {
     char ch = input();
     if(ch=='"'){
@@ -1228,7 +1228,7 @@ YY_RULE_SETUP
 case 41:
 /* rule 41 can match eol */
 YY_RULE_SETUP
-#line 280 "lex.l"
+#line 281 "lex.l"
 {
         LIST;
         printf("%d: %s", linenum++, buf);
@@ -1237,12 +1237,12 @@ YY_RULE_SETUP
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 286 "lex.l"
+#line 287 "lex.l"
 {LIST;}
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 288 "lex.l"
+#line 289 "lex.l"
 {
         LIST;
         printf("%d:%s\n", linenum+1, buf);
@@ -1252,7 +1252,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 294 "lex.l"
+#line 295 "lex.l"
 ECHO;
 	YY_BREAK
 #line 1259 "lex.yy.c"
@@ -2254,7 +2254,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 294 "lex.l"
+#line 295 "lex.l"
 
 
 
@@ -2279,13 +2279,14 @@ SymbolTable * create(int size){
 }
 // hash function 
 unsigned int hash(char *key,SymbolTable* symboltable){
-    unsigned long long int hashval;
+    unsigned long long int hashval = 0;
     int i = 0;
 	while( hashval < ULONG_MAX && i < strlen( key ) ) {
 		hashval = hashval << 8;
-		hashval += key[ i ];
+		hashval += key[i];
 		i++;
 	}
+    //printf("now hashing key: %s, key length: %d,result: %d\n",key,strlen(key),hashval % symboltable->size);
     return hashval % symboltable->size;
 }
 
@@ -2317,7 +2318,8 @@ int insert(char* key,SymbolTable* symboltable){
     if(curr == NULL){
         // 這條目前是空的，可以直接新增在第一個
         SymbolNode *newnode = malloc(sizeof(SymbolNode));
-        newnode->key = malloc(yyleng+1);
+        //newnode->key = malloc(yyleng+1);
+        newnode->key = malloc(sizeof(char)*strlen(key));
         strcpy(newnode->key,key);
         newnode->prev = NULL;
         newnode->next = NULL;
@@ -2341,7 +2343,8 @@ int insert(char* key,SymbolTable* symboltable){
         }
         // 都不存在在table內創一個新的
         SymbolNode *newnode = malloc(sizeof(SymbolNode));
-        newnode->key = malloc(yyleng+1);
+        //newnode->key = malloc(yyleng+1);
+        newnode->key = malloc(sizeof(char)*strlen(key));
         strcpy(newnode->key,key);
         newnode->next = NULL;
         newnode->prev = prev;
@@ -2371,8 +2374,17 @@ void dump(SymbolTable* symboltable){
 }
 
 int main(int argc, char ** argv) { 
-    symboltable = create(3);
-    yyin = stdin;
+    symboltable = create(5);
+    if(argc>1){
+        yyin = fopen(argv[1],"r");
+        if(!yyin){
+            printf("file open error\n");
+            exit(-1);
+        }
+    }
+    else{
+        yyin = stdin;
+    }
     yylex();
     printf("\n");
     dump(symboltable);
