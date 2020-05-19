@@ -1,14 +1,24 @@
 %{
+#include <iostream>
+#include "main.h"
+#include "lex.yy.cpp"
 #define Trace(t)        printf(t)
+void yyerror(const char *s){
+   cout << buf << " (" << s  << ')' << endl;
+}
+
+
+
 %}
 
-
+// declare my union
 %union {
-    double realval;
+    float floatval;
     int intval;
     bool boolval;
-    string stringval;
-
+    string *stringval;
+    int type;
+    valueInfo* value;
 }
 
 /* tokens */
@@ -28,7 +38,7 @@
 %token FOR
 %token IF
 %token INT
-%token NULL
+%token _NULL
 %token OBJECT
 %token PRINT
 %token PRINTLN
@@ -42,11 +52,22 @@
 %token VAR
 %token WHILE
 
+%token ASSIGN
+
+
+// lex.l will return value
 %token <boolval> BOOL_VALUE
 %token <intval> INT_VALUE
 %token <stringval> STRING_VALUE
-%token <realval> REAL_VALUE
+%token <floatval> FLOAT_VALUE
 %token <stringval> ID
+
+
+
+
+%type <value> VALUE
+// define data type token and return value is enum type
+%type <type> DATA_TYPE
 
 
 
@@ -60,84 +81,127 @@
 %nonassoc UMINUS
 
 %%
-program:        identifier semi
+program:        VALUE
                 {
                 Trace("Reducing to program\n");
                 }
                 ;
 
-
-
-
-semi:           SEMICOLON
-                {
-                Trace("Reducing to semi\n");
-                }
-                ;
-
-
 // constant variables declarations
-
-VAL_DECLARE : VAL ID EQ somevalue{
+VAL_DECLARE : VAL ID EQ VALUE{
             }
-            | VAL ID ":" type EQ somevalue{
-
-            }
-
-VAR_DECLARE : VAR ID EQ somevalue{
-
-}
-            | VAR ID ":" type {
-
-            }
-            | VAR ID ":" type EQ somevalue{
-
-            }
-            | VAR ID ":" type "[" INT "]"{
+            | VAL ID ":" DATA_TYPE EQ VALUE {
 
             }
 
+VAR_DECLARE : VAR ID EQ VALUE {
 
-EXPR : "(" EXPR ")"{
-    $$ = $2;
+            }
+            | VAR ID ":" DATA_TYPE {
 
-}
-    | EXPR "+" EXPR{
+            }
+            | VAR ID ":" DATA_TYPE EQ VALUE{
 
+            }
+            | VAR ID ":" DATA_TYPE "[" INT_VALUE "]" {
+
+            }
+
+
+
+
+// define keyword data type
+//  The predefined data types are char, string, int, boolean, and float.
+DATA_TYPE : CHAR {
+            $$ = charType;
+         }
+         | STRING {
+             $$ = stringType;
+         }
+         | INT {
+             $$ = intType;
+
+         }
+         | BOOLEAN {
+             $$ = boolType;
+
+         }
+         | FLOAT {
+            $$ = floatType;
+         }
+         ;
+
+// define values
+VALUE : STRING_VALUE {
+        cout << *$1 << endl;
+        $$ = stringValue($1);
     }
-    | EXPR "-" EXPR{
+      | INT_VALUE {
+        $$ = intValue($1);
+        cout << $1 << endl;
+      }
+      | BOOL_VALUE {
+        $$ = boolValue($1);
+        cout << $1 << endl;
+      }
+      | FLOAT_VALUE {
+          $$  = floatValue($1);
+          cout << $1 << endl;
+      }
+      | "'" 
+      ;
 
-    }
-    | EXPR "*" EXPR{
+// EXPR : "(" EXPR ")"{
+//     $$ = $2;
 
-    }
-    | EXPR "/" EXPR{
+// }
+//     | EXPR "+" EXPR{
 
-    }
-    | EXPR "%" EXPR{
+//     }
+//     | EXPR "-" EXPR{
 
-    }
-    | EXPR
+//     }
+//     | EXPR "*" EXPR{
+
+//     }
+//     | EXPR "/" EXPR{
+
+//     }
+//     | EXPR "%" EXPR{
+
+//     }
+//     | EXPR
 
 %%
-#include "lex.yy.c"
 
-yyerror(msg)
-char *msg;
-{
-    fprintf(stderr, "%s\n", msg);
-}
+// yyerror(msg)
+// char *msg;
+// {
+//     fprintf(stderr, "%s\n", msg);
+// }
+// void yyerror(string s) {
+//   cerr << "line " << linenum << ": " << s << endl;
+//   exit(1);
+// }
+//Yacc Required Function
 
-main()
+
+int main(int argc, char *argv[])
 {
     /* open the source program file */
-    if (argc != 2) {
+
+    if(argc == 1){
+        yyin = stdin;
+    }
+    else if (argc == 2){
+        yyin = fopen(argv[1], "r");         /* open input file */
+    }
+    else{
         printf ("Usage: sc filename\n");
         exit(1);
     }
-    yyin = fopen(argv[1], "r");         /* open input file */
 
     /* perform parsing */
-    if (yyparse() == 1)                 /* parsing */
+    if (yyparse() == 1)                /* parsing */
         yyerror("Parsing error !");     /* syntax error */
 }

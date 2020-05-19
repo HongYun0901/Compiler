@@ -1,7 +1,7 @@
 %{
 // #define LIST     strcat(buf,yytext)
 #define LIST    {printf("%s",yytext); charnum+=yyleng;}
-#define PRINT   {printf("%d ",++linenum); buf[0]=0;charnum=0;}
+#define MYPRINT   {printf("%d ",++linenum); buf[0]=0;charnum=0;}
 #define token(t) {LIST; printf("<%s>\n",t);}
 #define tokenInteger(t,i) {LIST; printf("<%s:%d>\n",t,i);}
 #define tokenDouble(t,i) {LIST; printf("<%s:%lf>\n",t,i);}
@@ -11,8 +11,9 @@
 #include <stdio.h>
 #include <memory.h>
 #include <limits.h>
-#include <string.h>
+// #include <string.h>
 #include <stdlib.h>
+#include "y.tab.hpp"
 using namespace std;
 
 
@@ -59,6 +60,9 @@ identifiers ({letter}({letter}|{digit})*)
 /* string */
 strings \"(\\.|[^"\n])*\"
 
+
+
+
 %%
  /* keyworkds */
 boolean   {
@@ -80,7 +84,7 @@ case   {
 }
 class   {
     LIST;
-    return CLASS:
+    return CLASS;
 }
 continue   {
     LIST;
@@ -96,7 +100,7 @@ do   {
 }
 else   {
     LIST;
-    return ESLE;
+    return ELSE;
 }
 exit   {
     LIST;
@@ -104,7 +108,7 @@ exit   {
 }
 false   {
     LIST;
-    yylval.bval = false;
+    yylval.boolval = false;
     return BOOL_VALUE;
 }
 float   {
@@ -125,7 +129,7 @@ int   {
 }
 null   {
     LIST;
-    return NULL;
+    return _NULL;
 }
 object   {
     LIST;
@@ -157,7 +161,7 @@ to   {
 }
 true   {
     LIST;
-    yylval.bval = true;
+    yylval.boolval = true;
     return BOOL_VALUE;
 }
 type   {
@@ -207,47 +211,43 @@ while   {
 }
 "&&" {
     LIST;
-    return AND_OP
+    return AND_OP;
 }
 "||" {
     LIST;
-    return OR_OP
+    return OR_OP;
 }
 "!" {
     LIST;
-    return NOT
+    return NOT;
 }
 "=" {
     LIST;
-    return ASSIGN
+    return ASSIGN;
 }
-
-
-
-
-
 
  /* Real Constants and  Integer Constants */
 {integer} {
     int tmp;
     sscanf(yytext,"%d",&tmp);
-    tokenInteger("integer",tmp);
-    yylval.ival = tmp;
+    // tokenInteger("integer",tmp);
+    yylval.intval = tmp;
     return INT_VALUE;
 }
 {realconstants} {
     double tmp;
     sscanf(yytext,"%lf",&tmp);
-    tokenDouble("realconstants",tmp);
-    yylval.dval = tmp;
-    return REAL_VALUE;
+    // tokenDouble("realconstants",tmp);
+    yylval.floatval = tmp;
+    return FLOAT_VALUE;
 }
 
  /* identifiers */
 {identifiers} {
     tokenString("id",yytext);
     // insert(yytext,symboltable);
-    yylval = new string(yytext);
+    yylval.stringval = new string(yytext);
+    // yylval.stringval = string(yytext);
     return ID;
 
 }
@@ -278,9 +278,9 @@ while   {
 }
 
 {strings} {
-    char ch = input();
+    char ch = getchar();
     if(ch=='"'){
-        unput(ch);
+        putchar(ch);
         yymore();
         
     }
@@ -307,10 +307,11 @@ while   {
         }
         char *result = (char *)malloc(sizeof(char)*(strlen(tmp)-2));
         strncpy(result,tmp+1, sizeof(char)*(strlen(tmp)-2));
-        tokenString("strings",result);
-        unput(ch);
+        // tokenString("string",result);
+        putchar(ch);
         free(tmp);
         yylval.stringval = new string(result);
+        // yylval.stringval = string(result);
         return STRING_VALUE;
     }
 }
