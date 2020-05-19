@@ -1,0 +1,83 @@
+1: /* Sigma.scala
+2:  *
+3:  * Compute sum = 1 + 2 + ... + n
+4:  */
+5: 
+<OBJECT>
+<id:Sigma>
+6: object Sigma
+<{>
+7: {
+8:   // constants and variables
+<VAL>
+<id:n>
+<operators:=>
+<integer:10>
+9:   val n = 10
+<VAR>
+<id:sum>
+<:>
+<INT>
+10:   var sum: int
+<VAR>
+<id:index>
+<:>
+<INT>
+11:   var index: int
+12: 
+<DEF>
+<id:main>
+<(>
+<)>
+<{>
+13:   def main () {
+<id:sum>
+<operators:=>
+<integer:0>
+14:     sum = 0
+<id:index>
+<operators:=>
+<integer:0>
+15:     index = 0
+16:     
+<WHILE>
+<(>
+<id:index>
+<operators:<=>
+<id:n>
+<)>
+<{>
+17:     while (index <= n) {
+<id:sum>
+<operators:=>
+<id:sum>
+<operators:+>
+<id:index>
+18:       sum = sum + index
+<id:index>
+<operators:=>
+<id:index>
+<operators:+>
+<integer:1>
+19:       index = index + 1
+<}>
+20:     }
+<PRINT>
+<(>
+<strings:The sum is >
+<)>
+21:     print ("The sum is ")
+<PRINTLN>
+<(>
+<id:sum>
+<)>
+22:     println (sum)
+<}>
+23:   }
+<}>
+24: }
+
+dump symboltable:
+n 
+sum index main 
+Sigma 

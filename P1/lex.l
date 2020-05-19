@@ -77,7 +77,7 @@ boolean true|false
 
 
 /* string */
-strings \"(\\.|[^"\\])*\"
+strings \"(\\.|[^"\n])*\"
 
 %%
  /* keyworkds */
@@ -267,7 +267,6 @@ while   {
             }
         }
         // printf("tmp : %s\n",tmp)
-
         // printf("tmp len = %zu \n",strlen(tmp));
         char *result = (char *)malloc(sizeof(char)*(strlen(tmp)-2));
         strncpy(result,tmp+1, sizeof(char)*(strlen(tmp)-2));
@@ -288,7 +287,7 @@ while   {
 
 .       {
         LIST;
-        printf("%d:%s\n", linenum+1, buf);
+        printf("%d:%s\n", linenum, buf);
         printf("bad character:'%s'\n",yytext);
         exit(-1);
         }

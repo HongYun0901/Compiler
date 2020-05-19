@@ -1,0 +1,50 @@
+1: /* Hello World Example */
+<OBJECT>
+<id:HelloWorld>
+<{>
+2: object HelloWorld {
+<DEF>
+<id:main>
+<(>
+<)>
+<{>
+3:   def main () {
+4:     // Print text to the console
+<PRINT>
+<(>
+<strings:Hello World>
+<)>
+5:     print ("Hello World")
+<}>
+6:   }
+<}>
+7: }
+
+dump symboltable:
+main 
+HelloWorld 
+1: /* Hello World Example */
+<OBJECT>
+<id:HelloWorld>
+<{>
+2: object HelloWorld {
+<DEF>
+<id:main>
+<(>
+<)>
+<{>
+3:   def main () {
+4:     // Print text to the console
+<PRINT>
+<(>
+<strings:Hello World>
+<)>
+5:     print ("Hello World")
+<}>
+6:   }
+<}>
+7: }
+
+dump symboltable:
+main 
+HelloWorld 

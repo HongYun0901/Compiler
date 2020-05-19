@@ -1,0 +1,92 @@
+1: /*
+2:  * Example with Functions
+3:  */
+4: 
+<OBJECT>
+<id:example>
+<{>
+5: object example {
+<VAL>
+<id:a>
+<operators:=>
+<integer:5>
+6:   val a = 5
+7: 
+8:   // function declaration
+<DEF>
+<id:add>
+<(>
+<id:a>
+<:>
+<INT>
+<,>
+<id:b>
+<:>
+<INT>
+<)>
+<:>
+<INT>
+9:   def add (a: int, b: int) : int
+<{>
+10:   {
+<RETURN>
+<id:a>
+<operators:+>
+<id:b>
+11:     return a+b
+<}>
+12:   }
+13:   
+14:   // main statements
+<DEF>
+<id:main>
+<(>
+<)>
+15:   def main()
+<{>
+16:   {
+<VAR>
+<id:c>
+<:>
+<INT>
+17:     var c:int
+<id:c>
+<operators:=>
+<id:add>
+<(>
+<id:a>
+<,>
+<integer:10>
+<)>
+18:     c = add(a, 10)
+<IF>
+<(>
+<id:c>
+<operators:>>
+<integer:10>
+<)>
+19:     if (c > 10)
+<PRINT>
+<operators:->
+<id:c>
+20:       print -c
+<ELSE>
+21:     else
+<PRINT>
+<id:c>
+22:       print c
+<PRINTLN>
+<(>
+<strings:Hello World>
+<)>
+23:     println ("Hello World")
+<}>
+24:   }
+<}>
+25: }
+
+dump symboltable:
+main 
+a add 
+example b 
+c 

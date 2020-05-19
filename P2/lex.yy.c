@@ -1215,6 +1215,7 @@ YY_RULE_SETUP
             }
         }
         // printf("tmp : %s\n",tmp)
+
         // printf("tmp len = %zu \n",strlen(tmp));
         char *result = (char *)malloc(sizeof(char)*(strlen(tmp)-2));
         strncpy(result,tmp+1, sizeof(char)*(strlen(tmp)-2));
@@ -1228,7 +1229,7 @@ YY_RULE_SETUP
 case 41:
 /* rule 41 can match eol */
 YY_RULE_SETUP
-#line 280 "lex.l"
+#line 281 "lex.l"
 {
         LIST;
         printf("%d: %s", linenum++, buf);
@@ -1237,25 +1238,25 @@ YY_RULE_SETUP
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 286 "lex.l"
+#line 287 "lex.l"
 {LIST;}
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 288 "lex.l"
+#line 289 "lex.l"
 {
         LIST;
-        printf("%d:%s\n", linenum, buf);
+        printf("%d:%s\n", linenum+1, buf);
         printf("bad character:'%s'\n",yytext);
         exit(-1);
         }
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 294 "lex.l"
+#line 295 "lex.l"
 ECHO;
 	YY_BREAK
-#line 1259 "lex.yy.c"
+#line 1260 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(COMMENT):
 case YY_STATE_EOF(STRING):
@@ -2254,7 +2255,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 294 "lex.l"
+#line 295 "lex.l"
 
 
 
