@@ -1,11 +1,11 @@
 %{
-// #define LIST     strcat(buf,yytext)
-#define LIST    {printf("%s",yytext); charnum+=yyleng;}
+// #define LIST_NO_PRINT     strcat(buf,yytext)
+#define LIST    {/*printf("%s",yytext);*/ charnum+=yyleng;}
 #define MYPRINT   {printf("%d ",++linenum); buf[0]=0;charnum=0;}
 #define token(t) {LIST; printf("<%s>\n",t);}
 #define tokenInteger(t,i) {LIST; printf("<%s:%d>\n",t,i);}
 #define tokenDouble(t,i) {LIST; printf("<%s:%lf>\n",t,i);}
-#define tokenString(t,s) {LIST; printf("<%s:%s>\n",t,s);}
+#define tokenString(t,s) {LIST; /* printf("<%s:%s>\n",t,s); */}
 
 #define MAX_LINE_LENG 256
 #include <stdio.h>
@@ -143,6 +143,10 @@ println   {
     LIST;
     return PRINTLN;
 }
+read {
+    LIST;
+    return READ;
+}
 repeat   {
     LIST;
     return REPEAT;
@@ -183,6 +187,12 @@ while   {
 
  /* operators */
 {arithmetic} {
+    strcat(buf,yytext);
+    return *yytext;
+}
+ /* delimiters */
+{delimiters} {
+    strcat(buf,yytext);
     return *yytext;
 }
 "<" {
@@ -273,7 +283,8 @@ while   {
 }
 <COMMENT>\n {
     LIST;
-    printf("%d: %s", linenum++, buf);
+    linenum++;
+    // printf("%d: %s", linenum++, buf);
     buf[0] = '\0';
 }
 
@@ -318,7 +329,8 @@ while   {
 
 \n      {
         LIST;
-        printf("%d: %s", linenum++, buf);
+        linenum++;
+        // printf("%d: %s", linenum++, buf);
         buf[0] = '\0';
         charnum = 0;
         }

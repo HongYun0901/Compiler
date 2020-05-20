@@ -59,31 +59,32 @@
      OBJECT = 275,
      PRINT = 276,
      PRINTLN = 277,
-     REPEAT = 278,
-     RETURN = 279,
-     STRING = 280,
-     TO = 281,
-     TRUE = 282,
-     TYPE = 283,
-     VAL = 284,
-     VAR = 285,
-     WHILE = 286,
-     ASSIGN = 287,
-     BOOL_VALUE = 288,
-     INT_VALUE = 289,
-     STRING_VALUE = 290,
-     FLOAT_VALUE = 291,
-     ID = 292,
-     OR_OP = 293,
-     AND_OP = 294,
-     NOT = 295,
-     NE = 296,
-     GE = 297,
-     GT = 298,
-     EQ = 299,
-     LE = 300,
-     LT = 301,
-     UMINUS = 302
+     READ = 278,
+     REPEAT = 279,
+     RETURN = 280,
+     STRING = 281,
+     TO = 282,
+     TRUE = 283,
+     TYPE = 284,
+     VAL = 285,
+     VAR = 286,
+     WHILE = 287,
+     ASSIGN = 288,
+     BOOL_VALUE = 289,
+     INT_VALUE = 290,
+     STRING_VALUE = 291,
+     FLOAT_VALUE = 292,
+     ID = 293,
+     OR_OP = 294,
+     AND_OP = 295,
+     NOT = 296,
+     NE = 297,
+     GE = 298,
+     GT = 299,
+     EQ = 300,
+     LE = 301,
+     LT = 302,
+     UMINUS = 303
    };
 #endif
 /* Tokens.  */
@@ -107,48 +108,50 @@
 #define OBJECT 275
 #define PRINT 276
 #define PRINTLN 277
-#define REPEAT 278
-#define RETURN 279
-#define STRING 280
-#define TO 281
-#define TRUE 282
-#define TYPE 283
-#define VAL 284
-#define VAR 285
-#define WHILE 286
-#define ASSIGN 287
-#define BOOL_VALUE 288
-#define INT_VALUE 289
-#define STRING_VALUE 290
-#define FLOAT_VALUE 291
-#define ID 292
-#define OR_OP 293
-#define AND_OP 294
-#define NOT 295
-#define NE 296
-#define GE 297
-#define GT 298
-#define EQ 299
-#define LE 300
-#define LT 301
-#define UMINUS 302
+#define READ 278
+#define REPEAT 279
+#define RETURN 280
+#define STRING 281
+#define TO 282
+#define TRUE 283
+#define TYPE 284
+#define VAL 285
+#define VAR 286
+#define WHILE 287
+#define ASSIGN 288
+#define BOOL_VALUE 289
+#define INT_VALUE 290
+#define STRING_VALUE 291
+#define FLOAT_VALUE 292
+#define ID 293
+#define OR_OP 294
+#define AND_OP 295
+#define NOT 296
+#define NE 297
+#define GE 298
+#define GT 299
+#define EQ 300
+#define LE 301
+#define LT 302
+#define UMINUS 303
 
 
 
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 15 "yacc.y"
+#line 22 "yacc.y"
 {
     float floatval;
     int intval;
     bool boolval;
-    string *stringval;
-    int type;
+    string* stringval;
+    int valueType;
     valueInfo* value;
+    
 }
 /* Line 1529 of yacc.c.  */
-#line 152 "y.tab.hpp"
+#line 155 "y.tab.hpp"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

@@ -79,6 +79,8 @@ boolean true|false
 /* string */
 strings \"(\\.|[^"\n])*\"
 
+char '([^'\\\n]|\\.)'
+
 %%
  /* keyworkds */
 boolean   {
@@ -199,6 +201,11 @@ while   {
 {identifiers} {
     tokenString("id",yytext);
     insert(yytext,symboltable);
+}
+
+{char} {
+    LIST;
+    printf("get char %c \n",yytext[1]);
 }
 
 
