@@ -11,7 +11,6 @@
 #include <stdio.h>
 #include <memory.h>
 #include <limits.h>
-// #include <string.h>
 #include <stdlib.h>
 #include "y.tab.hpp"
 using namespace std;
@@ -289,9 +288,9 @@ while   {
 }
 
 {strings} {
-    char ch = getchar();
+    char ch = getc(yyin);
     if(ch=='"'){
-        putchar(ch);
+        ungetc(ch, yyin);
         yymore();
         
     }
@@ -318,8 +317,8 @@ while   {
         }
         char *result = (char *)malloc(sizeof(char)*(strlen(tmp)-2));
         strncpy(result,tmp+1, sizeof(char)*(strlen(tmp)-2));
-        // tokenString("string",result);
-        putchar(ch);
+        tokenString("string",result);
+        ungetc(ch, yyin);
         free(tmp);
         yylval.stringval = new string(result);
         // yylval.stringval = string(result);

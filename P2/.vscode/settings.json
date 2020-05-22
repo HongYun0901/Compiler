@@ -6,6 +6,8 @@
         "iterator": "cpp",
         "__locale": "cpp",
         "locale": "cpp",
-        "iostream": "cpp"
+        "iostream": "cpp",
+        "map": "cpp",
+        "ostream": "cpp"
     }
 }

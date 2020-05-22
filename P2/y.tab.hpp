@@ -140,7 +140,7 @@
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 22 "yacc.y"
+#line 21 "yacc.y"
 {
     float floatval;
     int intval;
@@ -148,10 +148,15 @@ typedef union YYSTYPE
     string* stringval;
     int valueType;
     valueInfo* value;
-    
+    // here is record for the function on called
+    vector<valueInfo*>* valueInfoVec;
+    vector<pair<string,int>*>* argumentsInfo;
+    map<string, idInfo*>* idMap;
+    pair<string,int>* argumentInfo;
+
 }
 /* Line 1529 of yacc.c.  */
-#line 155 "y.tab.hpp"
+#line 160 "y.tab.hpp"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

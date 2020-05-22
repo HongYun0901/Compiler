@@ -1,0 +1,336 @@
+int value
+value 
+VAR ID ASSIGN EXPR
+int value
+value 
+VAL ID ASSIGN EXPR
+ID : DataType
+int value
+value 
+VAR ID ASSIGN EXPR
+--------------dump--------------
+----------index:1----------
+id: a	type: variable
+id: b	type: const
+----------------------------
+----------index:2----------
+id: c	type: variable
+----------------------------
+--------------------------------
+declare methods without return type
+VAR ID : DATA_TYPE [ INT_VALUE ]
+declare an id to objet type
+ID : DataType
+string value
+value 
+VAR ID ASSIGN EXPR
+--------------dump--------------
+----------index:1----------
+id: a	type: variable
+id: asd	type: function
+id: b	type: const
+----------------------------
+----------index:2----------
+id: asdasdas	type: object
+id: c	type: array
+----------------------------
+----------index:3----------
+id: g	type: variable
+----------------------------
+--------------------------------
+declare methods without return type
+--------------dump--------------
+----------index:1----------
+id: a	type: variable
+id: asd	type: function
+id: b	type: const
+----------------------------
+----------index:2----------
+id: asdasdas	type: object
+id: c	type: array
+----------------------------
+----------index:3----------
+id: adasd	type: function
+----------------------------
+--------------------------------
+OBJECT ID BLOCK
+string value
+value 
+VAR ID : DATA_TYPE ASSIGN EXPR
+ID : DataType
+int value
+value 
+VAR ID ASSIGN EXPR
+--------------dump--------------
+----------index:1----------
+id: a	type: variable
+id: asd	type: function
+id: b	type: const
+----------------------------
+----------index:2----------
+id: asdasdas	type: object
+id: c	type: array
+----------------------------
+----------index:3----------
+id: adasd	type: function
+id: asdasdajkk	type: variable
+----------------------------
+----------index:4----------
+id: a	type: variable
+----------------------------
+--------------------------------
+declare methods without return type
+ID : DataType
+int value
+value 
+VAR ID ASSIGN EXPR
+--------------dump--------------
+----------index:1----------
+id: a	type: variable
+id: asd	type: function
+id: b	type: const
+----------------------------
+----------index:2----------
+id: asdasdas	type: object
+id: c	type: array
+----------------------------
+----------index:3----------
+id: adasd	type: function
+id: asdasdajkk	type: variable
+id: foo	type: function
+----------------------------
+----------index:4----------
+id: a	type: variable
+----------------------------
+--------------------------------
+declare methods without return type
+Reducing to program
+
+int value
+value 
+VAR ID ASSIGN EXPR
+int value
+value 
+VAL ID ASSIGN EXPR
+ID : DataType
+int value
+value 
+VAR ID ASSIGN EXPR
+--------------dump--------------
+----------index:1----------
+id: a	type: variable
+id: b	type: const
+----------------------------
+----------index:2----------
+id: c	type: variable
+----------------------------
+--------------------------------
+declare methods without return type
+VAR ID : DATA_TYPE [ INT_VALUE ]
+declare an id to objet type
+ID : DataType
+string value
+value 
+VAR ID ASSIGN EXPR
+--------------dump--------------
+----------index:1----------
+id: a	type: variable
+id: asd	type: function
+id: b	type: const
+----------------------------
+----------index:2----------
+id: asdasdas	type: object
+id: c	type: array
+----------------------------
+----------index:3----------
+id: g	type: variable
+----------------------------
+--------------------------------
+declare methods without return type
+--------------dump--------------
+----------index:1----------
+id: a	type: variable
+id: asd	type: function
+id: b	type: const
+----------------------------
+----------index:2----------
+id: asdasdas	type: object
+id: c	type: array
+----------------------------
+----------index:3----------
+id: adasd	type: function
+----------------------------
+--------------------------------
+OBJECT ID BLOCK
+string value
+value 
+VAR ID : DATA_TYPE ASSIGN EXPR
+ID : DataType
+int value
+value 
+VAR ID ASSIGN EXPR
+--------------dump--------------
+----------index:1----------
+id: a	type: variable
+id: asd	type: function
+id: b	type: const
+----------------------------
+----------index:2----------
+id: asdasdas	type: object
+id: c	type: array
+----------------------------
+----------index:3----------
+id: adasd	type: function
+id: asdasdajkk	type: variable
+----------------------------
+----------index:4----------
+id: a	type: variable
+----------------------------
+--------------------------------
+declare methods without return type
+ID : DataType
+int value
+value 
+VAR ID ASSIGN EXPR
+--------------dump--------------
+----------index:1----------
+id: a	type: variable
+id: asd	type: function
+id: b	type: const
+----------------------------
+----------index:2----------
+id: asdasdas	type: object
+id: c	type: array
+----------------------------
+----------index:3----------
+id: adasd	type: function
+id: asdasdajkk	type: variable
+id: foo	type: function
+----------------------------
+----------index:4----------
+id: a	type: variable
+----------------------------
+--------------------------------
+declare methods without return type
+Reducing to program
+
+int value
+value 
+VAR ID ASSIGN EXPR
+int value
+value 
+VAL ID ASSIGN EXPR
+create an function id
+ID : DataType
+int value
+value 
+VAR ID ASSIGN EXPR
+--------------dump--------------
+----------index:1----------
+id: a	type: variable
+id: asd	type: function
+id: b	type: const
+----------------------------
+----------index:2----------
+id: c	type: variable
+----------------------------
+--------------------------------
+declare methods
+function return type isintVAR ID : DATA_TYPE [ INT_VALUE ]
+declare an id to objet type
+create an function id
+ID : DataType
+string value
+value 
+VAR ID ASSIGN EXPR
+--------------dump--------------
+----------index:1----------
+id: a	type: variable
+id: asd	type: function
+id: b	type: const
+----------------------------
+----------index:2----------
+id: asdasdas	type: object
+id: c	type: array
+----------------------------
+----------index:3----------
+id: adasd	type: function
+----------------------------
+----------index:4----------
+id: g	type: variable
+----------------------------
+--------------------------------
+declare methods
+--------------dump--------------
+----------index:1----------
+id: a	type: variable
+id: asd	type: function
+id: b	type: const
+----------------------------
+----------index:2----------
+id: asdasdas	type: object
+id: c	type: array
+----------------------------
+----------index:3----------
+id: adasd	type: function
+----------------------------
+--------------------------------
+OBJECT ID BLOCK
+string value
+value 
+VAR ID : DATA_TYPE ASSIGN EXPR
+create an function id
+ID : DataType
+int value
+value 
+VAR ID ASSIGN EXPR
+--------------dump--------------
+----------index:1----------
+id: a	type: variable
+id: asd	type: function
+id: b	type: const
+----------------------------
+----------index:2----------
+id: asdasdas	type: object
+id: c	type: array
+----------------------------
+----------index:3----------
+id: adasd	type: function
+id: asdasdajkk	type: variable
+id: foo	type: function
+----------------------------
+----------index:4----------
+id: a	type: variable
+----------------------------
+--------------------------------
+declare methods
+create an function id
+ID : DataType
+int value
+value 
+VAR ID ASSIGN EXPR
+--------------dump--------------
+----------index:1----------
+id: a	type: variable
+id: asd	type: function
+id: b	type: const
+----------------------------
+----------index:2----------
+id: asdasdas	type: object
+id: c	type: array
+----------------------------
+----------index:3----------
+id: adasd	type: function
+id: asdasdajkk	type: variable
+id: foo	type: function
+----------------------------
+----------index:4----------
+id: foo2	type: function
+----------------------------
+----------index:5----------
+id: a	type: variable
+----------------------------
+--------------------------------
+declare methods
+Reducing to program
+

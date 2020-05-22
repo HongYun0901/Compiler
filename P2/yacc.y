@@ -9,15 +9,14 @@ void yyerror(string s){
    cout << buf << " (" << s  << ')' << endl;
    exit(-1);
 }
-
 SymbolTableVector tables;
 
 
 
 %}
 
+// show detail error message
 %error-verbose
-
 // declare my union
 %union {
     float floatval;
@@ -26,7 +25,12 @@ SymbolTableVector tables;
     string* stringval;
     int valueType;
     valueInfo* value;
-    
+    // here is record for the function on called
+    vector<valueInfo*>* valueInfoVec;
+    vector<pair<string,int>*>* argumentsInfo;
+    map<string, idInfo*>* idMap;
+    pair<string,int>* argumentInfo;
+
 }
 
 /* tokens */
@@ -60,23 +64,26 @@ SymbolTableVector tables;
 %token VAL
 %token VAR
 %token WHILE
-
 %token ASSIGN
 
 
 // lex.l will return value
 %token <boolval> BOOL_VALUE
-%token <intval> INT_VALUE
+%token <intval> INT_VALUE 
 %token <stringval> STRING_VALUE
 %token <floatval> FLOAT_VALUE
 %token <stringval> ID
 
-
-
-
-%type <value> VALUE EXPR
+%type <value> VALUE EXPR FUNCTION_INVOCATION 
 // define data type token and return value is enum type
 %type <valueType> DATA_TYPE
+%type <argumentsInfo> ARGS
+%type <argumentInfo> ARG 
+%type <valueType> FUNCTION_OPTIONAL
+%type <valueInfoVec> COMMA_SEP_EXPR 
+%type <idMap> BLOCK
+
+
 
 
 
@@ -90,72 +97,265 @@ SymbolTableVector tables;
 %nonassoc UMINUS
 
 %%
-program:        STMTS
-                {
-                Trace("Reducing to program\n");
+start : ALL {
+        Trace("Reducing to program\n");
+    }
+    ;
+
+ALL : STMTS ALL
+    | FUNCTION ALL
+    | PROGRAM ALL
+    | 
+    ;
+
+// Program 
+PROGRAM : OBJECT ID {
+            Trace("declare an id to objet type");
+            int result = tables.vec[tables.top].insert(*$2,objectType);
+            if(result == -1){
+                yyerror(*$2 + "already exists");
+            }
+            tables.push();
+        } OBJ_BLOCK {
+            Trace("OBJECT ID BLOCK");
+        };
+
+
+// methods
+FUNCTION : DEF ID {
+            Trace("create an function id");
+            int result = tables.vec[tables.top].insert(*$2,functionType);
+            if(result == -1){
+                yyerror(*$2 + "already exists");
+            }
+            tables.push();
+        } '(' ARGS ')' FUNCTION_OPTIONAL BLOCK {
+            Trace("declare method end");
+            idInfo * id = tables.lookup(*$2);
+            if($7 != unknownType){
+                cout << "function return type is " << valueType2Str($7) << endl;
+                id->returnType = $7;
+
+            }
+            Trace("Saveing function arguments and inside id map");
+            id->argumentsInfo = tables.vec[tables.top].idMap;
+            id->insideIdMap = *$8;
+            cout << "size check : "<< id->argumentsInfo.size() << endl;
+            cout << "size check : "<< id->insideIdMap.size() << endl;
+            tables.pop();
+
+            for(int i = 0; i < $5->size(); ++i){
+                cout << "id : " << (*$5)[i]->first << " type : " << valueType2Str((*$5)[i]->second) << endl;
+            }
+            id->argumentsInfoSeq = *$5;
+        }
+
+// can specify return type or not
+FUNCTION_OPTIONAL : ':' DATA_TYPE {
+                    $$ = $2;
+                }
+                | {
+                    $$ = unknownType;
                 }
                 ;
 
+// function invocation
+FUNCTION_INVOCATION : ID '(' COMMA_SEP_EXPR ')' {
+                        Trace("call function invocation");
+                        idInfo* id = tables.lookup(*$1);
+                        if(id == NULL){
+                            yyerror(*$1 + "doesn't exist");
+                        }
+                        if(id->idType != functionType){
+                            yyerror(*$1 + "is not a function");
+                        }
+                        valueInfo* buf = new valueInfo();
+                        cout << "parameter nums : " << $3->size() << endl;
+                        for(int i = 0; i < $3->size(); ++i){
+                            cout << "type : " << valueType2Str((*$3)[i]->valueType) << endl;
+                        }
+                        // check parameter is same as declared 
+                        if($3->size()!= id->argumentsInfo.size()){
+                            yyerror("parameter nums error");
+                        }
+                        // check type and assign
+                        for(int i = 0; i < $3->size(); ++i){
+                            if((*$3)[i]->valueType!=id->argumentsInfoSeq[i]->second){
+                                yyerror("parameter type error");
+                            }
+                            // call by reference?...
+                            id->argumentsInfo[id->argumentsInfoSeq[i]->first]->value =  (*$3)[i];
+                        }
+                        // map<string, idInfo *>::iterator it;
+                        // for (it = id->argumentsInfo.begin(); it != id->argumentsInfo.end(); it++)
+                        // {
+                        //     cout << "id : " << it->first << "\t type : " << idType2Str(it->second->idType);
+                        //     cout << " value : "<< it->second->value->intval;
+                        //     cout << endl;
+                        // }
+                        $$ = buf;
+                    }
+
+// comma-separated expressions
+COMMA_SEP_EXPR : {
+                    Trace("check arugment start");
+                    vector<valueInfo*>* buf = new vector<valueInfo*>();
+                    $$ = buf;
+                }
+               | EXPR ',' COMMA_SEP_EXPR {
+                   Trace("checking argument...");
+                   $3->push_back($1);
+                   $$ = $3;
+               }
+               | EXPR {
+                   Trace("check arugment start");
+                    vector<valueInfo*>* buf = new vector<valueInfo*>();
+                    buf->push_back($1);
+                    $$ = buf;
+               }
+               ;
+
+
+
+// arguments when declare
+// u can also pass zero/one/more arguments in function
+ARGS : | ARG ',' ARGS{
+         Trace("ARG , ARGS");  
+         $$ = $3;
+        $$->push_back($1);
+
+       }
+       | ARG {
+           Trace("ARG");
+           vector<pair<string,int>*>* buf = new vector<pair<string,int>*>();
+           $$ = buf;
+           $$->push_back($1);
+           
+       }
+       | {
+           Trace("ARGS empty");
+           vector<pair<string,int>*>* buf = new vector<pair<string,int>*>();
+           $$ = buf;
+
+       }
+
+// argument
+ARG : ID ':' DATA_TYPE {
+        Trace("ID : DataType");
+        int result = tables.vec[tables.top].insert(*$1,variableType,$3);
+        if(result == -1){
+            yyerror("id has been used");
+        }
+        pair<string,int>* p = new pair<string,int>();
+        p->first = *$1;
+        p->second = $3;
+        $$ = p;
+    }
+
 // define stmts
-STMTS : STMT {
-
-      }
-      | STMT STMTS {
-
-      };
+STMTS : STMT 
+      | STMT STMTS 
+      ;
 
 // define stmt
-STMT : SIMPLE_STMT {
-
-     }
-     | BLOCK {
-
-     }
-     | CONDITIONAL_STMT {
-
-     }
-     | LOOP_STMT {
-
-     }
+STMT : SIMPLE_STMT 
+     | BLOCK 
+     | CONDITIONAL_STMT 
+     | LOOP_STMT 
+     ;
 
 
+
+V_DECLARE : VAL_DECLARE
+          | VAR_DECLARE
+          |;
 
 // define simple stmt simple stmt include declare
-SIMPLE_STMT : VAL_DECLARE {
-
-            }
-            | VAR_DECLARE {
-
-            }
+SIMPLE_STMT : V_DECLARE
             | ID ASSIGN EXPR {
-                Trace("reducing id assign expr");
+                Trace("ID ASSIGN EXPR");
+                idInfo* buf = new idInfo();
+                // buf = tables.vec[tables.top].lookup(*$1);
+                buf = tables.lookup(*$1);
+                if(buf == NULL){
+                    yyerror(*$1 + " doesn't exist");
+                }
 
+                if(buf->idType != variableType){
+                    yyerror(*$1 + " can not be assign");
+                }
+                if(buf->hasInit){
+                    if(buf->value->valueType != $3->valueType){
+                        yyerror(*$1 + " already assigen other data type");
+                    }
+                    *(buf->value) = *$3;
+                }
+                else{
+                    buf->value = new valueInfo();
+                    *(buf->value) = *$3;
+                    buf->hasInit = true;
+                }
             }
             | ID '[' EXPR ']' ASSIGN EXPR {
-
+                Trace("ID '[' EXPR ']' ASSIGN EXPR");
+                // idInfo* buf = tables.vec[tables.top].lookup(*$1);
+                idInfo* buf = tables.lookup(*$1);
+                if(buf == NULL){
+                    yyerror("id does not exist");
+                }
+                if(buf->idType != arrayType){
+                    yyerror(*$1 + " is not an array");
+                }
+                if($3->valueType != intType){
+                    yyerror("only can assess int index");
+                }
+                else if($3->intval >= buf->arraySize || $3->intval <0){
+                    yyerror("access array out of range");
+                }
+                if(buf->arrayValueType != $6->valueType){
+                    yyerror("assign different value type in array");
+                }
+                else{
+                    *(buf->arrayValue[$3->intval]) = *($6);
+                }
             }
-            | PRINT '(' EXPR ')' {
+            | PRINT '(' EXPR ')' 
+            | PRINTLN '(' EXPR ')' 
+            | READ ID 
+            | RETURN EXPR
+            | RETURN 
+            | EXPR
+            ; 
 
-            }
-            | PRINTLN '(' EXPR ')' {
+// define block but in this block cant declare methods
+// example u cant define method in method
+BLOCK : '{' {
+        Trace("BLOCK START");
+        tables.push();
+      } STMTS 
+      '}' {
+          Trace("BLOCK END");
+            $$ =  new map<string,idInfo*>();
+          *$$ = tables.vec[tables.top].idMap;
+          if(tables.pop() == -1){
+              yyerror("symbol table error");
+          }
+      }
 
-            }
-            | READ ID {
-
-            }
-            | RETURN EXPR {
-
-            }
-            | RETURN {
-
-            }
-            | EXPR {
-
-            }
-
-// define block
-BLOCK : '{' STMTS '}' 
-
+// object block can declare methods  and stmts inside
+// example u can define a methods in object
+OBJ_CONTENTS : FUNCTION OBJ_CONTENTS
+             | V_DECLARE OBJ_CONTENTS
+             | FUNCTION
+OBJ_BLOCK : '{' {
+        tables.push();
+      } OBJ_CONTENTS 
+      '}' {
+          tables.dump();
+          if(tables.pop() == -1){
+              yyerror("symbol table error");
+          }
+      }
 
 
 // constant variables declarations
@@ -179,6 +379,7 @@ VAL_DECLARE : VAL ID ASSIGN EXPR{
 
 VAR_DECLARE : VAR ID ASSIGN EXPR {
                 Trace("VAR ID ASSIGN EXPR");
+                // declare var with value
                 int result = tables.vec[tables.top].insert(*$2,variableType,$4);
                 if(result == -1){
                     yyerror("id has been used");
@@ -186,7 +387,8 @@ VAR_DECLARE : VAR ID ASSIGN EXPR {
             }
             | VAR ID ':' DATA_TYPE {
                 Trace("VAR ID ':' DATA_TYPE");
-                int result = tables.vec[tables.top].insert(*$2,variableType);
+                // declare var but only have type
+                int result = tables.vec[tables.top].insert(*$2,variableType,$4);
                 if(result == -1){
                     yyerror("id has been used");
                 }
@@ -196,6 +398,7 @@ VAR_DECLARE : VAR ID ASSIGN EXPR {
                 if($4 != $6->valueType){
                     yyerror("data type and value type doesn't match");
                 }
+                // declare var with sepcific data type and value
                 int result = tables.vec[tables.top].insert(*$2,variableType,$6);
                 if(result == -1){
                     yyerror("id has been used");
@@ -208,29 +411,148 @@ VAR_DECLARE : VAR ID ASSIGN EXPR {
                     yyerror("id has been used");
                 }
             }
+            | VAR ID {
+                Trace("VAR ID");
+                // declare unknownType var
+                int result = tables.vec[tables.top].insert(*$2,variableType,unknownType);
+                if(result == -1){
+                    yyerror("id has been used");
+                }
+            }
 
 //  define expr
 EXPR : '(' EXPR ')' {
         $$ = $2;
     }
+    | FUNCTION_INVOCATION
     | EXPR '+' EXPR{
+        Trace("EXPR + EXPR");
+        valueInfo* buf = new valueInfo();
+        if($1->valueType==intType && $3->valueType==intType){
+            buf->valueType = intType;
+            buf->intval = ($1->intval + $3->intval);
+        }
+        else if($1->valueType==floatType && $3->valueType==intType){
+            buf->valueType = floatType;
+            buf->floatval = ($1->floatval + (float)$3->intval);
+        }
+        else if($1->valueType==intType && $3->valueType==floatType){
+            buf->valueType = floatType;
+            buf->floatval = ((float)$1->intval + $3->floatval);
+        }
+        else if($1->valueType==floatType && $3->valueType==floatType){
+            buf->valueType = floatType;
+            buf->floatval = ($1->floatval + $3->floatval);
+        }
+        else{
+            yyerror("EXPR + EXPR TYPE ERROR");
+        }
+        $$ = buf;
         
     }
     | EXPR '-' EXPR{
+        Trace("EXPR - EXPR");
+        valueInfo* buf = new valueInfo();
+        if($1->valueType==intType && $3->valueType==intType){
+            buf->valueType = intType;
+            buf->intval = ($1->intval - $3->intval);
+        }
+        else if($1->valueType==floatType && $3->valueType==intType){
+            buf->valueType = floatType;
+            buf->floatval = ($1->floatval - (float)$3->intval);
+        }
+        else if($1->valueType==intType && $3->valueType==floatType){
+            buf->valueType = floatType;
+            buf->floatval = ((float)$1->intval - $3->floatval);
+        }
+        else if($1->valueType==floatType && $3->valueType==floatType){
+            buf->valueType = floatType;
+            buf->floatval = ($1->floatval - $3->floatval);
+        }
+        else{
+            yyerror("EXPR - EXPR TYPE ERROR");
+        }
+        $$ = buf;
 
     }
     | EXPR '*' EXPR{
+        Trace("EXPR * EXPR");
+        valueInfo* buf = new valueInfo();
+        if($1->valueType==intType && $3->valueType==intType){
+            buf->valueType = intType;
+            buf->intval = ($1->intval * $3->intval);
+        }
+        else if($1->valueType==floatType && $3->valueType==intType){
+            buf->valueType = floatType;
+            buf->floatval = ($1->floatval * (float)$3->intval);
+        }
+        else if($1->valueType==intType && $3->valueType==floatType){
+            buf->valueType = floatType;
+            buf->floatval = ((float)$1->intval * $3->floatval);
+        }
+        else if($1->valueType==floatType && $3->valueType==floatType){
+            buf->valueType = floatType;
+            buf->floatval = ($1->floatval * $3->floatval);
+        }
+        else{
+            yyerror("EXPR * EXPR TYPE ERROR");
+        }
+        $$ = buf;
 
     }
     | EXPR '/' EXPR{
+        Trace("EXPR / EXPR");
+        valueInfo* buf = new valueInfo();
+        if($1->valueType==intType && $3->valueType==intType){
+            buf->valueType = intType;
+            buf->intval = ($1->intval / $3->intval);
+        }
+        else if($1->valueType==floatType && $3->valueType==intType){
+            buf->valueType = floatType;
+            buf->floatval = ($1->floatval / (float)$3->intval);
+        }
+        else if($1->valueType==intType && $3->valueType==floatType){
+            buf->valueType = floatType;
+            buf->floatval = ((float)$1->intval / $3->floatval);
+        }
+        else if($1->valueType==floatType && $3->valueType==floatType){
+            buf->valueType = floatType;
+            buf->floatval = ($1->floatval / $3->floatval);
+        }
+        else{
+            yyerror("EXPR / EXPR TYPE ERROR");
+        }
+        $$ = buf;
 
     }
     | EXPR '%' EXPR{
+        Trace("EXPR / EXPR");
+        valueInfo* buf = new valueInfo();
+        if($1->valueType==intType && $3->valueType==intType){
+            buf->valueType = intType;
+            buf->intval = ($1->intval % $3->intval);
+        }
+        else if($1->valueType==floatType && $3->valueType==intType){
+            buf->valueType = floatType;
+            buf->floatval = fmod((double)$1->floatval,(double)$3->intval);
+        }
+        else if($1->valueType==intType && $3->valueType==floatType){
+            buf->valueType = floatType;
+            buf->floatval = fmod((double)$1->intval,(double)$3->floatval);
+        }
+        else if($1->valueType==floatType && $3->valueType==floatType){
+            buf->valueType = floatType;
+            buf->floatval = fmod((double)$1->floatval,(double)$3->floatval);
+        }
+        else{
+            yyerror("EXPR / EXPR TYPE ERROR");
+        }
+        $$ = buf;
 
     }
     | '-' EXPR %prec UMINUS {
         Trace("- EXPR")
-        valueInfo* buf;
+        valueInfo* buf = new valueInfo();
         if ($2->valueType== intType) {
             *buf = *$2;
             buf->intval = -1 * buf->intval;
@@ -242,17 +564,39 @@ EXPR : '(' EXPR ')' {
         else{
             yyerror("- EXPR type error");
         }
+        $$ = buf;
+
 
     }
     | EXPR OR_OP EXPR {
+        Trace("EXPR OR_OP EXPR");
+        valueInfo* buf = new valueInfo();
+        buf->valueType = boolType;
+        if($1->valueType!=boolType || $3->valueType!=boolType){
+            yyerror("EXPR OR_OP EXPR type must be bool");
+        }
+        else{
+            buf->boolval = $1->boolval || $3->boolval;
+        }
+        $$ = buf;
 
     }
     | EXPR AND_OP EXPR {
+        Trace("EXPR AND_OP EXPR");
+        valueInfo* buf = new valueInfo();
+        buf->valueType = boolType;
+        if($1->valueType!=boolType || $3->valueType!=boolType){
+            yyerror("EXPR OR_OP EXPR type must be bool");
+        }
+        else{
+            buf->boolval = $1->boolval && $3->boolval;
+        }
+        $$ = buf;
 
     }
     | EXPR LT EXPR {
         Trace("EXPR LT EXPR");
-        valueInfo* buf;
+        valueInfo* buf = new valueInfo();
         buf->valueType = boolType;
         if($1->valueType==intType && $3->valueType==intType){
             buf->boolval = ($1->intval < $3->intval);
@@ -269,11 +613,13 @@ EXPR : '(' EXPR ')' {
         else{
             yyerror("EXPR LT EXPR TYPE ERROR");
         }
+        $$ = buf;
+
 
     }
     | EXPR LE EXPR {
         Trace("EXPR LE EXPR");
-        valueInfo* buf;
+        valueInfo* buf = new valueInfo();
         buf->valueType = boolType;
         if($1->valueType==intType && $3->valueType==intType){
             buf->boolval = ($1->intval <= $3->intval);
@@ -290,32 +636,38 @@ EXPR : '(' EXPR ')' {
         else{
             yyerror("EXPR LE EXPR TYPE ERROR");
         }
+        $$ = buf;
+
     }
     | EXPR EQ EXPR {
         Trace("EXPR EQ EXPR");
-        valueInfo* buf;
+        valueInfo* buf = new valueInfo();
         buf->valueType = boolType;
-        if($1->valueType==intType && $3->valueType==intType){
+        if($1->valueType != $3->valueType){
+            yyerror("EXPR EQ EXPR type mismatch");
+        }
+        else if($1->valueType==intType){
             buf->boolval = ($1->intval == $3->intval);
         }
-        else if($1->valueType==floatType && $3->valueType==intType){
-            buf->boolval = ($1->floatval == (float)$3->intval);
-        }
-        else if($1->valueType==intType && $3->valueType==floatType){
-            buf->boolval = ((float)$1->intval == $3->floatval);
-        }
-        else if($1->valueType==floatType && $3->valueType==floatType){
+        else if($1->valueType==floatType){
             buf->boolval = ($1->floatval == $3->floatval);
+        }
+        else if($1->valueType==boolType){
+            buf->boolval = ($1->boolval == $3->boolval);
+        }
+        else if($1->valueType==stringType){
+            buf->boolval = (*($1->stringval) == *($3->stringval));
         }
         else{
             yyerror("EXPR EQ EXPR TYPE ERROR");
         }
-
+        $$ = buf;
     }
     | EXPR GT EXPR {
         Trace("EXPR GT EXPR");
-        valueInfo* buf;
+        valueInfo* buf = new valueInfo();
         buf->valueType = boolType;
+
         if($1->valueType==intType && $3->valueType==intType){
             buf->boolval = ($1->intval > $3->intval);
         }
@@ -331,11 +683,12 @@ EXPR : '(' EXPR ')' {
         else{
             yyerror("EXPR GT EXPR TYPE ERROR");
         }
+        $$ = buf;
 
     }
     | EXPR GE EXPR {
         Trace("EXPR GE EXPR");
-        valueInfo* buf;
+        valueInfo* buf = new valueInfo();
         buf->valueType = boolType;
         if($1->valueType==intType && $3->valueType==intType){
             buf->boolval = ($1->intval >= $3->intval);
@@ -352,35 +705,37 @@ EXPR : '(' EXPR ')' {
         else{
             yyerror("EXPR GE EXPR TYPE ERROR");
         }
+        $$ = buf;
 
     }
     | EXPR NE EXPR {
         Trace("EXPR NE EXPR");
-        valueInfo* buf;
+        valueInfo* buf = new valueInfo();
         buf->valueType = boolType;
-        if($1->valueType==intType && $3->valueType==intType){
+        if($1->valueType != $3->valueType){
+            yyerror("EXPR EQ EXPR type mismatch");
+        }
+        else if($1->valueType==intType){
             buf->boolval = ($1->intval != $3->intval);
         }
-        else if($1->valueType==floatType && $3->valueType==intType){
-            buf->boolval = ($1->floatval != (float)$3->intval);
-        }
-        else if($1->valueType==intType && $3->valueType==floatType){
-            buf->boolval = ((float)$1->intval != $3->floatval);
-        }
-        else if($1->valueType==floatType && $3->valueType==floatType){
+        else if($1->valueType==floatType){
             buf->boolval = ($1->floatval != $3->floatval);
         }
-        else if($1->valueType==boolType && $3->valueType==boolType){
-            buf->boolval =($1->boolval != $3->boolval);
+        else if($1->valueType==boolType){
+            buf->boolval = ($1->boolval != $3->boolval);
+        }
+        else if($1->valueType==stringType){
+            buf->boolval = (*($1->stringval) != *($3->stringval));
         }
         else{
             yyerror("EXPR NE EXPR TYPE ERROR");
         }
+        $$ = buf;
 
     }
     | NOT EXPR {
         Trace("NOT EXPR");
-        valueInfo* buf;
+        valueInfo* buf = new valueInfo();
         buf->valueType = boolType;
         if($2->valueType != boolType){
             yyerror("NOT EXPR type error");
@@ -388,6 +743,7 @@ EXPR : '(' EXPR ')' {
         else{
             buf->boolval = !($2->boolval);
         }
+        $$ = buf;
     }
     | ID {
         Trace("ID");
@@ -432,7 +788,7 @@ EXPR : '(' EXPR ')' {
         $$ = buf->arrayValue[$3->intval];
     }
     | VALUE {
-        Trace("Expr : value ")
+        Trace("value ")
         $$ = $1;
     }
 
@@ -483,9 +839,6 @@ VALUE : STRING_VALUE {
 CONDITIONAL_STMT : IF_STMT
                  | IF_STMT ELSE_STMT
 
-
-
-
 IF_STMT : IF '(' EXPR ')' SIMPLE_STMT
         | IF '(' EXPR ')' BLOCK
 
@@ -500,14 +853,12 @@ ELSE_STMT : ELSE SIMPLE_STMT
 LOOP_STMT : WHILE_STMT
           | FOR_STMT
 
-
 // define while stmt
 WHILE_STMT : WHILE '(' EXPR ')' SIMPLE_STMT {
                 Trace(" while without block");
                 if($3->valueType != boolType){
                     yyerror("while EXPR must be boolean");
                 }
-
            }
            | WHILE '(' EXPR ')' BLOCK{
                 Trace(" while with block");
@@ -518,38 +869,22 @@ WHILE_STMT : WHILE '(' EXPR ')' SIMPLE_STMT {
 
 // define for stmt
 FOR_STMT : FOR '(' ID LT '-' VALUE TO VALUE ')' SIMPLE_STMT {
-
+                Trace("for stmt without block");
+            if($6->valueType != intType || $8->valueType != intType){
+                yyerror("for loop args must be int");
+            }
          }
-         | FOR '(' ID LT '-' VALUE TO VALUE ')' BLOCK{
-
+         | FOR '(' ID LT '-' VALUE TO VALUE ')' BLOCK {
+             Trace("for stmt with block");
+             if($6->valueType != intType || $8->valueType != intType){
+                yyerror("for loop args must be int");
+            }
          }
-
-
-
-
-
-
-
-
 
 %%
-
-// yyerror(msg)
-// char *msg;
-// {
-//     fprintf(stderr, "%s\n", msg);
-// }
-// void yyerror(string s) {
-//   cerr << "line " << linenum << ": " << s << endl;
-//   exit(1);
-// }
-//Yacc Required Function
-
-
 int main(int argc, char *argv[])
 {
     /* open the source program file */
-
     if(argc == 1){
         yyin = stdin;
     }
