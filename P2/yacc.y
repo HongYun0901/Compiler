@@ -868,13 +868,13 @@ WHILE_STMT : WHILE '(' EXPR ')' SIMPLE_STMT {
            }
 
 // define for stmt
-FOR_STMT : FOR '(' ID LT '-' VALUE TO VALUE ')' SIMPLE_STMT {
+FOR_STMT : FOR '(' ID LT '-' EXPR TO EXPR ')' SIMPLE_STMT {
                 Trace("for stmt without block");
             if($6->valueType != intType || $8->valueType != intType){
                 yyerror("for loop args must be int");
             }
          }
-         | FOR '(' ID LT '-' VALUE TO VALUE ')' BLOCK {
+         | FOR '(' ID LT '-' EXPR TO EXPR ')' BLOCK {
              Trace("for stmt with block");
              if($6->valueType != intType || $8->valueType != intType){
                 yyerror("for loop args must be int");
