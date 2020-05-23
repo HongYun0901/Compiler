@@ -1,7 +1,7 @@
 all: parser
 
 parser: lex.yy.cpp y.tab.cpp main.cpp main.h
-	g++ y.tab.cpp main.cpp -o parser -ll -ly  -std=c++11 -lstdc++ -Wno-deprecated-register
+	g++ y.tab.cpp main.cpp -o parser -ll -ly  -std=c++11  -Wno-deprecated-register
 
 lex.yy.cpp: lex.l
 	lex -o lex.yy.cpp lex.l

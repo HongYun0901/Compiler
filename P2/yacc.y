@@ -74,14 +74,14 @@ SymbolTableVector tables;
 %token <floatval> FLOAT_VALUE
 %token <stringval> ID
 
-%type <value> VALUE EXPR FUNCTION_INVOCATION 
+%type <value> VALUE EXPR FUNCTION_INVOCATION FUNCTION_RETURN
 // define data type token and return value is enum type
 %type <valueType> DATA_TYPE
 %type <argumentsInfo> ARGS
 %type <argumentInfo> ARG 
 %type <valueType> FUNCTION_OPTIONAL
 %type <valueInfoVec> COMMA_SEP_EXPR 
-%type <idMap> BLOCK
+%type <idMap> BLOCK FUNCTION_BLOCK
 
 
 
@@ -129,26 +129,61 @@ FUNCTION : DEF ID {
                 yyerror(*$2 + "already exists");
             }
             tables.push();
-        } '(' ARGS ')' FUNCTION_OPTIONAL BLOCK {
+        } '(' ARGS ')' FUNCTION_OPTIONAL FUNCTION_BLOCK {
             Trace("declare method end");
             idInfo * id = tables.lookup(*$2);
             if($7 != unknownType){
                 cout << "function return type is " << valueType2Str($7) << endl;
                 id->returnType = $7;
-
+                // check return value is same as declared 
+                if((*$8)["return"]->value->valueType != $7){
+                    yyerror("function return type is different from declared");
+                }
             }
             Trace("Saveing function arguments and inside id map");
             id->argumentsInfo = tables.vec[tables.top].idMap;
             id->insideIdMap = *$8;
             cout << "size check : "<< id->argumentsInfo.size() << endl;
+            // the answer include return idinfo
             cout << "size check : "<< id->insideIdMap.size() << endl;
             tables.pop();
-
+            cout << $5->empty() << endl;
             for(int i = 0; i < $5->size(); ++i){
                 cout << "id : " << (*$5)[i]->first << " type : " << valueType2Str((*$5)[i]->second) << endl;
             }
+            // store the function declare arguments sequence
+            // can check when function invocation
             id->argumentsInfoSeq = *$5;
         }
+
+// return stmt declare
+FUNCTION_RETURN : RETURN EXPR {
+                    Trace("FUNCTION HAS RETURN VALUE");
+                    $$ = $2;
+                }
+                | RETURN {
+                    Trace("FUNCTION HAS NO RETURN VALUE");
+                    $$ = new valueInfo();
+                }
+                | {
+                    Trace("FUNCTION HAS NO RETURN VALUE");
+                    $$ = new valueInfo();
+                }
+// function block(last must be return or not)
+FUNCTION_BLOCK : '{' {
+        Trace("FUNCTION BLOCK START");
+        tables.push();
+      } STMTS FUNCTION_RETURN '}' {
+          Trace("FUNCTION BLOCK END");
+            $$ =  new map<string,idInfo*>();
+          *$$ = tables.vec[tables.top].idMap;
+          (*$$)["return"] =  new idInfo();
+          (*$$)["return"]->value = $4;
+          tables.dump();
+          if(tables.pop() == -1){
+              yyerror("symbol table error");
+          }
+      }
 
 // can specify return type or not
 FUNCTION_OPTIONAL : ':' DATA_TYPE {
@@ -169,7 +204,6 @@ FUNCTION_INVOCATION : ID '(' COMMA_SEP_EXPR ')' {
                         if(id->idType != functionType){
                             yyerror(*$1 + "is not a function");
                         }
-                        valueInfo* buf = new valueInfo();
                         cout << "parameter nums : " << $3->size() << endl;
                         for(int i = 0; i < $3->size(); ++i){
                             cout << "type : " << valueType2Str((*$3)[i]->valueType) << endl;
@@ -186,14 +220,9 @@ FUNCTION_INVOCATION : ID '(' COMMA_SEP_EXPR ')' {
                             // call by reference?...
                             id->argumentsInfo[id->argumentsInfoSeq[i]->first]->value =  (*$3)[i];
                         }
-                        // map<string, idInfo *>::iterator it;
-                        // for (it = id->argumentsInfo.begin(); it != id->argumentsInfo.end(); it++)
-                        // {
-                        //     cout << "id : " << it->first << "\t type : " << idType2Str(it->second->idType);
-                        //     cout << " value : "<< it->second->value->intval;
-                        //     cout << endl;
-                        // }
-                        $$ = buf;
+                        valueInfo* buf = new valueInfo();
+                        // here need to push id's tow idmap into idmap
+                        $$ = buf; 
                     }
 
 // comma-separated expressions
@@ -219,7 +248,14 @@ COMMA_SEP_EXPR : {
 
 // arguments when declare
 // u can also pass zero/one/more arguments in function
-ARGS : | ARG ',' ARGS{
+ARGS : {
+            Trace("ARGS empty");
+           vector<pair<string,int>*>* buf = new vector<pair<string,int>*>();
+           buf->clear(); 
+           $$ = buf;
+
+       }
+       | ARG ',' ARGS{
          Trace("ARG , ARGS");  
          $$ = $3;
         $$->push_back($1);
@@ -231,12 +267,6 @@ ARGS : | ARG ',' ARGS{
            $$ = buf;
            $$->push_back($1);
            
-       }
-       | {
-           Trace("ARGS empty");
-           vector<pair<string,int>*>* buf = new vector<pair<string,int>*>();
-           $$ = buf;
-
        }
 
 // argument
@@ -322,8 +352,7 @@ SIMPLE_STMT : V_DECLARE
             | PRINT '(' EXPR ')' 
             | PRINTLN '(' EXPR ')' 
             | READ ID 
-            | RETURN EXPR
-            | RETURN 
+ 
             | EXPR
             ; 
 
@@ -337,6 +366,7 @@ BLOCK : '{' {
           Trace("BLOCK END");
             $$ =  new map<string,idInfo*>();
           *$$ = tables.vec[tables.top].idMap;
+            tables.dump();
           if(tables.pop() == -1){
               yyerror("symbol table error");
           }
@@ -759,10 +789,19 @@ EXPR : '(' EXPR ')' {
 
         // if id is function
         if(buf->idType == functionType){
-            yyerror(*$1 + " is function make grammar error");
+            Trace("call function invocation");
+            // check parameter is same as declared 
+            if(0 != buf->argumentsInfo.size()){
+                yyerror("parameter nums error");
+            }
+            valueInfo* v = new valueInfo();
+            // here need to push id's tow idmap into idmap
+            $$ = v;
+
+            // yyerror(*$1 + " is function make grammar error");
         }
         // check has init or not
-        if(!buf->hasInit){
+        else if(!buf->hasInit){
             yyerror(*$1 + " has not init");
         }
         $$ = buf->value;

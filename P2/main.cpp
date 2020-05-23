@@ -167,7 +167,8 @@ void SymbolTableVector::dump()
     {
         if (!vec[i].idMap.empty())
         {
-            cout << "----------index:" << ++count << "--i:"<< i << "-----" << endl;
+            // cout << "----------index:" << ++count << "--i:"<< i << "-----" << endl;
+            cout << "----------index:" << ++count << "-----------" << endl;
             map<string, idInfo *>::iterator it;
             for (it = vec[i].idMap.begin(); it != vec[i].idMap.end(); it++)
             {
