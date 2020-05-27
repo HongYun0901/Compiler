@@ -224,7 +224,7 @@ FUNCTION_INVOCATION : ID '(' COMMA_SEP_EXPR ')' {
                         }
                         valueInfo* buf = new valueInfo();
                         // here need to push id's tow idmap into idmap
-                        $$ = buf; 
+                        $$ = id->insideIdMap["return"]->value; 
                     }
 
 // comma-separated expressions
@@ -890,10 +890,22 @@ VALUE : STRING_VALUE {
 CONDITIONAL_STMT : IF_STMT
                  | IF_STMT ELSE_STMT
 
-IF_STMT : IF '(' EXPR ')' SIMPLE_STMT
+IF_STMT : IF '(' EXPR ')' {
+            tables.push();
+
+        } SIMPLE_STMT {
+            tables.dump();
+            tables.pop();
+
+        }
         | IF '(' EXPR ')' BLOCK
 
-ELSE_STMT : ELSE SIMPLE_STMT
+ELSE_STMT : ELSE {
+            tables.push();
+        } SIMPLE_STMT {
+            tables.dump();
+            tables.pop();
+        }
           | ELSE BLOCK 
           | ELSE IF_STMT
           | ELSE IF_STMT ELSE_STMT
@@ -905,7 +917,11 @@ LOOP_STMT : WHILE_STMT
           | FOR_STMT
 
 // define while stmt
-WHILE_STMT : WHILE '(' EXPR ')' SIMPLE_STMT {
+WHILE_STMT : WHILE '(' EXPR ')' {
+                    tables.push();
+                } SIMPLE_STMT {
+                tables.dump();
+                tables.pop();
                 Trace(" while without block");
                 if($3->valueType != boolType){
                     yyerror("while EXPR must be boolean");
@@ -919,7 +935,12 @@ WHILE_STMT : WHILE '(' EXPR ')' SIMPLE_STMT {
            }
 
 // define for stmt
-FOR_STMT : FOR '(' ID LT '-' EXPR TO EXPR ')' SIMPLE_STMT {
+FOR_STMT : FOR '(' ID LT '-' EXPR TO EXPR ')' {
+                tables.push();
+
+            } SIMPLE_STMT {
+                tables.dump();
+                tables.pop();
                 Trace("for stmt without block");
             if($6->valueType != intType || $8->valueType != intType){
                 yyerror("for loop args must be int");
