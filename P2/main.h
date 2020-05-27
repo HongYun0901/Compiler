@@ -33,6 +33,7 @@ struct valueInfo
     int intval = 0;
     float floatval = 0;
     bool boolval = false;
+    char charval = '\0';
     string *stringval = new string();
 };
 
@@ -41,6 +42,8 @@ valueInfo *stringValue(string *s);
 valueInfo *intValue(int i);
 valueInfo *boolValue(bool b);
 valueInfo *floatValue(float f);
+valueInfo *charValue(char c);
+
 
 // should record id is array or function or const or variable
 enum IDType

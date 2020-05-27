@@ -75,16 +75,17 @@
      STRING_VALUE = 291,
      FLOAT_VALUE = 292,
      ID = 293,
-     OR_OP = 294,
-     AND_OP = 295,
-     NOT = 296,
-     NE = 297,
-     GE = 298,
-     GT = 299,
-     EQ = 300,
-     LE = 301,
-     LT = 302,
-     UMINUS = 303
+     CHAR_VALUE = 294,
+     OR_OP = 295,
+     AND_OP = 296,
+     NOT = 297,
+     NE = 298,
+     GE = 299,
+     GT = 300,
+     EQ = 301,
+     LE = 302,
+     LT = 303,
+     UMINUS = 304
    };
 #endif
 /* Tokens.  */
@@ -124,16 +125,17 @@
 #define STRING_VALUE 291
 #define FLOAT_VALUE 292
 #define ID 293
-#define OR_OP 294
-#define AND_OP 295
-#define NOT 296
-#define NE 297
-#define GE 298
-#define GT 299
-#define EQ 300
-#define LE 301
-#define LT 302
-#define UMINUS 303
+#define CHAR_VALUE 294
+#define OR_OP 295
+#define AND_OP 296
+#define NOT 297
+#define NE 298
+#define GE 299
+#define GT 300
+#define EQ 301
+#define LE 302
+#define LT 303
+#define UMINUS 304
 
 
 
@@ -148,6 +150,7 @@ typedef union YYSTYPE
     string* stringval;
     int valueType;
     valueInfo* value;
+    char charval;
     // here is record for the function on called
     vector<valueInfo*>* valueInfoVec;
     vector<pair<string,int>*>* argumentsInfo;
@@ -156,7 +159,7 @@ typedef union YYSTYPE
 
 }
 /* Line 1529 of yacc.c.  */
-#line 160 "y.tab.hpp"
+#line 163 "y.tab.hpp"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

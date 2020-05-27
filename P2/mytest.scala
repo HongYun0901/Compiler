@@ -1,4 +1,4 @@
-
+var c:char = 'a'
 
 
 def fun(b:int,e:int,g:int,c:int,k:int):boolean{

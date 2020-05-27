@@ -25,6 +25,7 @@ SymbolTableVector tables;
     string* stringval;
     int valueType;
     valueInfo* value;
+    char charval;
     // here is record for the function on called
     vector<valueInfo*>* valueInfoVec;
     vector<pair<string,int>*>* argumentsInfo;
@@ -73,6 +74,7 @@ SymbolTableVector tables;
 %token <stringval> STRING_VALUE
 %token <floatval> FLOAT_VALUE
 %token <stringval> ID
+%token <charval> CHAR_VALUE
 
 %type <value> VALUE EXPR FUNCTION_INVOCATION FUNCTION_RETURN
 // define data type token and return value is enum type
@@ -688,6 +690,9 @@ EXPR : '(' EXPR ')' {
         else if($1->valueType==stringType){
             buf->boolval = (*($1->stringval) == *($3->stringval));
         }
+        else if($1->valueType==charType){
+            buf->boolval = (($1->charval) == ($3->charval));
+        }
         else{
             yyerror("EXPR EQ EXPR TYPE ERROR");
         }
@@ -756,6 +761,9 @@ EXPR : '(' EXPR ')' {
         }
         else if($1->valueType==stringType){
             buf->boolval = (*($1->stringval) != *($3->stringval));
+        }
+        else if($1->valueType==charType){
+            buf->boolval = (($1->charval) != ($3->charval));
         }
         else{
             yyerror("EXPR NE EXPR TYPE ERROR");
@@ -871,6 +879,10 @@ VALUE : STRING_VALUE {
       | FLOAT_VALUE {
             Trace(" float value");
             $$  = floatValue($1);
+      }
+      | CHAR_VALUE {
+          Trace(" char value");
+          $$  = charValue($1);
       }
       ;
 

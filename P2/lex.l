@@ -59,6 +59,10 @@ identifiers ({letter}({letter}|{digit})*)
 /* string */
 strings \"(\\.|[^"\n])*\"
 
+ /* char */
+char '([^'\\\n]|\\.)'
+
+
 
 
 
@@ -249,6 +253,19 @@ while   {
     // tokenDouble("realconstants",tmp);
     yylval.floatval = tmp;
     return FLOAT_VALUE;
+}
+
+{char} {
+    char tmp[1024];
+    LIST;
+    sscanf(yytext,"%s",tmp);
+    printf("%s \n",tmp);
+    yylval.charval = tmp[1];
+    return CHAR_VALUE;
+
+
+
+
 }
 
  /* identifiers */

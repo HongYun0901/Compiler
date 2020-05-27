@@ -33,6 +33,14 @@ valueInfo *floatValue(float f)
     return tmp;
 }
 
+valueInfo *charValue(char c)
+{
+    valueInfo *tmp = new valueInfo();
+    tmp->valueType = charType;
+    tmp->charval = c;
+    return tmp;
+}
+
 SymbolTable::SymbolTable()
 {
     idMap.clear();
