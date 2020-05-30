@@ -4,7 +4,7 @@
 #include "lex.yy.cpp"
 #define Trace(t)        {printf(t);printf("\n");}
 // #define Error(t)    {printf(t);printf("\n");exit(-1);}
-#define Warning(t)  {printf(t);printf("\n");} 
+#define Warning(t)  {cout << "Warning: " <<  t << endl;} 
 void yyerror(string s){
    cout << buf << " (" << s  << ')' << endl;
    exit(-1);
@@ -99,16 +99,17 @@ SymbolTableVector tables;
 %nonassoc UMINUS
 
 %%
-start : ALL {
-        Trace("Reducing to program\n");
-    }
-    ;
+//start : ALL {
+//        Trace("Reducing to program\n");
+//    }
+//   ;
 
-ALL : STMTS ALL
-    | FUNCTION ALL
-    | PROGRAM ALL
-    | 
-    ;
+//ALL : STMTS ALL
+//    | FUNCTION ALL
+//    | PROGRAM ALL
+//    | 
+//   ;
+
 
 // Program 
 PROGRAM : OBJECT ID {
@@ -251,7 +252,7 @@ COMMA_SEP_EXPR : {
 // arguments when declare
 // u can also pass zero/one/more arguments in function
 ARGS : {
-            Trace("ARGS empty");
+           Trace("ARGS empty");
            vector<pair<string,int>*>* buf = new vector<pair<string,int>*>();
            buf->clear(); 
            $$ = buf;
@@ -287,6 +288,7 @@ ARG : ID ':' DATA_TYPE {
 // define stmts
 STMTS : STMT 
       | STMT STMTS 
+      |
       ;
 
 // define stmt
@@ -299,8 +301,7 @@ STMT : SIMPLE_STMT
 
 
 V_DECLARE : VAL_DECLARE
-          | VAR_DECLARE
-          |;
+          | VAR_DECLARE;
 
 // define simple stmt simple stmt include declare
 SIMPLE_STMT : V_DECLARE
@@ -351,10 +352,9 @@ SIMPLE_STMT : V_DECLARE
                     *(buf->arrayValue[$3->intval]) = *($6);
                 }
             }
-            | PRINT '(' EXPR ')' 
-            | PRINTLN '(' EXPR ')' 
+            | PRINT  EXPR 
+            | PRINTLN  EXPR 
             | READ ID 
- 
             | EXPR
             ; 
 
@@ -378,7 +378,9 @@ BLOCK : '{' {
 // example u can define a methods in object
 OBJ_CONTENTS : FUNCTION OBJ_CONTENTS
              | V_DECLARE OBJ_CONTENTS
-             | FUNCTION
+             | 
+             ;
+
 OBJ_BLOCK : '{' {
         tables.push();
       } OBJ_CONTENTS 
@@ -810,7 +812,8 @@ EXPR : '(' EXPR ')' {
         }
         // check has init or not
         else if(!buf->hasInit){
-            yyerror(*$1 + " has not init");
+            // yyerror(*$1 + " has not init");
+            Warning(*$1 + " has not init");
         }
         $$ = buf->value;
     }
@@ -971,4 +974,8 @@ int main(int argc, char *argv[])
     /* perform parsing */
     if (yyparse() == 1)                /* parsing */
         yyerror("Parsing error !");     /* syntax error */
+
+
+    printf("Parsing Success \n");
+    tables.dump();
 }
