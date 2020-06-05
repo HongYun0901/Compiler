@@ -22,7 +22,6 @@ enum valueType
     stringType,
     valueTypeError,
     unknownType,
-
 };
 
 // Value struct

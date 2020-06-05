@@ -7,20 +7,29 @@ object example {
   var c
 
   // function declaration
-  def add (a: int, b: int) : int
+  def add (a: int, b: int): int 
   {
-    return a+b
+    return 3
   }
+
+
   
-  // main statements
   def main()
   {
     var c:int
+    var b:float 
+    c = c - b
+    val x:char = 'x'
     c = add(a, 10)
     if (c > 10)
       print -c
     else
       print c
     println ("Hello World")
+
+    
   }
+
+  val x = 4
+
 }

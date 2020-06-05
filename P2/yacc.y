@@ -75,15 +75,18 @@ SymbolTableVector tables;
 %token <floatval> FLOAT_VALUE
 %token <stringval> ID
 %token <charval> CHAR_VALUE
+// %type <value>    FUNCTION_RETURN
 
-%type <value> VALUE EXPR FUNCTION_INVOCATION FUNCTION_RETURN
+%type <value> VALUE EXPR FUNCTION_INVOCATION 
 // define data type token and return value is enum type
 %type <valueType> DATA_TYPE
 %type <argumentsInfo> ARGS
 %type <argumentInfo> ARG 
 %type <valueType> FUNCTION_OPTIONAL
 %type <valueInfoVec> COMMA_SEP_EXPR 
-%type <idMap> BLOCK FUNCTION_BLOCK
+// %type <idMap>  FUNCTION_BLOCK
+
+%type <idMap> BLOCK 
 
 
 
@@ -116,9 +119,9 @@ PROGRAM : OBJECT ID {
             Trace("declare an id to objet type");
             int result = tables.vec[tables.top].insert(*$2,objectType);
             if(result == -1){
-                yyerror(*$2 + "already exists");
+                yyerror(*$2 + " already exists");
             }
-            tables.push();
+            //tables.push();
         } OBJ_BLOCK {
             Trace("OBJECT ID BLOCK");
         };
@@ -129,23 +132,25 @@ FUNCTION : DEF ID {
             Trace("create an function id");
             int result = tables.vec[tables.top].insert(*$2,functionType);
             if(result == -1){
-                yyerror(*$2 + "already exists");
+                yyerror(*$2 + " already exists");
             }
             tables.push();
-        } '(' ARGS ')' FUNCTION_OPTIONAL FUNCTION_BLOCK {
+        } '(' ARGS ')' FUNCTION_OPTIONAL BLOCK {
             Trace("declare method end");
             idInfo * id = tables.lookup(*$2);
-            if($7 != unknownType){
+            if($7 != unknownType && $7 != valueTypeError){
                 cout << "function return type is " << valueType2Str($7) << endl;
                 id->returnType = $7;
                 // check return value is same as declared 
-                if((*$8)["return"]->value->valueType != $7){
-                    yyerror("function return type is different from declared");
-                }
+               // if((*$8)["return"]->value->valueType != $7){
+                    // yyerror("function type is different from declared");
+                   // Warning("function return type is different from declared");
+               // }
             }
             Trace("Saveing function arguments and inside id map");
             id->argumentsInfo = tables.vec[tables.top].idMap;
-            id->insideIdMap = *$8;
+            // here is record return 
+            // id->insideIdMap = *$8;
             cout << "size check : "<< id->argumentsInfo.size() << endl;
             // the answer include return idinfo
             cout << "size check : "<< id->insideIdMap.size() << endl;
@@ -160,42 +165,43 @@ FUNCTION : DEF ID {
         }
 
 // return stmt declare
-FUNCTION_RETURN : RETURN EXPR {
-                    Trace("FUNCTION HAS RETURN VALUE");
-                    $$ = $2;
-                }
-                | RETURN {
-                    Trace("FUNCTION HAS NO RETURN VALUE");
-                    $$ = new valueInfo();
-                }
-                | {
-                    Trace("FUNCTION HAS NO RETURN VALUE");
-                    $$ = new valueInfo();
-                }
+// FUNCTION_RETURN : RETURN EXPR {
+//                     Trace("FUNCTION HAS RETURN VALUE");
+//                     $$ = $2;
+//                 }
+//                 | RETURN {
+//                     Trace("FUNCTION HAS NO RETURN VALUE");
+//                     $$ = new valueInfo();
+//                 }
+//                 | {
+//                     Trace("FUNCTION HAS NO RETURN VALUE");
+//                     $$ = new valueInfo();
+//                 }
 // function block(last must be return or not)
-FUNCTION_BLOCK : '{' {
-        Trace("FUNCTION BLOCK START");
-        tables.push();
-      } STMTS FUNCTION_RETURN '}' {
-          Trace("FUNCTION BLOCK END");
-            $$ =  new map<string,idInfo*>();
-          *$$ = tables.vec[tables.top].idMap;
-          (*$$)["return"] =  new idInfo();
-          (*$$)["return"]->value = $4;
-          tables.dump();
-          if(tables.pop() == -1){
-              yyerror("symbol table error");
-          }
-      }
+// FUNCTION_BLOCK : '{' {
+//         Trace("FUNCTION BLOCK START");
+//         tables.push();
+//       } STMTS  '}' {
+//           Trace("FUNCTION BLOCK END");
+//             $$ =  new map<string,idInfo*>();
+//           *$$ = tables.vec[tables.top].idMap;
+//          //  judge return
+//           // (*$$)["return"] =  new idInfo();
+//           // (*$$)["return"]->value = $4;
+//           tables.dump();
+//           if(tables.pop() == -1){
+//               yyerror("symbol table error");
+//           }
+//       }
 
 // can specify return type or not
-FUNCTION_OPTIONAL : ':' DATA_TYPE {
-                    $$ = $2;
-                }
-                | {
+FUNCTION_OPTIONAL : {
                     $$ = unknownType;
-                }
-                ;
+                  }
+                  | ':' DATA_TYPE {
+                    $$ = $2;
+                  }
+                 ;
 
 // function invocation
 FUNCTION_INVOCATION : ID '(' COMMA_SEP_EXPR ')' {
@@ -225,7 +231,13 @@ FUNCTION_INVOCATION : ID '(' COMMA_SEP_EXPR ')' {
                         }
                         valueInfo* buf = new valueInfo();
                         // here need to push id's tow idmap into idmap
-                        $$ = id->insideIdMap["return"]->value; 
+                        // $$ = id->insideIdMap["return"]->value; 
+                        $$ = new valueInfo();
+                        //if(id->returnType!=unknownType){
+                           // $$->valueType = id->returnType;
+                       // }
+                        $$->valueType = id->returnType;
+                        
                     }
 
 // comma-separated expressions
@@ -296,15 +308,17 @@ STMT : SIMPLE_STMT
      | BLOCK 
      | CONDITIONAL_STMT 
      | LOOP_STMT 
-     ;
-
-
+    ;
 
 V_DECLARE : VAL_DECLARE
           | VAR_DECLARE;
 
+
+
 // define simple stmt simple stmt include declare
 SIMPLE_STMT : V_DECLARE
+            | RETURN
+            | RETURN EXPR;
             | ID ASSIGN EXPR {
                 Trace("ID ASSIGN EXPR");
                 idInfo* buf = new idInfo();
@@ -318,7 +332,16 @@ SIMPLE_STMT : V_DECLARE
                     yyerror(*$1 + " can not be assign");
                 }
                 if(buf->hasInit){
-                    if(buf->value->valueType != $3->valueType){
+                    if($3->valueType == intType && buf->value->valueType == floatType){
+                        *(buf->value) = *$3;
+                    }
+                    else if($3->valueType == floatType && buf->value->valueType == intType){
+                        *(buf->value) = *$3;
+                    }
+                    else if($3->valueType == unknownType){
+                        Warning("unknownType!!!");
+                    }
+                    else if(buf->value->valueType != $3->valueType){
                         yyerror(*$1 + " already assigen other data type");
                     }
                     *(buf->value) = *$3;
@@ -339,7 +362,10 @@ SIMPLE_STMT : V_DECLARE
                 if(buf->idType != arrayType){
                     yyerror(*$1 + " is not an array");
                 }
-                if($3->valueType != intType){
+                if($3->valueType == unknownType){
+                    Warning("unknownType!!!!");
+                }
+                else if($3->valueType != intType){
                     yyerror("only can assess int index");
                 }
                 else if($3->intval >= buf->arraySize || $3->intval <0){
@@ -376,19 +402,21 @@ BLOCK : '{' {
 
 // object block can declare methods  and stmts inside
 // example u can define a methods in object
-OBJ_CONTENTS : FUNCTION OBJ_CONTENTS
+
+
+OBJ_CONTENTS : 
+             | FUNCTION OBJ_CONTENTS
              | V_DECLARE OBJ_CONTENTS
-             | 
              ;
 
 OBJ_BLOCK : '{' {
-        tables.push();
+        // tables.push();
       } OBJ_CONTENTS 
       '}' {
-          tables.dump();
-          if(tables.pop() == -1){
-              yyerror("symbol table error");
-          }
+          // tables.dump();
+          //if(tables.pop() == -1){
+          //    yyerror("symbol table error");
+          //}
       }
 
 
@@ -429,7 +457,10 @@ VAR_DECLARE : VAR ID ASSIGN EXPR {
             }
             | VAR ID ':' DATA_TYPE ASSIGN EXPR{
                 Trace("VAR ID : DATA_TYPE ASSIGN EXPR");
-                if($4 != $6->valueType){
+                if($6->valueType == unknownType){
+                     Warning("unknownType!!!!");
+                }
+                else if($4 != $6->valueType){
                     yyerror("data type and value type doesn't match");
                 }
                 // declare var with sepcific data type and value
@@ -457,333 +488,6 @@ VAR_DECLARE : VAR ID ASSIGN EXPR {
 //  define expr
 EXPR : '(' EXPR ')' {
         $$ = $2;
-    }
-    | FUNCTION_INVOCATION
-    | EXPR '+' EXPR{
-        Trace("EXPR + EXPR");
-        valueInfo* buf = new valueInfo();
-        if($1->valueType==intType && $3->valueType==intType){
-            buf->valueType = intType;
-            buf->intval = ($1->intval + $3->intval);
-        }
-        else if($1->valueType==floatType && $3->valueType==intType){
-            buf->valueType = floatType;
-            buf->floatval = ($1->floatval + (float)$3->intval);
-        }
-        else if($1->valueType==intType && $3->valueType==floatType){
-            buf->valueType = floatType;
-            buf->floatval = ((float)$1->intval + $3->floatval);
-        }
-        else if($1->valueType==floatType && $3->valueType==floatType){
-            buf->valueType = floatType;
-            buf->floatval = ($1->floatval + $3->floatval);
-        }
-        else{
-            yyerror("EXPR + EXPR TYPE ERROR");
-        }
-        $$ = buf;
-        
-    }
-    | EXPR '-' EXPR{
-        Trace("EXPR - EXPR");
-        valueInfo* buf = new valueInfo();
-        if($1->valueType==intType && $3->valueType==intType){
-            buf->valueType = intType;
-            buf->intval = ($1->intval - $3->intval);
-        }
-        else if($1->valueType==floatType && $3->valueType==intType){
-            buf->valueType = floatType;
-            buf->floatval = ($1->floatval - (float)$3->intval);
-        }
-        else if($1->valueType==intType && $3->valueType==floatType){
-            buf->valueType = floatType;
-            buf->floatval = ((float)$1->intval - $3->floatval);
-        }
-        else if($1->valueType==floatType && $3->valueType==floatType){
-            buf->valueType = floatType;
-            buf->floatval = ($1->floatval - $3->floatval);
-        }
-        else{
-            yyerror("EXPR - EXPR TYPE ERROR");
-        }
-        $$ = buf;
-
-    }
-    | EXPR '*' EXPR{
-        Trace("EXPR * EXPR");
-        valueInfo* buf = new valueInfo();
-        if($1->valueType==intType && $3->valueType==intType){
-            buf->valueType = intType;
-            buf->intval = ($1->intval * $3->intval);
-        }
-        else if($1->valueType==floatType && $3->valueType==intType){
-            buf->valueType = floatType;
-            buf->floatval = ($1->floatval * (float)$3->intval);
-        }
-        else if($1->valueType==intType && $3->valueType==floatType){
-            buf->valueType = floatType;
-            buf->floatval = ((float)$1->intval * $3->floatval);
-        }
-        else if($1->valueType==floatType && $3->valueType==floatType){
-            buf->valueType = floatType;
-            buf->floatval = ($1->floatval * $3->floatval);
-        }
-        else{
-            yyerror("EXPR * EXPR TYPE ERROR");
-        }
-        $$ = buf;
-
-    }
-    | EXPR '/' EXPR{
-        Trace("EXPR / EXPR");
-        valueInfo* buf = new valueInfo();
-        if($1->valueType==intType && $3->valueType==intType){
-            buf->valueType = intType;
-            buf->intval = ($1->intval / $3->intval);
-        }
-        else if($1->valueType==floatType && $3->valueType==intType){
-            buf->valueType = floatType;
-            buf->floatval = ($1->floatval / (float)$3->intval);
-        }
-        else if($1->valueType==intType && $3->valueType==floatType){
-            buf->valueType = floatType;
-            buf->floatval = ((float)$1->intval / $3->floatval);
-        }
-        else if($1->valueType==floatType && $3->valueType==floatType){
-            buf->valueType = floatType;
-            buf->floatval = ($1->floatval / $3->floatval);
-        }
-        else{
-            yyerror("EXPR / EXPR TYPE ERROR");
-        }
-        $$ = buf;
-
-    }
-    | EXPR '%' EXPR{
-        Trace("EXPR / EXPR");
-        valueInfo* buf = new valueInfo();
-        if($1->valueType==intType && $3->valueType==intType){
-            buf->valueType = intType;
-            buf->intval = ($1->intval % $3->intval);
-        }
-        else if($1->valueType==floatType && $3->valueType==intType){
-            buf->valueType = floatType;
-            buf->floatval = fmod((double)$1->floatval,(double)$3->intval);
-        }
-        else if($1->valueType==intType && $3->valueType==floatType){
-            buf->valueType = floatType;
-            buf->floatval = fmod((double)$1->intval,(double)$3->floatval);
-        }
-        else if($1->valueType==floatType && $3->valueType==floatType){
-            buf->valueType = floatType;
-            buf->floatval = fmod((double)$1->floatval,(double)$3->floatval);
-        }
-        else{
-            yyerror("EXPR / EXPR TYPE ERROR");
-        }
-        $$ = buf;
-
-    }
-    | '-' EXPR %prec UMINUS {
-        Trace("- EXPR")
-        valueInfo* buf = new valueInfo();
-        if ($2->valueType== intType) {
-            *buf = *$2;
-            buf->intval = -1 * buf->intval;
-        }
-        else if($2->valueType== floatType){
-            *buf = *$2;
-            buf->floatval = -1 * buf->floatval;
-        }
-        else{
-            yyerror("- EXPR type error");
-        }
-        $$ = buf;
-
-
-    }
-    | EXPR OR_OP EXPR {
-        Trace("EXPR OR_OP EXPR");
-        valueInfo* buf = new valueInfo();
-        buf->valueType = boolType;
-        if($1->valueType!=boolType || $3->valueType!=boolType){
-            yyerror("EXPR OR_OP EXPR type must be bool");
-        }
-        else{
-            buf->boolval = $1->boolval || $3->boolval;
-        }
-        $$ = buf;
-
-    }
-    | EXPR AND_OP EXPR {
-        Trace("EXPR AND_OP EXPR");
-        valueInfo* buf = new valueInfo();
-        buf->valueType = boolType;
-        if($1->valueType!=boolType || $3->valueType!=boolType){
-            yyerror("EXPR OR_OP EXPR type must be bool");
-        }
-        else{
-            buf->boolval = $1->boolval && $3->boolval;
-        }
-        $$ = buf;
-
-    }
-    | EXPR LT EXPR {
-        Trace("EXPR LT EXPR");
-        valueInfo* buf = new valueInfo();
-        buf->valueType = boolType;
-        if($1->valueType==intType && $3->valueType==intType){
-            buf->boolval = ($1->intval < $3->intval);
-        }
-        else if($1->valueType==floatType && $3->valueType==intType){
-            buf->boolval = ($1->floatval < (float)$3->intval);
-        }
-        else if($1->valueType==intType && $3->valueType==floatType){
-            buf->boolval = ((float)$1->intval < $3->floatval);
-        }
-        else if($1->valueType==floatType && $3->valueType==floatType){
-            buf->boolval = ($1->floatval < $3->floatval);
-        }
-        else{
-            yyerror("EXPR LT EXPR TYPE ERROR");
-        }
-        $$ = buf;
-
-
-    }
-    | EXPR LE EXPR {
-        Trace("EXPR LE EXPR");
-        valueInfo* buf = new valueInfo();
-        buf->valueType = boolType;
-        if($1->valueType==intType && $3->valueType==intType){
-            buf->boolval = ($1->intval <= $3->intval);
-        }
-        else if($1->valueType==floatType && $3->valueType==intType){
-            buf->boolval = ($1->floatval <= (float)$3->intval);
-        }
-        else if($1->valueType==intType && $3->valueType==floatType){
-            buf->boolval = ((float)$1->intval <= $3->floatval);
-        }
-        else if($1->valueType==floatType && $3->valueType==floatType){
-            buf->boolval = ($1->floatval <= $3->floatval);
-        }
-        else{
-            yyerror("EXPR LE EXPR TYPE ERROR");
-        }
-        $$ = buf;
-
-    }
-    | EXPR EQ EXPR {
-        Trace("EXPR EQ EXPR");
-        valueInfo* buf = new valueInfo();
-        buf->valueType = boolType;
-        if($1->valueType != $3->valueType){
-            yyerror("EXPR EQ EXPR type mismatch");
-        }
-        else if($1->valueType==intType){
-            buf->boolval = ($1->intval == $3->intval);
-        }
-        else if($1->valueType==floatType){
-            buf->boolval = ($1->floatval == $3->floatval);
-        }
-        else if($1->valueType==boolType){
-            buf->boolval = ($1->boolval == $3->boolval);
-        }
-        else if($1->valueType==stringType){
-            buf->boolval = (*($1->stringval) == *($3->stringval));
-        }
-        else if($1->valueType==charType){
-            buf->boolval = (($1->charval) == ($3->charval));
-        }
-        else{
-            yyerror("EXPR EQ EXPR TYPE ERROR");
-        }
-        $$ = buf;
-    }
-    | EXPR GT EXPR {
-        Trace("EXPR GT EXPR");
-        valueInfo* buf = new valueInfo();
-        buf->valueType = boolType;
-
-        if($1->valueType==intType && $3->valueType==intType){
-            buf->boolval = ($1->intval > $3->intval);
-        }
-        else if($1->valueType==floatType && $3->valueType==intType){
-            buf->boolval = ($1->floatval > (float)$3->intval);
-        }
-        else if($1->valueType==intType && $3->valueType==floatType){
-            buf->boolval = ((float)$1->intval > $3->floatval);
-        }
-        else if($1->valueType==floatType && $3->valueType==floatType){
-            buf->boolval = ($1->floatval > $3->floatval);
-        }
-        else{
-            yyerror("EXPR GT EXPR TYPE ERROR");
-        }
-        $$ = buf;
-
-    }
-    | EXPR GE EXPR {
-        Trace("EXPR GE EXPR");
-        valueInfo* buf = new valueInfo();
-        buf->valueType = boolType;
-        if($1->valueType==intType && $3->valueType==intType){
-            buf->boolval = ($1->intval >= $3->intval);
-        }
-        else if($1->valueType==floatType && $3->valueType==intType){
-            buf->boolval = ($1->floatval >= (float)$3->intval);
-        }
-        else if($1->valueType==intType && $3->valueType==floatType){
-            buf->boolval = ((float)$1->intval >= $3->floatval);
-        }
-        else if($1->valueType==floatType && $3->valueType==floatType){
-            buf->boolval = ($1->floatval >= $3->floatval);
-        }
-        else{
-            yyerror("EXPR GE EXPR TYPE ERROR");
-        }
-        $$ = buf;
-
-    }
-    | EXPR NE EXPR {
-        Trace("EXPR NE EXPR");
-        valueInfo* buf = new valueInfo();
-        buf->valueType = boolType;
-        if($1->valueType != $3->valueType){
-            yyerror("EXPR EQ EXPR type mismatch");
-        }
-        else if($1->valueType==intType){
-            buf->boolval = ($1->intval != $3->intval);
-        }
-        else if($1->valueType==floatType){
-            buf->boolval = ($1->floatval != $3->floatval);
-        }
-        else if($1->valueType==boolType){
-            buf->boolval = ($1->boolval != $3->boolval);
-        }
-        else if($1->valueType==stringType){
-            buf->boolval = (*($1->stringval) != *($3->stringval));
-        }
-        else if($1->valueType==charType){
-            buf->boolval = (($1->charval) != ($3->charval));
-        }
-        else{
-            yyerror("EXPR NE EXPR TYPE ERROR");
-        }
-        $$ = buf;
-
-    }
-    | NOT EXPR {
-        Trace("NOT EXPR");
-        valueInfo* buf = new valueInfo();
-        buf->valueType = boolType;
-        if($2->valueType != boolType){
-            yyerror("NOT EXPR type error");
-        }
-        else{
-            buf->boolval = !($2->boolval);
-        }
-        $$ = buf;
     }
     | ID {
         Trace("ID");
@@ -817,6 +521,382 @@ EXPR : '(' EXPR ')' {
         }
         $$ = buf->value;
     }
+    | '-' EXPR %prec UMINUS {
+        Trace("- EXPR")
+        valueInfo* buf = new valueInfo();
+        if ($2->valueType== intType) {
+            *buf = *$2;
+            buf->intval = -1 * buf->intval;
+        }
+        else if($2->valueType== floatType){
+            *buf = *$2;
+            buf->floatval = -1 * buf->floatval;
+        }
+        else if($2->valueType==unknownType){
+            Warning("beside operator may have unknownType");
+        }
+        else{
+            yyerror("- EXPR type error");
+        }
+        $$ = buf;
+
+
+    }
+    | FUNCTION_INVOCATION
+    | EXPR '+' EXPR{
+        Trace("EXPR + EXPR");
+        valueInfo* buf = new valueInfo();
+        if($1->valueType==intType && $3->valueType==intType){
+            buf->valueType = intType;
+            buf->intval = ($1->intval + $3->intval);
+        }
+        else if($1->valueType==floatType && $3->valueType==intType){
+            buf->valueType = floatType;
+            buf->floatval = ($1->floatval + (float)$3->intval);
+        }
+        else if($1->valueType==intType && $3->valueType==floatType){
+            buf->valueType = floatType;
+            buf->floatval = ((float)$1->intval + $3->floatval);
+        }
+        else if($1->valueType==floatType && $3->valueType==floatType){
+            buf->valueType = floatType;
+            buf->floatval = ($1->floatval + $3->floatval);
+        }
+        else if($1->valueType==unknownType || $3->valueType==unknownType){
+            Warning("beside operator may have unknownType");
+        }
+        else{
+            yyerror("EXPR + EXPR TYPE ERROR");
+        }
+        $$ = buf;
+        
+    }
+    | EXPR '-' EXPR{
+        Trace("EXPR - EXPR");
+        valueInfo* buf = new valueInfo();
+        if($1->valueType==intType && $3->valueType==intType){
+            buf->valueType = intType;
+            buf->intval = ($1->intval - $3->intval);
+        }
+        else if($1->valueType==floatType && $3->valueType==intType){
+            buf->valueType = floatType;
+            buf->floatval = ($1->floatval - (float)$3->intval);
+        }
+        else if($1->valueType==intType && $3->valueType==floatType){
+            buf->valueType = floatType;
+            buf->floatval = ((float)$1->intval - $3->floatval);
+        }
+        else if($1->valueType==floatType && $3->valueType==floatType){
+            buf->valueType = floatType;
+            buf->floatval = ($1->floatval - $3->floatval);
+        }
+        else if($1->valueType==unknownType || $3->valueType==unknownType){
+            Warning("beside operator may have unknownType");
+        }
+        else{
+            yyerror("EXPR - EXPR TYPE ERROR");
+        }
+        $$ = buf;
+
+    }
+    | EXPR '*' EXPR{
+        Trace("EXPR * EXPR");
+        valueInfo* buf = new valueInfo();
+        if($1->valueType==intType && $3->valueType==intType){
+            buf->valueType = intType;
+            buf->intval = ($1->intval * $3->intval);
+        }
+        else if($1->valueType==floatType && $3->valueType==intType){
+            buf->valueType = floatType;
+            buf->floatval = ($1->floatval * (float)$3->intval);
+        }
+        else if($1->valueType==intType && $3->valueType==floatType){
+            buf->valueType = floatType;
+            buf->floatval = ((float)$1->intval * $3->floatval);
+        }
+        else if($1->valueType==floatType && $3->valueType==floatType){
+            buf->valueType = floatType;
+            buf->floatval = ($1->floatval * $3->floatval);
+        }
+        else if($1->valueType==unknownType || $3->valueType==unknownType){
+            Warning("beside operator may have unknownType");
+        }
+        else{
+            yyerror("EXPR * EXPR TYPE ERROR");
+        }
+        $$ = buf;
+
+    }
+    | EXPR '/' EXPR{
+        Trace("EXPR / EXPR");
+        valueInfo* buf = new valueInfo();
+        if($1->valueType==intType && $3->valueType==intType){
+            buf->valueType = intType;
+            buf->intval = ($1->intval / $3->intval);
+        }
+        else if($1->valueType==floatType && $3->valueType==intType){
+            buf->valueType = floatType;
+            buf->floatval = ($1->floatval / (float)$3->intval);
+        }
+        else if($1->valueType==intType && $3->valueType==floatType){
+            buf->valueType = floatType;
+            buf->floatval = ((float)$1->intval / $3->floatval);
+        }
+        else if($1->valueType==floatType && $3->valueType==floatType){
+            buf->valueType = floatType;
+            buf->floatval = ($1->floatval / $3->floatval);
+        }
+        else if($1->valueType==unknownType || $3->valueType==unknownType){
+            Warning("beside operator may have unknownType");
+        }
+        else{
+            yyerror("EXPR / EXPR TYPE ERROR");
+        }
+        $$ = buf;
+
+    }
+    | EXPR '%' EXPR{
+        Trace("EXPR / EXPR");
+        valueInfo* buf = new valueInfo();
+        if($1->valueType==intType && $3->valueType==intType){
+            buf->valueType = intType;
+            buf->intval = ($1->intval % $3->intval);
+        }
+        else if($1->valueType==floatType && $3->valueType==intType){
+            buf->valueType = floatType;
+            buf->floatval = fmod((double)$1->floatval,(double)$3->intval);
+        }
+        else if($1->valueType==intType && $3->valueType==floatType){
+            buf->valueType = floatType;
+            buf->floatval = fmod((double)$1->intval,(double)$3->floatval);
+        }
+        else if($1->valueType==floatType && $3->valueType==floatType){
+            buf->valueType = floatType;
+            buf->floatval = fmod((double)$1->floatval,(double)$3->floatval);
+        }
+        else if($1->valueType==unknownType || $3->valueType==unknownType){
+            Warning("beside operator may have unknownType");
+        }
+        else{
+            yyerror("EXPR / EXPR TYPE ERROR");
+        }
+        $$ = buf;
+
+    }
+    | EXPR OR_OP EXPR {
+        Trace("EXPR OR_OP EXPR");
+        valueInfo* buf = new valueInfo();
+        buf->valueType = boolType;
+        if($1->valueType!=boolType || $3->valueType!=boolType){
+            yyerror("EXPR OR_OP EXPR type must be bool");
+        }
+        else if($1->valueType==unknownType || $3->valueType==unknownType){
+            Warning("beside operator may have unknownType");
+        }
+        else{
+            buf->boolval = $1->boolval || $3->boolval;
+        }
+        $$ = buf;
+
+    }
+    | EXPR AND_OP EXPR {
+        Trace("EXPR AND_OP EXPR");
+        valueInfo* buf = new valueInfo();
+        buf->valueType = boolType;
+        if($1->valueType!=boolType || $3->valueType!=boolType){
+            yyerror("EXPR OR_OP EXPR type must be bool");
+        }
+        else if($1->valueType==unknownType || $3->valueType==unknownType){
+            Warning("beside operator may have unknownType");
+        }
+        else{
+            buf->boolval = $1->boolval && $3->boolval;
+        }
+        $$ = buf;
+
+    }
+    | EXPR LT EXPR {
+        Trace("EXPR LT EXPR");
+        valueInfo* buf = new valueInfo();
+        buf->valueType = boolType;
+        if($1->valueType==intType && $3->valueType==intType){
+            buf->boolval = ($1->intval < $3->intval);
+        }
+        else if($1->valueType==floatType && $3->valueType==intType){
+            buf->boolval = ($1->floatval < (float)$3->intval);
+        }
+        else if($1->valueType==intType && $3->valueType==floatType){
+            buf->boolval = ((float)$1->intval < $3->floatval);
+        }
+        else if($1->valueType==floatType && $3->valueType==floatType){
+            buf->boolval = ($1->floatval < $3->floatval);
+        }
+        else if($1->valueType==unknownType || $3->valueType==unknownType){
+            Warning("beside operator may have unknownType");
+        }
+        else{
+            yyerror("EXPR LT EXPR TYPE ERROR");
+        }
+        $$ = buf;
+
+
+    }
+    | EXPR LE EXPR {
+        Trace("EXPR LE EXPR");
+        valueInfo* buf = new valueInfo();
+        buf->valueType = boolType;
+        if($1->valueType==intType && $3->valueType==intType){
+            buf->boolval = ($1->intval <= $3->intval);
+        }
+        else if($1->valueType==floatType && $3->valueType==intType){
+            buf->boolval = ($1->floatval <= (float)$3->intval);
+        }
+        else if($1->valueType==intType && $3->valueType==floatType){
+            buf->boolval = ((float)$1->intval <= $3->floatval);
+        }
+        else if($1->valueType==floatType && $3->valueType==floatType){
+            buf->boolval = ($1->floatval <= $3->floatval);
+        }
+        else if($1->valueType==unknownType || $3->valueType==unknownType){
+            Warning("beside operator may have unknownType");
+        }
+        else if($1->valueType==unknownType || $3->valueType==unknownType){
+            Warning("beside operator may have unknownType");
+        }
+        else{
+            yyerror("EXPR LE EXPR TYPE ERROR");
+        }
+        $$ = buf;
+
+    }
+    | EXPR EQ EXPR {
+        Trace("EXPR EQ EXPR");
+        valueInfo* buf = new valueInfo();
+        buf->valueType = boolType;
+        if($1->valueType != $3->valueType){
+            yyerror("EXPR EQ EXPR type mismatch");
+        }
+        else if($1->valueType==intType){
+            buf->boolval = ($1->intval == $3->intval);
+        }
+        else if($1->valueType==floatType){
+            buf->boolval = ($1->floatval == $3->floatval);
+        }
+        else if($1->valueType==boolType){
+            buf->boolval = ($1->boolval == $3->boolval);
+        }
+        else if($1->valueType==stringType){
+            buf->boolval = (*($1->stringval) == *($3->stringval));
+        }
+        else if($1->valueType==charType){
+            buf->boolval = (($1->charval) == ($3->charval));
+        }
+        else if($1->valueType==unknownType || $3->valueType==unknownType){
+            Warning("beside operator may have unknownType");
+        }
+        else{
+            yyerror("EXPR EQ EXPR TYPE ERROR");
+        }
+        $$ = buf;
+    }
+    | EXPR GT EXPR {
+        Trace("EXPR GT EXPR");
+        valueInfo* buf = new valueInfo();
+        buf->valueType = boolType;
+
+        if($1->valueType==intType && $3->valueType==intType){
+            buf->boolval = ($1->intval > $3->intval);
+        }
+        else if($1->valueType==floatType && $3->valueType==intType){
+            buf->boolval = ($1->floatval > (float)$3->intval);
+        }
+        else if($1->valueType==intType && $3->valueType==floatType){
+            buf->boolval = ((float)$1->intval > $3->floatval);
+        }
+        else if($1->valueType==floatType && $3->valueType==floatType){
+            buf->boolval = ($1->floatval > $3->floatval);
+        }
+        else if($1->valueType==unknownType || $3->valueType==unknownType){
+            Warning("beside operator may have unknownType");
+        }
+        else{
+            yyerror("EXPR GT EXPR TYPE ERROR");
+        }
+        $$ = buf;
+
+    }
+    | EXPR GE EXPR {
+        Trace("EXPR GE EXPR");
+        valueInfo* buf = new valueInfo();
+        buf->valueType = boolType;
+        if($1->valueType==intType && $3->valueType==intType){
+            buf->boolval = ($1->intval >= $3->intval);
+        }
+        else if($1->valueType==floatType && $3->valueType==intType){
+            buf->boolval = ($1->floatval >= (float)$3->intval);
+        }
+        else if($1->valueType==intType && $3->valueType==floatType){
+            buf->boolval = ((float)$1->intval >= $3->floatval);
+        }
+        else if($1->valueType==floatType && $3->valueType==floatType){
+            buf->boolval = ($1->floatval >= $3->floatval);
+        }
+        else if($1->valueType==unknownType || $3->valueType==unknownType){
+            Warning("beside operator may have unknownType");
+        }
+        else{
+            yyerror("EXPR GE EXPR TYPE ERROR");
+        }
+        $$ = buf;
+
+    }
+    | EXPR NE EXPR {
+        Trace("EXPR NE EXPR");
+        valueInfo* buf = new valueInfo();
+        buf->valueType = boolType;
+        if($1->valueType != $3->valueType){
+            yyerror("EXPR EQ EXPR type mismatch");
+        }
+        else if($1->valueType==intType){
+            buf->boolval = ($1->intval != $3->intval);
+        }
+        else if($1->valueType==floatType){
+            buf->boolval = ($1->floatval != $3->floatval);
+        }
+        else if($1->valueType==boolType){
+            buf->boolval = ($1->boolval != $3->boolval);
+        }
+        else if($1->valueType==stringType){
+            buf->boolval = (*($1->stringval) != *($3->stringval));
+        }
+        else if($1->valueType==charType){
+            buf->boolval = (($1->charval) != ($3->charval));
+        }
+        else if($1->valueType==unknownType || $3->valueType==unknownType){
+            Warning("beside operator may have unknownType");
+        }
+        else{
+            yyerror("EXPR NE EXPR TYPE ERROR");
+        }
+        $$ = buf;
+
+    }
+    | NOT EXPR {
+        Trace("NOT EXPR");
+        valueInfo* buf = new valueInfo();
+        buf->valueType = boolType;
+        if($2->valueType==unknownType){
+            Warning("beside operator may have unknownType");
+        }
+        else if($2->valueType != boolType){
+            yyerror("NOT EXPR type error");
+        }
+        else{
+            buf->boolval = !($2->boolval);
+        }
+        $$ = buf;
+    }
+   
     | ID '[' EXPR ']' {
         Trace("ID [ EXPR ]");
         idInfo* buf = tables.lookup(*$1);

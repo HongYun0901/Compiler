@@ -1,0 +1,3093 @@
+Terminals which are not used
+
+   SEMICOLON
+   BREAK
+   CASE
+   CLASS
+   CONTINUE
+   DO
+   EXIT
+   FALSE
+   _NULL
+   REPEAT
+   TRUE
+   TYPE
+
+
+State 33 conflicts: 1 shift/reduce
+State 39 conflicts: 1 shift/reduce
+State 47 conflicts: 1 shift/reduce
+State 93 conflicts: 1 shift/reduce
+State 94 conflicts: 1 shift/reduce
+State 115 conflicts: 1 shift/reduce
+State 118 conflicts: 2 reduce/reduce
+State 122 conflicts: 1 shift/reduce
+State 130 conflicts: 1 shift/reduce
+State 131 conflicts: 1 shift/reduce
+State 145 conflicts: 1 shift/reduce
+State 169 conflicts: 1 shift/reduce
+
+
+Grammar
+
+    0 $accept: PROGRAM $end
+
+    1 @1: /* empty */
+
+    2 PROGRAM: OBJECT ID @1 OBJ_BLOCK
+
+    3 @2: /* empty */
+
+    4 FUNCTION: DEF ID @2 '(' ARGS ')' FUNCTION_OPTIONAL FUNCTION_BLOCK
+
+    5 FUNCTION_RETURN: RETURN EXPR
+    6                | RETURN
+    7                | /* empty */
+
+    8 @3: /* empty */
+
+    9 FUNCTION_BLOCK: '{' @3 STMTS FUNCTION_RETURN '}'
+
+   10 FUNCTION_OPTIONAL: /* empty */
+   11                  | ':' DATA_TYPE
+
+   12 FUNCTION_INVOCATION: ID '(' COMMA_SEP_EXPR ')'
+
+   13 COMMA_SEP_EXPR: /* empty */
+   14               | EXPR ',' COMMA_SEP_EXPR
+   15               | EXPR
+
+   16 ARGS: /* empty */
+   17     | ARG ',' ARGS
+   18     | ARG
+
+   19 ARG: ID ':' DATA_TYPE
+
+   20 STMTS: STMT
+   21      | STMT STMTS
+   22      | /* empty */
+
+   23 STMT: SIMPLE_STMT
+   24     | BLOCK
+   25     | CONDITIONAL_STMT
+   26     | LOOP_STMT
+
+   27 V_DECLARE: VAL_DECLARE
+   28          | VAR_DECLARE
+
+   29 SIMPLE_STMT: V_DECLARE
+   30            | ID ASSIGN EXPR
+   31            | ID '[' EXPR ']' ASSIGN EXPR
+   32            | PRINT EXPR
+   33            | PRINTLN EXPR
+   34            | READ ID
+   35            | EXPR
+
+   36 @4: /* empty */
+
+   37 BLOCK: '{' @4 STMTS '}'
+
+   38 OBJ_CONTENTS: /* empty */
+   39             | FUNCTION OBJ_CONTENTS
+   40             | V_DECLARE OBJ_CONTENTS
+
+   41 @5: /* empty */
+
+   42 OBJ_BLOCK: '{' @5 OBJ_CONTENTS '}'
+
+   43 VAL_DECLARE: VAL ID ASSIGN EXPR
+   44            | VAL ID ':' DATA_TYPE ASSIGN EXPR
+
+   45 VAR_DECLARE: VAR ID ASSIGN EXPR
+   46            | VAR ID ':' DATA_TYPE
+   47            | VAR ID ':' DATA_TYPE ASSIGN EXPR
+   48            | VAR ID ':' DATA_TYPE '[' INT_VALUE ']'
+   49            | VAR ID
+
+   50 EXPR: '(' EXPR ')'
+   51     | FUNCTION_INVOCATION
+   52     | EXPR '+' EXPR
+   53     | EXPR '-' EXPR
+   54     | EXPR '*' EXPR
+   55     | EXPR '/' EXPR
+   56     | EXPR '%' EXPR
+   57     | '-' EXPR
+   58     | EXPR OR_OP EXPR
+   59     | EXPR AND_OP EXPR
+   60     | EXPR LT EXPR
+   61     | EXPR LE EXPR
+   62     | EXPR EQ EXPR
+   63     | EXPR GT EXPR
+   64     | EXPR GE EXPR
+   65     | EXPR NE EXPR
+   66     | NOT EXPR
+   67     | ID
+   68     | ID '[' EXPR ']'
+   69     | VALUE
+
+   70 DATA_TYPE: CHAR
+   71          | STRING
+   72          | INT
+   73          | BOOLEAN
+   74          | FLOAT
+
+   75 VALUE: STRING_VALUE
+   76      | INT_VALUE
+   77      | BOOL_VALUE
+   78      | FLOAT_VALUE
+   79      | CHAR_VALUE
+
+   80 CONDITIONAL_STMT: IF_STMT
+   81                 | IF_STMT ELSE_STMT
+
+   82 @6: /* empty */
+
+   83 IF_STMT: IF '(' EXPR ')' @6 SIMPLE_STMT
+   84        | IF '(' EXPR ')' BLOCK
+
+   85 @7: /* empty */
+
+   86 ELSE_STMT: ELSE @7 SIMPLE_STMT
+   87          | ELSE BLOCK
+   88          | ELSE IF_STMT
+   89          | ELSE IF_STMT ELSE_STMT
+
+   90 LOOP_STMT: WHILE_STMT
+   91          | FOR_STMT
+
+   92 @8: /* empty */
+
+   93 WHILE_STMT: WHILE '(' EXPR ')' @8 SIMPLE_STMT
+   94           | WHILE '(' EXPR ')' BLOCK
+
+   95 @9: /* empty */
+
+   96 FOR_STMT: FOR '(' ID LT '-' EXPR TO EXPR ')' @9 SIMPLE_STMT
+   97         | FOR '(' ID LT '-' EXPR TO EXPR ')' BLOCK
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'%' (37) 56
+'(' (40) 4 12 50 83 84 93 94 96 97
+')' (41) 4 12 50 83 84 93 94 96 97
+'*' (42) 54
+'+' (43) 52
+',' (44) 14 17
+'-' (45) 53 57 96 97
+'/' (47) 55
+':' (58) 11 19 44 46 47 48
+'[' (91) 31 48 68
+']' (93) 31 48 68
+'{' (123) 9 37 42
+'}' (125) 9 37 42
+error (256)
+SEMICOLON (258)
+BOOLEAN (259) 73
+BREAK (260)
+CHAR (261) 70
+CASE (262)
+CLASS (263)
+CONTINUE (264)
+DEF (265) 4
+DO (266)
+ELSE (267) 86 87 88 89
+EXIT (268)
+FALSE (269)
+FLOAT (270) 74
+FOR (271) 96 97
+IF (272) 83 84
+INT (273) 72
+_NULL (274)
+OBJECT (275) 2
+PRINT (276) 32
+PRINTLN (277) 33
+READ (278) 34
+REPEAT (279)
+RETURN (280) 5 6
+STRING (281) 71
+TO (282) 96 97
+TRUE (283)
+TYPE (284)
+VAL (285) 43 44
+VAR (286) 45 46 47 48 49
+WHILE (287) 93 94
+ASSIGN (288) 30 31 43 44 45 47
+BOOL_VALUE (289) 77
+INT_VALUE (290) 48 76
+STRING_VALUE (291) 75
+FLOAT_VALUE (292) 78
+ID (293) 2 4 12 19 30 31 34 43 44 45 46 47 48 49 67 68 96 97
+CHAR_VALUE (294) 79
+OR_OP (295) 58
+AND_OP (296) 59
+NOT (297) 66
+NE (298) 65
+GE (299) 64
+GT (300) 63
+EQ (301) 62
+LE (302) 61
+LT (303) 60 96 97
+UMINUS (304)
+
+
+Nonterminals, with rules where they appear
+
+$accept (63)
+    on left: 0
+PROGRAM (64)
+    on left: 2, on right: 0
+@1 (65)
+    on left: 1, on right: 2
+FUNCTION (66)
+    on left: 4, on right: 39
+@2 (67)
+    on left: 3, on right: 4
+FUNCTION_RETURN (68)
+    on left: 5 6 7, on right: 9
+FUNCTION_BLOCK (69)
+    on left: 9, on right: 4
+@3 (70)
+    on left: 8, on right: 9
+FUNCTION_OPTIONAL (71)
+    on left: 10 11, on right: 4
+FUNCTION_INVOCATION (72)
+    on left: 12, on right: 51
+COMMA_SEP_EXPR (73)
+    on left: 13 14 15, on right: 12 14
+ARGS (74)
+    on left: 16 17 18, on right: 4 17
+ARG (75)
+    on left: 19, on right: 17 18
+STMTS (76)
+    on left: 20 21 22, on right: 9 21 37
+STMT (77)
+    on left: 23 24 25 26, on right: 20 21
+V_DECLARE (78)
+    on left: 27 28, on right: 29 40
+SIMPLE_STMT (79)
+    on left: 29 30 31 32 33 34 35, on right: 23 83 86 93 96
+BLOCK (80)
+    on left: 37, on right: 24 84 87 94 97
+@4 (81)
+    on left: 36, on right: 37
+OBJ_CONTENTS (82)
+    on left: 38 39 40, on right: 39 40 42
+OBJ_BLOCK (83)
+    on left: 42, on right: 2
+@5 (84)
+    on left: 41, on right: 42
+VAL_DECLARE (85)
+    on left: 43 44, on right: 27
+VAR_DECLARE (86)
+    on left: 45 46 47 48 49, on right: 28
+EXPR (87)
+    on left: 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67
+    68 69, on right: 5 14 15 30 31 32 33 35 43 44 45 47 50 52 53 54
+    55 56 57 58 59 60 61 62 63 64 65 66 68 83 84 93 94 96 97
+DATA_TYPE (88)
+    on left: 70 71 72 73 74, on right: 11 19 44 46 47 48
+VALUE (89)
+    on left: 75 76 77 78 79, on right: 69
+CONDITIONAL_STMT (90)
+    on left: 80 81, on right: 25
+IF_STMT (91)
+    on left: 83 84, on right: 80 81 88 89
+@6 (92)
+    on left: 82, on right: 83
+ELSE_STMT (93)
+    on left: 86 87 88 89, on right: 81 89
+@7 (94)
+    on left: 85, on right: 86
+LOOP_STMT (95)
+    on left: 90 91, on right: 26
+WHILE_STMT (96)
+    on left: 93 94, on right: 90
+@8 (97)
+    on left: 92, on right: 93
+FOR_STMT (98)
+    on left: 96 97, on right: 91
+@9 (99)
+    on left: 95, on right: 96
+
+
+state 0
+
+    0 $accept: . PROGRAM $end
+
+    OBJECT  shift, and go to state 1
+
+    PROGRAM  go to state 2
+
+
+state 1
+
+    2 PROGRAM: OBJECT . ID @1 OBJ_BLOCK
+
+    ID  shift, and go to state 3
+
+
+state 2
+
+    0 $accept: PROGRAM . $end
+
+    $end  shift, and go to state 4
+
+
+state 3
+
+    2 PROGRAM: OBJECT ID . @1 OBJ_BLOCK
+
+    $default  reduce using rule 1 (@1)
+
+    @1  go to state 5
+
+
+state 4
+
+    0 $accept: PROGRAM $end .
+
+    $default  accept
+
+
+state 5
+
+    2 PROGRAM: OBJECT ID @1 . OBJ_BLOCK
+
+    '{'  shift, and go to state 6
+
+    OBJ_BLOCK  go to state 7
+
+
+state 6
+
+   42 OBJ_BLOCK: '{' . @5 OBJ_CONTENTS '}'
+
+    $default  reduce using rule 41 (@5)
+
+    @5  go to state 8
+
+
+state 7
+
+    2 PROGRAM: OBJECT ID @1 OBJ_BLOCK .
+
+    $default  reduce using rule 2 (PROGRAM)
+
+
+state 8
+
+   42 OBJ_BLOCK: '{' @5 . OBJ_CONTENTS '}'
+
+    DEF  shift, and go to state 9
+    VAL  shift, and go to state 10
+    VAR  shift, and go to state 11
+
+    $default  reduce using rule 38 (OBJ_CONTENTS)
+
+    FUNCTION      go to state 12
+    V_DECLARE     go to state 13
+    OBJ_CONTENTS  go to state 14
+    VAL_DECLARE   go to state 15
+    VAR_DECLARE   go to state 16
+
+
+state 9
+
+    4 FUNCTION: DEF . ID @2 '(' ARGS ')' FUNCTION_OPTIONAL FUNCTION_BLOCK
+
+    ID  shift, and go to state 17
+
+
+state 10
+
+   43 VAL_DECLARE: VAL . ID ASSIGN EXPR
+   44            | VAL . ID ':' DATA_TYPE ASSIGN EXPR
+
+    ID  shift, and go to state 18
+
+
+state 11
+
+   45 VAR_DECLARE: VAR . ID ASSIGN EXPR
+   46            | VAR . ID ':' DATA_TYPE
+   47            | VAR . ID ':' DATA_TYPE ASSIGN EXPR
+   48            | VAR . ID ':' DATA_TYPE '[' INT_VALUE ']'
+   49            | VAR . ID
+
+    ID  shift, and go to state 19
+
+
+state 12
+
+   39 OBJ_CONTENTS: FUNCTION . OBJ_CONTENTS
+
+    DEF  shift, and go to state 9
+    VAL  shift, and go to state 10
+    VAR  shift, and go to state 11
+
+    $default  reduce using rule 38 (OBJ_CONTENTS)
+
+    FUNCTION      go to state 12
+    V_DECLARE     go to state 13
+    OBJ_CONTENTS  go to state 20
+    VAL_DECLARE   go to state 15
+    VAR_DECLARE   go to state 16
+
+
+state 13
+
+   40 OBJ_CONTENTS: V_DECLARE . OBJ_CONTENTS
+
+    DEF  shift, and go to state 9
+    VAL  shift, and go to state 10
+    VAR  shift, and go to state 11
+
+    $default  reduce using rule 38 (OBJ_CONTENTS)
+
+    FUNCTION      go to state 12
+    V_DECLARE     go to state 13
+    OBJ_CONTENTS  go to state 21
+    VAL_DECLARE   go to state 15
+    VAR_DECLARE   go to state 16
+
+
+state 14
+
+   42 OBJ_BLOCK: '{' @5 OBJ_CONTENTS . '}'
+
+    '}'  shift, and go to state 22
+
+
+state 15
+
+   27 V_DECLARE: VAL_DECLARE .
+
+    $default  reduce using rule 27 (V_DECLARE)
+
+
+state 16
+
+   28 V_DECLARE: VAR_DECLARE .
+
+    $default  reduce using rule 28 (V_DECLARE)
+
+
+state 17
+
+    4 FUNCTION: DEF ID . @2 '(' ARGS ')' FUNCTION_OPTIONAL FUNCTION_BLOCK
+
+    $default  reduce using rule 3 (@2)
+
+    @2  go to state 23
+
+
+state 18
+
+   43 VAL_DECLARE: VAL ID . ASSIGN EXPR
+   44            | VAL ID . ':' DATA_TYPE ASSIGN EXPR
+
+    ASSIGN  shift, and go to state 24
+    ':'     shift, and go to state 25
+
+
+state 19
+
+   45 VAR_DECLARE: VAR ID . ASSIGN EXPR
+   46            | VAR ID . ':' DATA_TYPE
+   47            | VAR ID . ':' DATA_TYPE ASSIGN EXPR
+   48            | VAR ID . ':' DATA_TYPE '[' INT_VALUE ']'
+   49            | VAR ID .
+
+    ASSIGN  shift, and go to state 26
+    ':'     shift, and go to state 27
+
+    $default  reduce using rule 49 (VAR_DECLARE)
+
+
+state 20
+
+   39 OBJ_CONTENTS: FUNCTION OBJ_CONTENTS .
+
+    $default  reduce using rule 39 (OBJ_CONTENTS)
+
+
+state 21
+
+   40 OBJ_CONTENTS: V_DECLARE OBJ_CONTENTS .
+
+    $default  reduce using rule 40 (OBJ_CONTENTS)
+
+
+state 22
+
+   42 OBJ_BLOCK: '{' @5 OBJ_CONTENTS '}' .
+
+    $default  reduce using rule 42 (OBJ_BLOCK)
+
+
+state 23
+
+    4 FUNCTION: DEF ID @2 . '(' ARGS ')' FUNCTION_OPTIONAL FUNCTION_BLOCK
+
+    '('  shift, and go to state 28
+
+
+state 24
+
+   43 VAL_DECLARE: VAL ID ASSIGN . EXPR
+
+    BOOL_VALUE    shift, and go to state 29
+    INT_VALUE     shift, and go to state 30
+    STRING_VALUE  shift, and go to state 31
+    FLOAT_VALUE   shift, and go to state 32
+    ID            shift, and go to state 33
+    CHAR_VALUE    shift, and go to state 34
+    NOT           shift, and go to state 35
+    '-'           shift, and go to state 36
+    '('           shift, and go to state 37
+
+    FUNCTION_INVOCATION  go to state 38
+    EXPR                 go to state 39
+    VALUE                go to state 40
+
+
+state 25
+
+   44 VAL_DECLARE: VAL ID ':' . DATA_TYPE ASSIGN EXPR
+
+    BOOLEAN  shift, and go to state 41
+    CHAR     shift, and go to state 42
+    FLOAT    shift, and go to state 43
+    INT      shift, and go to state 44
+    STRING   shift, and go to state 45
+
+    DATA_TYPE  go to state 46
+
+
+state 26
+
+   45 VAR_DECLARE: VAR ID ASSIGN . EXPR
+
+    BOOL_VALUE    shift, and go to state 29
+    INT_VALUE     shift, and go to state 30
+    STRING_VALUE  shift, and go to state 31
+    FLOAT_VALUE   shift, and go to state 32
+    ID            shift, and go to state 33
+    CHAR_VALUE    shift, and go to state 34
+    NOT           shift, and go to state 35
+    '-'           shift, and go to state 36
+    '('           shift, and go to state 37
+
+    FUNCTION_INVOCATION  go to state 38
+    EXPR                 go to state 47
+    VALUE                go to state 40
+
+
+state 27
+
+   46 VAR_DECLARE: VAR ID ':' . DATA_TYPE
+   47            | VAR ID ':' . DATA_TYPE ASSIGN EXPR
+   48            | VAR ID ':' . DATA_TYPE '[' INT_VALUE ']'
+
+    BOOLEAN  shift, and go to state 41
+    CHAR     shift, and go to state 42
+    FLOAT    shift, and go to state 43
+    INT      shift, and go to state 44
+    STRING   shift, and go to state 45
+
+    DATA_TYPE  go to state 48
+
+
+state 28
+
+    4 FUNCTION: DEF ID @2 '(' . ARGS ')' FUNCTION_OPTIONAL FUNCTION_BLOCK
+
+    ID  shift, and go to state 49
+
+    $default  reduce using rule 16 (ARGS)
+
+    ARGS  go to state 50
+    ARG   go to state 51
+
+
+state 29
+
+   77 VALUE: BOOL_VALUE .
+
+    $default  reduce using rule 77 (VALUE)
+
+
+state 30
+
+   76 VALUE: INT_VALUE .
+
+    $default  reduce using rule 76 (VALUE)
+
+
+state 31
+
+   75 VALUE: STRING_VALUE .
+
+    $default  reduce using rule 75 (VALUE)
+
+
+state 32
+
+   78 VALUE: FLOAT_VALUE .
+
+    $default  reduce using rule 78 (VALUE)
+
+
+state 33
+
+   12 FUNCTION_INVOCATION: ID . '(' COMMA_SEP_EXPR ')'
+   67 EXPR: ID .
+   68     | ID . '[' EXPR ']'
+
+    '('  shift, and go to state 52
+    '['  shift, and go to state 53
+
+    '('       [reduce using rule 67 (EXPR)]
+    $default  reduce using rule 67 (EXPR)
+
+
+state 34
+
+   79 VALUE: CHAR_VALUE .
+
+    $default  reduce using rule 79 (VALUE)
+
+
+state 35
+
+   66 EXPR: NOT . EXPR
+
+    BOOL_VALUE    shift, and go to state 29
+    INT_VALUE     shift, and go to state 30
+    STRING_VALUE  shift, and go to state 31
+    FLOAT_VALUE   shift, and go to state 32
+    ID            shift, and go to state 33
+    CHAR_VALUE    shift, and go to state 34
+    NOT           shift, and go to state 35
+    '-'           shift, and go to state 36
+    '('           shift, and go to state 37
+
+    FUNCTION_INVOCATION  go to state 38
+    EXPR                 go to state 54
+    VALUE                go to state 40
+
+
+state 36
+
+   57 EXPR: '-' . EXPR
+
+    BOOL_VALUE    shift, and go to state 29
+    INT_VALUE     shift, and go to state 30
+    STRING_VALUE  shift, and go to state 31
+    FLOAT_VALUE   shift, and go to state 32
+    ID            shift, and go to state 33
+    CHAR_VALUE    shift, and go to state 34
+    NOT           shift, and go to state 35
+    '-'           shift, and go to state 36
+    '('           shift, and go to state 37
+
+    FUNCTION_INVOCATION  go to state 38
+    EXPR                 go to state 55
+    VALUE                go to state 40
+
+
+state 37
+
+   50 EXPR: '(' . EXPR ')'
+
+    BOOL_VALUE    shift, and go to state 29
+    INT_VALUE     shift, and go to state 30
+    STRING_VALUE  shift, and go to state 31
+    FLOAT_VALUE   shift, and go to state 32
+    ID            shift, and go to state 33
+    CHAR_VALUE    shift, and go to state 34
+    NOT           shift, and go to state 35
+    '-'           shift, and go to state 36
+    '('           shift, and go to state 37
+
+    FUNCTION_INVOCATION  go to state 38
+    EXPR                 go to state 56
+    VALUE                go to state 40
+
+
+state 38
+
+   51 EXPR: FUNCTION_INVOCATION .
+
+    $default  reduce using rule 51 (EXPR)
+
+
+state 39
+
+   43 VAL_DECLARE: VAL ID ASSIGN EXPR .
+   52 EXPR: EXPR . '+' EXPR
+   53     | EXPR . '-' EXPR
+   54     | EXPR . '*' EXPR
+   55     | EXPR . '/' EXPR
+   56     | EXPR . '%' EXPR
+   58     | EXPR . OR_OP EXPR
+   59     | EXPR . AND_OP EXPR
+   60     | EXPR . LT EXPR
+   61     | EXPR . LE EXPR
+   62     | EXPR . EQ EXPR
+   63     | EXPR . GT EXPR
+   64     | EXPR . GE EXPR
+   65     | EXPR . NE EXPR
+
+    OR_OP   shift, and go to state 57
+    AND_OP  shift, and go to state 58
+    NE      shift, and go to state 59
+    GE      shift, and go to state 60
+    GT      shift, and go to state 61
+    EQ      shift, and go to state 62
+    LE      shift, and go to state 63
+    LT      shift, and go to state 64
+    '+'     shift, and go to state 65
+    '-'     shift, and go to state 66
+    '*'     shift, and go to state 67
+    '/'     shift, and go to state 68
+    '%'     shift, and go to state 69
+
+    '-'       [reduce using rule 43 (VAL_DECLARE)]
+    $default  reduce using rule 43 (VAL_DECLARE)
+
+
+state 40
+
+   69 EXPR: VALUE .
+
+    $default  reduce using rule 69 (EXPR)
+
+
+state 41
+
+   73 DATA_TYPE: BOOLEAN .
+
+    $default  reduce using rule 73 (DATA_TYPE)
+
+
+state 42
+
+   70 DATA_TYPE: CHAR .
+
+    $default  reduce using rule 70 (DATA_TYPE)
+
+
+state 43
+
+   74 DATA_TYPE: FLOAT .
+
+    $default  reduce using rule 74 (DATA_TYPE)
+
+
+state 44
+
+   72 DATA_TYPE: INT .
+
+    $default  reduce using rule 72 (DATA_TYPE)
+
+
+state 45
+
+   71 DATA_TYPE: STRING .
+
+    $default  reduce using rule 71 (DATA_TYPE)
+
+
+state 46
+
+   44 VAL_DECLARE: VAL ID ':' DATA_TYPE . ASSIGN EXPR
+
+    ASSIGN  shift, and go to state 70
+
+
+state 47
+
+   45 VAR_DECLARE: VAR ID ASSIGN EXPR .
+   52 EXPR: EXPR . '+' EXPR
+   53     | EXPR . '-' EXPR
+   54     | EXPR . '*' EXPR
+   55     | EXPR . '/' EXPR
+   56     | EXPR . '%' EXPR
+   58     | EXPR . OR_OP EXPR
+   59     | EXPR . AND_OP EXPR
+   60     | EXPR . LT EXPR
+   61     | EXPR . LE EXPR
+   62     | EXPR . EQ EXPR
+   63     | EXPR . GT EXPR
+   64     | EXPR . GE EXPR
+   65     | EXPR . NE EXPR
+
+    OR_OP   shift, and go to state 57
+    AND_OP  shift, and go to state 58
+    NE      shift, and go to state 59
+    GE      shift, and go to state 60
+    GT      shift, and go to state 61
+    EQ      shift, and go to state 62
+    LE      shift, and go to state 63
+    LT      shift, and go to state 64
+    '+'     shift, and go to state 65
+    '-'     shift, and go to state 66
+    '*'     shift, and go to state 67
+    '/'     shift, and go to state 68
+    '%'     shift, and go to state 69
+
+    '-'       [reduce using rule 45 (VAR_DECLARE)]
+    $default  reduce using rule 45 (VAR_DECLARE)
+
+
+state 48
+
+   46 VAR_DECLARE: VAR ID ':' DATA_TYPE .
+   47            | VAR ID ':' DATA_TYPE . ASSIGN EXPR
+   48            | VAR ID ':' DATA_TYPE . '[' INT_VALUE ']'
+
+    ASSIGN  shift, and go to state 71
+    '['     shift, and go to state 72
+
+    $default  reduce using rule 46 (VAR_DECLARE)
+
+
+state 49
+
+   19 ARG: ID . ':' DATA_TYPE
+
+    ':'  shift, and go to state 73
+
+
+state 50
+
+    4 FUNCTION: DEF ID @2 '(' ARGS . ')' FUNCTION_OPTIONAL FUNCTION_BLOCK
+
+    ')'  shift, and go to state 74
+
+
+state 51
+
+   17 ARGS: ARG . ',' ARGS
+   18     | ARG .
+
+    ','  shift, and go to state 75
+
+    $default  reduce using rule 18 (ARGS)
+
+
+state 52
+
+   12 FUNCTION_INVOCATION: ID '(' . COMMA_SEP_EXPR ')'
+
+    BOOL_VALUE    shift, and go to state 29
+    INT_VALUE     shift, and go to state 30
+    STRING_VALUE  shift, and go to state 31
+    FLOAT_VALUE   shift, and go to state 32
+    ID            shift, and go to state 33
+    CHAR_VALUE    shift, and go to state 34
+    NOT           shift, and go to state 35
+    '-'           shift, and go to state 36
+    '('           shift, and go to state 37
+
+    $default  reduce using rule 13 (COMMA_SEP_EXPR)
+
+    FUNCTION_INVOCATION  go to state 38
+    COMMA_SEP_EXPR       go to state 76
+    EXPR                 go to state 77
+    VALUE                go to state 40
+
+
+state 53
+
+   68 EXPR: ID '[' . EXPR ']'
+
+    BOOL_VALUE    shift, and go to state 29
+    INT_VALUE     shift, and go to state 30
+    STRING_VALUE  shift, and go to state 31
+    FLOAT_VALUE   shift, and go to state 32
+    ID            shift, and go to state 33
+    CHAR_VALUE    shift, and go to state 34
+    NOT           shift, and go to state 35
+    '-'           shift, and go to state 36
+    '('           shift, and go to state 37
+
+    FUNCTION_INVOCATION  go to state 38
+    EXPR                 go to state 78
+    VALUE                go to state 40
+
+
+state 54
+
+   52 EXPR: EXPR . '+' EXPR
+   53     | EXPR . '-' EXPR
+   54     | EXPR . '*' EXPR
+   55     | EXPR . '/' EXPR
+   56     | EXPR . '%' EXPR
+   58     | EXPR . OR_OP EXPR
+   59     | EXPR . AND_OP EXPR
+   60     | EXPR . LT EXPR
+   61     | EXPR . LE EXPR
+   62     | EXPR . EQ EXPR
+   63     | EXPR . GT EXPR
+   64     | EXPR . GE EXPR
+   65     | EXPR . NE EXPR
+   66     | NOT EXPR .
+
+    NE   shift, and go to state 59
+    GE   shift, and go to state 60
+    GT   shift, and go to state 61
+    EQ   shift, and go to state 62
+    LE   shift, and go to state 63
+    LT   shift, and go to state 64
+    '+'  shift, and go to state 65
+    '-'  shift, and go to state 66
+    '*'  shift, and go to state 67
+    '/'  shift, and go to state 68
+    '%'  shift, and go to state 69
+
+    $default  reduce using rule 66 (EXPR)
+
+
+state 55
+
+   52 EXPR: EXPR . '+' EXPR
+   53     | EXPR . '-' EXPR
+   54     | EXPR . '*' EXPR
+   55     | EXPR . '/' EXPR
+   56     | EXPR . '%' EXPR
+   57     | '-' EXPR .
+   58     | EXPR . OR_OP EXPR
+   59     | EXPR . AND_OP EXPR
+   60     | EXPR . LT EXPR
+   61     | EXPR . LE EXPR
+   62     | EXPR . EQ EXPR
+   63     | EXPR . GT EXPR
+   64     | EXPR . GE EXPR
+   65     | EXPR . NE EXPR
+
+    $default  reduce using rule 57 (EXPR)
+
+
+state 56
+
+   50 EXPR: '(' EXPR . ')'
+   52     | EXPR . '+' EXPR
+   53     | EXPR . '-' EXPR
+   54     | EXPR . '*' EXPR
+   55     | EXPR . '/' EXPR
+   56     | EXPR . '%' EXPR
+   58     | EXPR . OR_OP EXPR
+   59     | EXPR . AND_OP EXPR
+   60     | EXPR . LT EXPR
+   61     | EXPR . LE EXPR
+   62     | EXPR . EQ EXPR
+   63     | EXPR . GT EXPR
+   64     | EXPR . GE EXPR
+   65     | EXPR . NE EXPR
+
+    OR_OP   shift, and go to state 57
+    AND_OP  shift, and go to state 58
+    NE      shift, and go to state 59
+    GE      shift, and go to state 60
+    GT      shift, and go to state 61
+    EQ      shift, and go to state 62
+    LE      shift, and go to state 63
+    LT      shift, and go to state 64
+    '+'     shift, and go to state 65
+    '-'     shift, and go to state 66
+    '*'     shift, and go to state 67
+    '/'     shift, and go to state 68
+    '%'     shift, and go to state 69
+    ')'     shift, and go to state 79
+
+
+state 57
+
+   58 EXPR: EXPR OR_OP . EXPR
+
+    BOOL_VALUE    shift, and go to state 29
+    INT_VALUE     shift, and go to state 30
+    STRING_VALUE  shift, and go to state 31
+    FLOAT_VALUE   shift, and go to state 32
+    ID            shift, and go to state 33
+    CHAR_VALUE    shift, and go to state 34
+    NOT           shift, and go to state 35
+    '-'           shift, and go to state 36
+    '('           shift, and go to state 37
+
+    FUNCTION_INVOCATION  go to state 38
+    EXPR                 go to state 80
+    VALUE                go to state 40
+
+
+state 58
+
+   59 EXPR: EXPR AND_OP . EXPR
+
+    BOOL_VALUE    shift, and go to state 29
+    INT_VALUE     shift, and go to state 30
+    STRING_VALUE  shift, and go to state 31
+    FLOAT_VALUE   shift, and go to state 32
+    ID            shift, and go to state 33
+    CHAR_VALUE    shift, and go to state 34
+    NOT           shift, and go to state 35
+    '-'           shift, and go to state 36
+    '('           shift, and go to state 37
+
+    FUNCTION_INVOCATION  go to state 38
+    EXPR                 go to state 81
+    VALUE                go to state 40
+
+
+state 59
+
+   65 EXPR: EXPR NE . EXPR
+
+    BOOL_VALUE    shift, and go to state 29
+    INT_VALUE     shift, and go to state 30
+    STRING_VALUE  shift, and go to state 31
+    FLOAT_VALUE   shift, and go to state 32
+    ID            shift, and go to state 33
+    CHAR_VALUE    shift, and go to state 34
+    NOT           shift, and go to state 35
+    '-'           shift, and go to state 36
+    '('           shift, and go to state 37
+
+    FUNCTION_INVOCATION  go to state 38
+    EXPR                 go to state 82
+    VALUE                go to state 40
+
+
+state 60
+
+   64 EXPR: EXPR GE . EXPR
+
+    BOOL_VALUE    shift, and go to state 29
+    INT_VALUE     shift, and go to state 30
+    STRING_VALUE  shift, and go to state 31
+    FLOAT_VALUE   shift, and go to state 32
+    ID            shift, and go to state 33
+    CHAR_VALUE    shift, and go to state 34
+    NOT           shift, and go to state 35
+    '-'           shift, and go to state 36
+    '('           shift, and go to state 37
+
+    FUNCTION_INVOCATION  go to state 38
+    EXPR                 go to state 83
+    VALUE                go to state 40
+
+
+state 61
+
+   63 EXPR: EXPR GT . EXPR
+
+    BOOL_VALUE    shift, and go to state 29
+    INT_VALUE     shift, and go to state 30
+    STRING_VALUE  shift, and go to state 31
+    FLOAT_VALUE   shift, and go to state 32
+    ID            shift, and go to state 33
+    CHAR_VALUE    shift, and go to state 34
+    NOT           shift, and go to state 35
+    '-'           shift, and go to state 36
+    '('           shift, and go to state 37
+
+    FUNCTION_INVOCATION  go to state 38
+    EXPR                 go to state 84
+    VALUE                go to state 40
+
+
+state 62
+
+   62 EXPR: EXPR EQ . EXPR
+
+    BOOL_VALUE    shift, and go to state 29
+    INT_VALUE     shift, and go to state 30
+    STRING_VALUE  shift, and go to state 31
+    FLOAT_VALUE   shift, and go to state 32
+    ID            shift, and go to state 33
+    CHAR_VALUE    shift, and go to state 34
+    NOT           shift, and go to state 35
+    '-'           shift, and go to state 36
+    '('           shift, and go to state 37
+
+    FUNCTION_INVOCATION  go to state 38
+    EXPR                 go to state 85
+    VALUE                go to state 40
+
+
+state 63
+
+   61 EXPR: EXPR LE . EXPR
+
+    BOOL_VALUE    shift, and go to state 29
+    INT_VALUE     shift, and go to state 30
+    STRING_VALUE  shift, and go to state 31
+    FLOAT_VALUE   shift, and go to state 32
+    ID            shift, and go to state 33
+    CHAR_VALUE    shift, and go to state 34
+    NOT           shift, and go to state 35
+    '-'           shift, and go to state 36
+    '('           shift, and go to state 37
+
+    FUNCTION_INVOCATION  go to state 38
+    EXPR                 go to state 86
+    VALUE                go to state 40
+
+
+state 64
+
+   60 EXPR: EXPR LT . EXPR
+
+    BOOL_VALUE    shift, and go to state 29
+    INT_VALUE     shift, and go to state 30
+    STRING_VALUE  shift, and go to state 31
+    FLOAT_VALUE   shift, and go to state 32
+    ID            shift, and go to state 33
+    CHAR_VALUE    shift, and go to state 34
+    NOT           shift, and go to state 35
+    '-'           shift, and go to state 36
+    '('           shift, and go to state 37
+
+    FUNCTION_INVOCATION  go to state 38
+    EXPR                 go to state 87
+    VALUE                go to state 40
+
+
+state 65
+
+   52 EXPR: EXPR '+' . EXPR
+
+    BOOL_VALUE    shift, and go to state 29
+    INT_VALUE     shift, and go to state 30
+    STRING_VALUE  shift, and go to state 31
+    FLOAT_VALUE   shift, and go to state 32
+    ID            shift, and go to state 33
+    CHAR_VALUE    shift, and go to state 34
+    NOT           shift, and go to state 35
+    '-'           shift, and go to state 36
+    '('           shift, and go to state 37
+
+    FUNCTION_INVOCATION  go to state 38
+    EXPR                 go to state 88
+    VALUE                go to state 40
+
+
+state 66
+
+   53 EXPR: EXPR '-' . EXPR
+
+    BOOL_VALUE    shift, and go to state 29
+    INT_VALUE     shift, and go to state 30
+    STRING_VALUE  shift, and go to state 31
+    FLOAT_VALUE   shift, and go to state 32
+    ID            shift, and go to state 33
+    CHAR_VALUE    shift, and go to state 34
+    NOT           shift, and go to state 35
+    '-'           shift, and go to state 36
+    '('           shift, and go to state 37
+
+    FUNCTION_INVOCATION  go to state 38
+    EXPR                 go to state 89
+    VALUE                go to state 40
+
+
+state 67
+
+   54 EXPR: EXPR '*' . EXPR
+
+    BOOL_VALUE    shift, and go to state 29
+    INT_VALUE     shift, and go to state 30
+    STRING_VALUE  shift, and go to state 31
+    FLOAT_VALUE   shift, and go to state 32
+    ID            shift, and go to state 33
+    CHAR_VALUE    shift, and go to state 34
+    NOT           shift, and go to state 35
+    '-'           shift, and go to state 36
+    '('           shift, and go to state 37
+
+    FUNCTION_INVOCATION  go to state 38
+    EXPR                 go to state 90
+    VALUE                go to state 40
+
+
+state 68
+
+   55 EXPR: EXPR '/' . EXPR
+
+    BOOL_VALUE    shift, and go to state 29
+    INT_VALUE     shift, and go to state 30
+    STRING_VALUE  shift, and go to state 31
+    FLOAT_VALUE   shift, and go to state 32
+    ID            shift, and go to state 33
+    CHAR_VALUE    shift, and go to state 34
+    NOT           shift, and go to state 35
+    '-'           shift, and go to state 36
+    '('           shift, and go to state 37
+
+    FUNCTION_INVOCATION  go to state 38
+    EXPR                 go to state 91
+    VALUE                go to state 40
+
+
+state 69
+
+   56 EXPR: EXPR '%' . EXPR
+
+    BOOL_VALUE    shift, and go to state 29
+    INT_VALUE     shift, and go to state 30
+    STRING_VALUE  shift, and go to state 31
+    FLOAT_VALUE   shift, and go to state 32
+    ID            shift, and go to state 33
+    CHAR_VALUE    shift, and go to state 34
+    NOT           shift, and go to state 35
+    '-'           shift, and go to state 36
+    '('           shift, and go to state 37
+
+    FUNCTION_INVOCATION  go to state 38
+    EXPR                 go to state 92
+    VALUE                go to state 40
+
+
+state 70
+
+   44 VAL_DECLARE: VAL ID ':' DATA_TYPE ASSIGN . EXPR
+
+    BOOL_VALUE    shift, and go to state 29
+    INT_VALUE     shift, and go to state 30
+    STRING_VALUE  shift, and go to state 31
+    FLOAT_VALUE   shift, and go to state 32
+    ID            shift, and go to state 33
+    CHAR_VALUE    shift, and go to state 34
+    NOT           shift, and go to state 35
+    '-'           shift, and go to state 36
+    '('           shift, and go to state 37
+
+    FUNCTION_INVOCATION  go to state 38
+    EXPR                 go to state 93
+    VALUE                go to state 40
+
+
+state 71
+
+   47 VAR_DECLARE: VAR ID ':' DATA_TYPE ASSIGN . EXPR
+
+    BOOL_VALUE    shift, and go to state 29
+    INT_VALUE     shift, and go to state 30
+    STRING_VALUE  shift, and go to state 31
+    FLOAT_VALUE   shift, and go to state 32
+    ID            shift, and go to state 33
+    CHAR_VALUE    shift, and go to state 34
+    NOT           shift, and go to state 35
+    '-'           shift, and go to state 36
+    '('           shift, and go to state 37
+
+    FUNCTION_INVOCATION  go to state 38
+    EXPR                 go to state 94
+    VALUE                go to state 40
+
+
+state 72
+
+   48 VAR_DECLARE: VAR ID ':' DATA_TYPE '[' . INT_VALUE ']'
+
+    INT_VALUE  shift, and go to state 95
+
+
+state 73
+
+   19 ARG: ID ':' . DATA_TYPE
+
+    BOOLEAN  shift, and go to state 41
+    CHAR     shift, and go to state 42
+    FLOAT    shift, and go to state 43
+    INT      shift, and go to state 44
+    STRING   shift, and go to state 45
+
+    DATA_TYPE  go to state 96
+
+
+state 74
+
+    4 FUNCTION: DEF ID @2 '(' ARGS ')' . FUNCTION_OPTIONAL FUNCTION_BLOCK
+
+    ':'  shift, and go to state 97
+
+    $default  reduce using rule 10 (FUNCTION_OPTIONAL)
+
+    FUNCTION_OPTIONAL  go to state 98
+
+
+state 75
+
+   17 ARGS: ARG ',' . ARGS
+
+    ID  shift, and go to state 49
+
+    $default  reduce using rule 16 (ARGS)
+
+    ARGS  go to state 99
+    ARG   go to state 51
+
+
+state 76
+
+   12 FUNCTION_INVOCATION: ID '(' COMMA_SEP_EXPR . ')'
+
+    ')'  shift, and go to state 100
+
+
+state 77
+
+   14 COMMA_SEP_EXPR: EXPR . ',' COMMA_SEP_EXPR
+   15               | EXPR .
+   52 EXPR: EXPR . '+' EXPR
+   53     | EXPR . '-' EXPR
+   54     | EXPR . '*' EXPR
+   55     | EXPR . '/' EXPR
+   56     | EXPR . '%' EXPR
+   58     | EXPR . OR_OP EXPR
+   59     | EXPR . AND_OP EXPR
+   60     | EXPR . LT EXPR
+   61     | EXPR . LE EXPR
+   62     | EXPR . EQ EXPR
+   63     | EXPR . GT EXPR
+   64     | EXPR . GE EXPR
+   65     | EXPR . NE EXPR
+
+    OR_OP   shift, and go to state 57
+    AND_OP  shift, and go to state 58
+    NE      shift, and go to state 59
+    GE      shift, and go to state 60
+    GT      shift, and go to state 61
+    EQ      shift, and go to state 62
+    LE      shift, and go to state 63
+    LT      shift, and go to state 64
+    '+'     shift, and go to state 65
+    '-'     shift, and go to state 66
+    '*'     shift, and go to state 67
+    '/'     shift, and go to state 68
+    '%'     shift, and go to state 69
+    ','     shift, and go to state 101
+
+    $default  reduce using rule 15 (COMMA_SEP_EXPR)
+
+
+state 78
+
+   52 EXPR: EXPR . '+' EXPR
+   53     | EXPR . '-' EXPR
+   54     | EXPR . '*' EXPR
+   55     | EXPR . '/' EXPR
+   56     | EXPR . '%' EXPR
+   58     | EXPR . OR_OP EXPR
+   59     | EXPR . AND_OP EXPR
+   60     | EXPR . LT EXPR
+   61     | EXPR . LE EXPR
+   62     | EXPR . EQ EXPR
+   63     | EXPR . GT EXPR
+   64     | EXPR . GE EXPR
+   65     | EXPR . NE EXPR
+   68     | ID '[' EXPR . ']'
+
+    OR_OP   shift, and go to state 57
+    AND_OP  shift, and go to state 58
+    NE      shift, and go to state 59
+    GE      shift, and go to state 60
+    GT      shift, and go to state 61
+    EQ      shift, and go to state 62
+    LE      shift, and go to state 63
+    LT      shift, and go to state 64
+    '+'     shift, and go to state 65
+    '-'     shift, and go to state 66
+    '*'     shift, and go to state 67
+    '/'     shift, and go to state 68
+    '%'     shift, and go to state 69
+    ']'     shift, and go to state 102
+
+
+state 79
+
+   50 EXPR: '(' EXPR ')' .
+
+    $default  reduce using rule 50 (EXPR)
+
+
+state 80
+
+   52 EXPR: EXPR . '+' EXPR
+   53     | EXPR . '-' EXPR
+   54     | EXPR . '*' EXPR
+   55     | EXPR . '/' EXPR
+   56     | EXPR . '%' EXPR
+   58     | EXPR . OR_OP EXPR
+   58     | EXPR OR_OP EXPR .
+   59     | EXPR . AND_OP EXPR
+   60     | EXPR . LT EXPR
+   61     | EXPR . LE EXPR
+   62     | EXPR . EQ EXPR
+   63     | EXPR . GT EXPR
+   64     | EXPR . GE EXPR
+   65     | EXPR . NE EXPR
+
+    AND_OP  shift, and go to state 58
+    NE      shift, and go to state 59
+    GE      shift, and go to state 60
+    GT      shift, and go to state 61
+    EQ      shift, and go to state 62
+    LE      shift, and go to state 63
+    LT      shift, and go to state 64
+    '+'     shift, and go to state 65
+    '-'     shift, and go to state 66
+    '*'     shift, and go to state 67
+    '/'     shift, and go to state 68
+    '%'     shift, and go to state 69
+
+    $default  reduce using rule 58 (EXPR)
+
+
+state 81
+
+   52 EXPR: EXPR . '+' EXPR
+   53     | EXPR . '-' EXPR
+   54     | EXPR . '*' EXPR
+   55     | EXPR . '/' EXPR
+   56     | EXPR . '%' EXPR
+   58     | EXPR . OR_OP EXPR
+   59     | EXPR . AND_OP EXPR
+   59     | EXPR AND_OP EXPR .
+   60     | EXPR . LT EXPR
+   61     | EXPR . LE EXPR
+   62     | EXPR . EQ EXPR
+   63     | EXPR . GT EXPR
+   64     | EXPR . GE EXPR
+   65     | EXPR . NE EXPR
+
+    NE   shift, and go to state 59
+    GE   shift, and go to state 60
+    GT   shift, and go to state 61
+    EQ   shift, and go to state 62
+    LE   shift, and go to state 63
+    LT   shift, and go to state 64
+    '+'  shift, and go to state 65
+    '-'  shift, and go to state 66
+    '*'  shift, and go to state 67
+    '/'  shift, and go to state 68
+    '%'  shift, and go to state 69
+
+    $default  reduce using rule 59 (EXPR)
+
+
+state 82
+
+   52 EXPR: EXPR . '+' EXPR
+   53     | EXPR . '-' EXPR
+   54     | EXPR . '*' EXPR
+   55     | EXPR . '/' EXPR
+   56     | EXPR . '%' EXPR
+   58     | EXPR . OR_OP EXPR
+   59     | EXPR . AND_OP EXPR
+   60     | EXPR . LT EXPR
+   61     | EXPR . LE EXPR
+   62     | EXPR . EQ EXPR
+   63     | EXPR . GT EXPR
+   64     | EXPR . GE EXPR
+   65     | EXPR . NE EXPR
+   65     | EXPR NE EXPR .
+
+    '+'  shift, and go to state 65
+    '-'  shift, and go to state 66
+    '*'  shift, and go to state 67
+    '/'  shift, and go to state 68
+    '%'  shift, and go to state 69
+
+    $default  reduce using rule 65 (EXPR)
+
+
+state 83
+
+   52 EXPR: EXPR . '+' EXPR
+   53     | EXPR . '-' EXPR
+   54     | EXPR . '*' EXPR
+   55     | EXPR . '/' EXPR
+   56     | EXPR . '%' EXPR
+   58     | EXPR . OR_OP EXPR
+   59     | EXPR . AND_OP EXPR
+   60     | EXPR . LT EXPR
+   61     | EXPR . LE EXPR
+   62     | EXPR . EQ EXPR
+   63     | EXPR . GT EXPR
+   64     | EXPR . GE EXPR
+   64     | EXPR GE EXPR .
+   65     | EXPR . NE EXPR
+
+    '+'  shift, and go to state 65
+    '-'  shift, and go to state 66
+    '*'  shift, and go to state 67
+    '/'  shift, and go to state 68
+    '%'  shift, and go to state 69
+
+    $default  reduce using rule 64 (EXPR)
+
+
+state 84
+
+   52 EXPR: EXPR . '+' EXPR
+   53     | EXPR . '-' EXPR
+   54     | EXPR . '*' EXPR
+   55     | EXPR . '/' EXPR
+   56     | EXPR . '%' EXPR
+   58     | EXPR . OR_OP EXPR
+   59     | EXPR . AND_OP EXPR
+   60     | EXPR . LT EXPR
+   61     | EXPR . LE EXPR
+   62     | EXPR . EQ EXPR
+   63     | EXPR . GT EXPR
+   63     | EXPR GT EXPR .
+   64     | EXPR . GE EXPR
+   65     | EXPR . NE EXPR
+
+    '+'  shift, and go to state 65
+    '-'  shift, and go to state 66
+    '*'  shift, and go to state 67
+    '/'  shift, and go to state 68
+    '%'  shift, and go to state 69
+
+    $default  reduce using rule 63 (EXPR)
+
+
+state 85
+
+   52 EXPR: EXPR . '+' EXPR
+   53     | EXPR . '-' EXPR
+   54     | EXPR . '*' EXPR
+   55     | EXPR . '/' EXPR
+   56     | EXPR . '%' EXPR
+   58     | EXPR . OR_OP EXPR
+   59     | EXPR . AND_OP EXPR
+   60     | EXPR . LT EXPR
+   61     | EXPR . LE EXPR
+   62     | EXPR . EQ EXPR
+   62     | EXPR EQ EXPR .
+   63     | EXPR . GT EXPR
+   64     | EXPR . GE EXPR
+   65     | EXPR . NE EXPR
+
+    '+'  shift, and go to state 65
+    '-'  shift, and go to state 66
+    '*'  shift, and go to state 67
+    '/'  shift, and go to state 68
+    '%'  shift, and go to state 69
+
+    $default  reduce using rule 62 (EXPR)
+
+
+state 86
+
+   52 EXPR: EXPR . '+' EXPR
+   53     | EXPR . '-' EXPR
+   54     | EXPR . '*' EXPR
+   55     | EXPR . '/' EXPR
+   56     | EXPR . '%' EXPR
+   58     | EXPR . OR_OP EXPR
+   59     | EXPR . AND_OP EXPR
+   60     | EXPR . LT EXPR
+   61     | EXPR . LE EXPR
+   61     | EXPR LE EXPR .
+   62     | EXPR . EQ EXPR
+   63     | EXPR . GT EXPR
+   64     | EXPR . GE EXPR
+   65     | EXPR . NE EXPR
+
+    '+'  shift, and go to state 65
+    '-'  shift, and go to state 66
+    '*'  shift, and go to state 67
+    '/'  shift, and go to state 68
+    '%'  shift, and go to state 69
+
+    $default  reduce using rule 61 (EXPR)
+
+
+state 87
+
+   52 EXPR: EXPR . '+' EXPR
+   53     | EXPR . '-' EXPR
+   54     | EXPR . '*' EXPR
+   55     | EXPR . '/' EXPR
+   56     | EXPR . '%' EXPR
+   58     | EXPR . OR_OP EXPR
+   59     | EXPR . AND_OP EXPR
+   60     | EXPR . LT EXPR
+   60     | EXPR LT EXPR .
+   61     | EXPR . LE EXPR
+   62     | EXPR . EQ EXPR
+   63     | EXPR . GT EXPR
+   64     | EXPR . GE EXPR
+   65     | EXPR . NE EXPR
+
+    '+'  shift, and go to state 65
+    '-'  shift, and go to state 66
+    '*'  shift, and go to state 67
+    '/'  shift, and go to state 68
+    '%'  shift, and go to state 69
+
+    $default  reduce using rule 60 (EXPR)
+
+
+state 88
+
+   52 EXPR: EXPR . '+' EXPR
+   52     | EXPR '+' EXPR .
+   53     | EXPR . '-' EXPR
+   54     | EXPR . '*' EXPR
+   55     | EXPR . '/' EXPR
+   56     | EXPR . '%' EXPR
+   58     | EXPR . OR_OP EXPR
+   59     | EXPR . AND_OP EXPR
+   60     | EXPR . LT EXPR
+   61     | EXPR . LE EXPR
+   62     | EXPR . EQ EXPR
+   63     | EXPR . GT EXPR
+   64     | EXPR . GE EXPR
+   65     | EXPR . NE EXPR
+
+    '*'  shift, and go to state 67
+    '/'  shift, and go to state 68
+    '%'  shift, and go to state 69
+
+    $default  reduce using rule 52 (EXPR)
+
+
+state 89
+
+   52 EXPR: EXPR . '+' EXPR
+   53     | EXPR . '-' EXPR
+   53     | EXPR '-' EXPR .
+   54     | EXPR . '*' EXPR
+   55     | EXPR . '/' EXPR
+   56     | EXPR . '%' EXPR
+   58     | EXPR . OR_OP EXPR
+   59     | EXPR . AND_OP EXPR
+   60     | EXPR . LT EXPR
+   61     | EXPR . LE EXPR
+   62     | EXPR . EQ EXPR
+   63     | EXPR . GT EXPR
+   64     | EXPR . GE EXPR
+   65     | EXPR . NE EXPR
+
+    '*'  shift, and go to state 67
+    '/'  shift, and go to state 68
+    '%'  shift, and go to state 69
+
+    $default  reduce using rule 53 (EXPR)
+
+
+state 90
+
+   52 EXPR: EXPR . '+' EXPR
+   53     | EXPR . '-' EXPR
+   54     | EXPR . '*' EXPR
+   54     | EXPR '*' EXPR .
+   55     | EXPR . '/' EXPR
+   56     | EXPR . '%' EXPR
+   58     | EXPR . OR_OP EXPR
+   59     | EXPR . AND_OP EXPR
+   60     | EXPR . LT EXPR
+   61     | EXPR . LE EXPR
+   62     | EXPR . EQ EXPR
+   63     | EXPR . GT EXPR
+   64     | EXPR . GE EXPR
+   65     | EXPR . NE EXPR
+
+    $default  reduce using rule 54 (EXPR)
+
+
+state 91
+
+   52 EXPR: EXPR . '+' EXPR
+   53     | EXPR . '-' EXPR
+   54     | EXPR . '*' EXPR
+   55     | EXPR . '/' EXPR
+   55     | EXPR '/' EXPR .
+   56     | EXPR . '%' EXPR
+   58     | EXPR . OR_OP EXPR
+   59     | EXPR . AND_OP EXPR
+   60     | EXPR . LT EXPR
+   61     | EXPR . LE EXPR
+   62     | EXPR . EQ EXPR
+   63     | EXPR . GT EXPR
+   64     | EXPR . GE EXPR
+   65     | EXPR . NE EXPR
+
+    $default  reduce using rule 55 (EXPR)
+
+
+state 92
+
+   52 EXPR: EXPR . '+' EXPR
+   53     | EXPR . '-' EXPR
+   54     | EXPR . '*' EXPR
+   55     | EXPR . '/' EXPR
+   56     | EXPR . '%' EXPR
+   56     | EXPR '%' EXPR .
+   58     | EXPR . OR_OP EXPR
+   59     | EXPR . AND_OP EXPR
+   60     | EXPR . LT EXPR
+   61     | EXPR . LE EXPR
+   62     | EXPR . EQ EXPR
+   63     | EXPR . GT EXPR
+   64     | EXPR . GE EXPR
+   65     | EXPR . NE EXPR
+
+    $default  reduce using rule 56 (EXPR)
+
+
+state 93
+
+   44 VAL_DECLARE: VAL ID ':' DATA_TYPE ASSIGN EXPR .
+   52 EXPR: EXPR . '+' EXPR
+   53     | EXPR . '-' EXPR
+   54     | EXPR . '*' EXPR
+   55     | EXPR . '/' EXPR
+   56     | EXPR . '%' EXPR
+   58     | EXPR . OR_OP EXPR
+   59     | EXPR . AND_OP EXPR
+   60     | EXPR . LT EXPR
+   61     | EXPR . LE EXPR
+   62     | EXPR . EQ EXPR
+   63     | EXPR . GT EXPR
+   64     | EXPR . GE EXPR
+   65     | EXPR . NE EXPR
+
+    OR_OP   shift, and go to state 57
+    AND_OP  shift, and go to state 58
+    NE      shift, and go to state 59
+    GE      shift, and go to state 60
+    GT      shift, and go to state 61
+    EQ      shift, and go to state 62
+    LE      shift, and go to state 63
+    LT      shift, and go to state 64
+    '+'     shift, and go to state 65
+    '-'     shift, and go to state 66
+    '*'     shift, and go to state 67
+    '/'     shift, and go to state 68
+    '%'     shift, and go to state 69
+
+    '-'       [reduce using rule 44 (VAL_DECLARE)]
+    $default  reduce using rule 44 (VAL_DECLARE)
+
+
+state 94
+
+   47 VAR_DECLARE: VAR ID ':' DATA_TYPE ASSIGN EXPR .
+   52 EXPR: EXPR . '+' EXPR
+   53     | EXPR . '-' EXPR
+   54     | EXPR . '*' EXPR
+   55     | EXPR . '/' EXPR
+   56     | EXPR . '%' EXPR
+   58     | EXPR . OR_OP EXPR
+   59     | EXPR . AND_OP EXPR
+   60     | EXPR . LT EXPR
+   61     | EXPR . LE EXPR
+   62     | EXPR . EQ EXPR
+   63     | EXPR . GT EXPR
+   64     | EXPR . GE EXPR
+   65     | EXPR . NE EXPR
+
+    OR_OP   shift, and go to state 57
+    AND_OP  shift, and go to state 58
+    NE      shift, and go to state 59
+    GE      shift, and go to state 60
+    GT      shift, and go to state 61
+    EQ      shift, and go to state 62
+    LE      shift, and go to state 63
+    LT      shift, and go to state 64
+    '+'     shift, and go to state 65
+    '-'     shift, and go to state 66
+    '*'     shift, and go to state 67
+    '/'     shift, and go to state 68
+    '%'     shift, and go to state 69
+
+    '-'       [reduce using rule 47 (VAR_DECLARE)]
+    $default  reduce using rule 47 (VAR_DECLARE)
+
+
+state 95
+
+   48 VAR_DECLARE: VAR ID ':' DATA_TYPE '[' INT_VALUE . ']'
+
+    ']'  shift, and go to state 103
+
+
+state 96
+
+   19 ARG: ID ':' DATA_TYPE .
+
+    $default  reduce using rule 19 (ARG)
+
+
+state 97
+
+   11 FUNCTION_OPTIONAL: ':' . DATA_TYPE
+
+    BOOLEAN  shift, and go to state 41
+    CHAR     shift, and go to state 42
+    FLOAT    shift, and go to state 43
+    INT      shift, and go to state 44
+    STRING   shift, and go to state 45
+
+    DATA_TYPE  go to state 104
+
+
+state 98
+
+    4 FUNCTION: DEF ID @2 '(' ARGS ')' FUNCTION_OPTIONAL . FUNCTION_BLOCK
+
+    '{'  shift, and go to state 105
+
+    FUNCTION_BLOCK  go to state 106
+
+
+state 99
+
+   17 ARGS: ARG ',' ARGS .
+
+    $default  reduce using rule 17 (ARGS)
+
+
+state 100
+
+   12 FUNCTION_INVOCATION: ID '(' COMMA_SEP_EXPR ')' .
+
+    $default  reduce using rule 12 (FUNCTION_INVOCATION)
+
+
+state 101
+
+   14 COMMA_SEP_EXPR: EXPR ',' . COMMA_SEP_EXPR
+
+    BOOL_VALUE    shift, and go to state 29
+    INT_VALUE     shift, and go to state 30
+    STRING_VALUE  shift, and go to state 31
+    FLOAT_VALUE   shift, and go to state 32
+    ID            shift, and go to state 33
+    CHAR_VALUE    shift, and go to state 34
+    NOT           shift, and go to state 35
+    '-'           shift, and go to state 36
+    '('           shift, and go to state 37
+
+    $default  reduce using rule 13 (COMMA_SEP_EXPR)
+
+    FUNCTION_INVOCATION  go to state 38
+    COMMA_SEP_EXPR       go to state 107
+    EXPR                 go to state 77
+    VALUE                go to state 40
+
+
+state 102
+
+   68 EXPR: ID '[' EXPR ']' .
+
+    $default  reduce using rule 68 (EXPR)
+
+
+state 103
+
+   48 VAR_DECLARE: VAR ID ':' DATA_TYPE '[' INT_VALUE ']' .
+
+    $default  reduce using rule 48 (VAR_DECLARE)
+
+
+state 104
+
+   11 FUNCTION_OPTIONAL: ':' DATA_TYPE .
+
+    $default  reduce using rule 11 (FUNCTION_OPTIONAL)
+
+
+state 105
+
+    9 FUNCTION_BLOCK: '{' . @3 STMTS FUNCTION_RETURN '}'
+
+    $default  reduce using rule 8 (@3)
+
+    @3  go to state 108
+
+
+state 106
+
+    4 FUNCTION: DEF ID @2 '(' ARGS ')' FUNCTION_OPTIONAL FUNCTION_BLOCK .
+
+    $default  reduce using rule 4 (FUNCTION)
+
+
+state 107
+
+   14 COMMA_SEP_EXPR: EXPR ',' COMMA_SEP_EXPR .
+
+    $default  reduce using rule 14 (COMMA_SEP_EXPR)
+
+
+state 108
+
+    9 FUNCTION_BLOCK: '{' @3 . STMTS FUNCTION_RETURN '}'
+
+    FOR           shift, and go to state 109
+    IF            shift, and go to state 110
+    PRINT         shift, and go to state 111
+    PRINTLN       shift, and go to state 112
+    READ          shift, and go to state 113
+    VAL           shift, and go to state 10
+    VAR           shift, and go to state 11
+    WHILE         shift, and go to state 114
+    BOOL_VALUE    shift, and go to state 29
+    INT_VALUE     shift, and go to state 30
+    STRING_VALUE  shift, and go to state 31
+    FLOAT_VALUE   shift, and go to state 32
+    ID            shift, and go to state 115
+    CHAR_VALUE    shift, and go to state 34
+    NOT           shift, and go to state 35
+    '-'           shift, and go to state 36
+    '('           shift, and go to state 37
+    '{'           shift, and go to state 116
+
+    $default  reduce using rule 22 (STMTS)
+
+    FUNCTION_INVOCATION  go to state 38
+    STMTS                go to state 117
+    STMT                 go to state 118
+    V_DECLARE            go to state 119
+    SIMPLE_STMT          go to state 120
+    BLOCK                go to state 121
+    VAL_DECLARE          go to state 15
+    VAR_DECLARE          go to state 16
+    EXPR                 go to state 122
+    VALUE                go to state 40
+    CONDITIONAL_STMT     go to state 123
+    IF_STMT              go to state 124
+    LOOP_STMT            go to state 125
+    WHILE_STMT           go to state 126
+    FOR_STMT             go to state 127
+
+
+state 109
+
+   96 FOR_STMT: FOR . '(' ID LT '-' EXPR TO EXPR ')' @9 SIMPLE_STMT
+   97         | FOR . '(' ID LT '-' EXPR TO EXPR ')' BLOCK
+
+    '('  shift, and go to state 128
+
+
+state 110
+
+   83 IF_STMT: IF . '(' EXPR ')' @6 SIMPLE_STMT
+   84        | IF . '(' EXPR ')' BLOCK
+
+    '('  shift, and go to state 129
+
+
+state 111
+
+   32 SIMPLE_STMT: PRINT . EXPR
+
+    BOOL_VALUE    shift, and go to state 29
+    INT_VALUE     shift, and go to state 30
+    STRING_VALUE  shift, and go to state 31
+    FLOAT_VALUE   shift, and go to state 32
+    ID            shift, and go to state 33
+    CHAR_VALUE    shift, and go to state 34
+    NOT           shift, and go to state 35
+    '-'           shift, and go to state 36
+    '('           shift, and go to state 37
+
+    FUNCTION_INVOCATION  go to state 38
+    EXPR                 go to state 130
+    VALUE                go to state 40
+
+
+state 112
+
+   33 SIMPLE_STMT: PRINTLN . EXPR
+
+    BOOL_VALUE    shift, and go to state 29
+    INT_VALUE     shift, and go to state 30
+    STRING_VALUE  shift, and go to state 31
+    FLOAT_VALUE   shift, and go to state 32
+    ID            shift, and go to state 33
+    CHAR_VALUE    shift, and go to state 34
+    NOT           shift, and go to state 35
+    '-'           shift, and go to state 36
+    '('           shift, and go to state 37
+
+    FUNCTION_INVOCATION  go to state 38
+    EXPR                 go to state 131
+    VALUE                go to state 40
+
+
+state 113
+
+   34 SIMPLE_STMT: READ . ID
+
+    ID  shift, and go to state 132
+
+
+state 114
+
+   93 WHILE_STMT: WHILE . '(' EXPR ')' @8 SIMPLE_STMT
+   94           | WHILE . '(' EXPR ')' BLOCK
+
+    '('  shift, and go to state 133
+
+
+state 115
+
+   12 FUNCTION_INVOCATION: ID . '(' COMMA_SEP_EXPR ')'
+   30 SIMPLE_STMT: ID . ASSIGN EXPR
+   31            | ID . '[' EXPR ']' ASSIGN EXPR
+   67 EXPR: ID .
+   68     | ID . '[' EXPR ']'
+
+    ASSIGN  shift, and go to state 134
+    '('     shift, and go to state 52
+    '['     shift, and go to state 135
+
+    '('       [reduce using rule 67 (EXPR)]
+    $default  reduce using rule 67 (EXPR)
+
+
+state 116
+
+   37 BLOCK: '{' . @4 STMTS '}'
+
+    $default  reduce using rule 36 (@4)
+
+    @4  go to state 136
+
+
+state 117
+
+    9 FUNCTION_BLOCK: '{' @3 STMTS . FUNCTION_RETURN '}'
+
+    RETURN  shift, and go to state 137
+
+    $default  reduce using rule 7 (FUNCTION_RETURN)
+
+    FUNCTION_RETURN  go to state 138
+
+
+state 118
+
+   20 STMTS: STMT .
+   21      | STMT . STMTS
+
+    FOR           shift, and go to state 109
+    IF            shift, and go to state 110
+    PRINT         shift, and go to state 111
+    PRINTLN       shift, and go to state 112
+    READ          shift, and go to state 113
+    VAL           shift, and go to state 10
+    VAR           shift, and go to state 11
+    WHILE         shift, and go to state 114
+    BOOL_VALUE    shift, and go to state 29
+    INT_VALUE     shift, and go to state 30
+    STRING_VALUE  shift, and go to state 31
+    FLOAT_VALUE   shift, and go to state 32
+    ID            shift, and go to state 115
+    CHAR_VALUE    shift, and go to state 34
+    NOT           shift, and go to state 35
+    '-'           shift, and go to state 36
+    '('           shift, and go to state 37
+    '{'           shift, and go to state 116
+
+    RETURN    reduce using rule 20 (STMTS)
+    RETURN    [reduce using rule 22 (STMTS)]
+    '}'       reduce using rule 20 (STMTS)
+    '}'       [reduce using rule 22 (STMTS)]
+    $default  reduce using rule 20 (STMTS)
+
+    FUNCTION_INVOCATION  go to state 38
+    STMTS                go to state 139
+    STMT                 go to state 118
+    V_DECLARE            go to state 119
+    SIMPLE_STMT          go to state 120
+    BLOCK                go to state 121
+    VAL_DECLARE          go to state 15
+    VAR_DECLARE          go to state 16
+    EXPR                 go to state 122
+    VALUE                go to state 40
+    CONDITIONAL_STMT     go to state 123
+    IF_STMT              go to state 124
+    LOOP_STMT            go to state 125
+    WHILE_STMT           go to state 126
+    FOR_STMT             go to state 127
+
+
+state 119
+
+   29 SIMPLE_STMT: V_DECLARE .
+
+    $default  reduce using rule 29 (SIMPLE_STMT)
+
+
+state 120
+
+   23 STMT: SIMPLE_STMT .
+
+    $default  reduce using rule 23 (STMT)
+
+
+state 121
+
+   24 STMT: BLOCK .
+
+    $default  reduce using rule 24 (STMT)
+
+
+state 122
+
+   35 SIMPLE_STMT: EXPR .
+   52 EXPR: EXPR . '+' EXPR
+   53     | EXPR . '-' EXPR
+   54     | EXPR . '*' EXPR
+   55     | EXPR . '/' EXPR
+   56     | EXPR . '%' EXPR
+   58     | EXPR . OR_OP EXPR
+   59     | EXPR . AND_OP EXPR
+   60     | EXPR . LT EXPR
+   61     | EXPR . LE EXPR
+   62     | EXPR . EQ EXPR
+   63     | EXPR . GT EXPR
+   64     | EXPR . GE EXPR
+   65     | EXPR . NE EXPR
+
+    OR_OP   shift, and go to state 57
+    AND_OP  shift, and go to state 58
+    NE      shift, and go to state 59
+    GE      shift, and go to state 60
+    GT      shift, and go to state 61
+    EQ      shift, and go to state 62
+    LE      shift, and go to state 63
+    LT      shift, and go to state 64
+    '+'     shift, and go to state 65
+    '-'     shift, and go to state 66
+    '*'     shift, and go to state 67
+    '/'     shift, and go to state 68
+    '%'     shift, and go to state 69
+
+    '-'       [reduce using rule 35 (SIMPLE_STMT)]
+    $default  reduce using rule 35 (SIMPLE_STMT)
+
+
+state 123
+
+   25 STMT: CONDITIONAL_STMT .
+
+    $default  reduce using rule 25 (STMT)
+
+
+state 124
+
+   80 CONDITIONAL_STMT: IF_STMT .
+   81                 | IF_STMT . ELSE_STMT
+
+    ELSE  shift, and go to state 140
+
+    $default  reduce using rule 80 (CONDITIONAL_STMT)
+
+    ELSE_STMT  go to state 141
+
+
+state 125
+
+   26 STMT: LOOP_STMT .
+
+    $default  reduce using rule 26 (STMT)
+
+
+state 126
+
+   90 LOOP_STMT: WHILE_STMT .
+
+    $default  reduce using rule 90 (LOOP_STMT)
+
+
+state 127
+
+   91 LOOP_STMT: FOR_STMT .
+
+    $default  reduce using rule 91 (LOOP_STMT)
+
+
+state 128
+
+   96 FOR_STMT: FOR '(' . ID LT '-' EXPR TO EXPR ')' @9 SIMPLE_STMT
+   97         | FOR '(' . ID LT '-' EXPR TO EXPR ')' BLOCK
+
+    ID  shift, and go to state 142
+
+
+state 129
+
+   83 IF_STMT: IF '(' . EXPR ')' @6 SIMPLE_STMT
+   84        | IF '(' . EXPR ')' BLOCK
+
+    BOOL_VALUE    shift, and go to state 29
+    INT_VALUE     shift, and go to state 30
+    STRING_VALUE  shift, and go to state 31
+    FLOAT_VALUE   shift, and go to state 32
+    ID            shift, and go to state 33
+    CHAR_VALUE    shift, and go to state 34
+    NOT           shift, and go to state 35
+    '-'           shift, and go to state 36
+    '('           shift, and go to state 37
+
+    FUNCTION_INVOCATION  go to state 38
+    EXPR                 go to state 143
+    VALUE                go to state 40
+
+
+state 130
+
+   32 SIMPLE_STMT: PRINT EXPR .
+   52 EXPR: EXPR . '+' EXPR
+   53     | EXPR . '-' EXPR
+   54     | EXPR . '*' EXPR
+   55     | EXPR . '/' EXPR
+   56     | EXPR . '%' EXPR
+   58     | EXPR . OR_OP EXPR
+   59     | EXPR . AND_OP EXPR
+   60     | EXPR . LT EXPR
+   61     | EXPR . LE EXPR
+   62     | EXPR . EQ EXPR
+   63     | EXPR . GT EXPR
+   64     | EXPR . GE EXPR
+   65     | EXPR . NE EXPR
+
+    OR_OP   shift, and go to state 57
+    AND_OP  shift, and go to state 58
+    NE      shift, and go to state 59
+    GE      shift, and go to state 60
+    GT      shift, and go to state 61
+    EQ      shift, and go to state 62
+    LE      shift, and go to state 63
+    LT      shift, and go to state 64
+    '+'     shift, and go to state 65
+    '-'     shift, and go to state 66
+    '*'     shift, and go to state 67
+    '/'     shift, and go to state 68
+    '%'     shift, and go to state 69
+
+    '-'       [reduce using rule 32 (SIMPLE_STMT)]
+    $default  reduce using rule 32 (SIMPLE_STMT)
+
+
+state 131
+
+   33 SIMPLE_STMT: PRINTLN EXPR .
+   52 EXPR: EXPR . '+' EXPR
+   53     | EXPR . '-' EXPR
+   54     | EXPR . '*' EXPR
+   55     | EXPR . '/' EXPR
+   56     | EXPR . '%' EXPR
+   58     | EXPR . OR_OP EXPR
+   59     | EXPR . AND_OP EXPR
+   60     | EXPR . LT EXPR
+   61     | EXPR . LE EXPR
+   62     | EXPR . EQ EXPR
+   63     | EXPR . GT EXPR
+   64     | EXPR . GE EXPR
+   65     | EXPR . NE EXPR
+
+    OR_OP   shift, and go to state 57
+    AND_OP  shift, and go to state 58
+    NE      shift, and go to state 59
+    GE      shift, and go to state 60
+    GT      shift, and go to state 61
+    EQ      shift, and go to state 62
+    LE      shift, and go to state 63
+    LT      shift, and go to state 64
+    '+'     shift, and go to state 65
+    '-'     shift, and go to state 66
+    '*'     shift, and go to state 67
+    '/'     shift, and go to state 68
+    '%'     shift, and go to state 69
+
+    '-'       [reduce using rule 33 (SIMPLE_STMT)]
+    $default  reduce using rule 33 (SIMPLE_STMT)
+
+
+state 132
+
+   34 SIMPLE_STMT: READ ID .
+
+    $default  reduce using rule 34 (SIMPLE_STMT)
+
+
+state 133
+
+   93 WHILE_STMT: WHILE '(' . EXPR ')' @8 SIMPLE_STMT
+   94           | WHILE '(' . EXPR ')' BLOCK
+
+    BOOL_VALUE    shift, and go to state 29
+    INT_VALUE     shift, and go to state 30
+    STRING_VALUE  shift, and go to state 31
+    FLOAT_VALUE   shift, and go to state 32
+    ID            shift, and go to state 33
+    CHAR_VALUE    shift, and go to state 34
+    NOT           shift, and go to state 35
+    '-'           shift, and go to state 36
+    '('           shift, and go to state 37
+
+    FUNCTION_INVOCATION  go to state 38
+    EXPR                 go to state 144
+    VALUE                go to state 40
+
+
+state 134
+
+   30 SIMPLE_STMT: ID ASSIGN . EXPR
+
+    BOOL_VALUE    shift, and go to state 29
+    INT_VALUE     shift, and go to state 30
+    STRING_VALUE  shift, and go to state 31
+    FLOAT_VALUE   shift, and go to state 32
+    ID            shift, and go to state 33
+    CHAR_VALUE    shift, and go to state 34
+    NOT           shift, and go to state 35
+    '-'           shift, and go to state 36
+    '('           shift, and go to state 37
+
+    FUNCTION_INVOCATION  go to state 38
+    EXPR                 go to state 145
+    VALUE                go to state 40
+
+
+state 135
+
+   31 SIMPLE_STMT: ID '[' . EXPR ']' ASSIGN EXPR
+   68 EXPR: ID '[' . EXPR ']'
+
+    BOOL_VALUE    shift, and go to state 29
+    INT_VALUE     shift, and go to state 30
+    STRING_VALUE  shift, and go to state 31
+    FLOAT_VALUE   shift, and go to state 32
+    ID            shift, and go to state 33
+    CHAR_VALUE    shift, and go to state 34
+    NOT           shift, and go to state 35
+    '-'           shift, and go to state 36
+    '('           shift, and go to state 37
+
+    FUNCTION_INVOCATION  go to state 38
+    EXPR                 go to state 146
+    VALUE                go to state 40
+
+
+state 136
+
+   37 BLOCK: '{' @4 . STMTS '}'
+
+    FOR           shift, and go to state 109
+    IF            shift, and go to state 110
+    PRINT         shift, and go to state 111
+    PRINTLN       shift, and go to state 112
+    READ          shift, and go to state 113
+    VAL           shift, and go to state 10
+    VAR           shift, and go to state 11
+    WHILE         shift, and go to state 114
+    BOOL_VALUE    shift, and go to state 29
+    INT_VALUE     shift, and go to state 30
+    STRING_VALUE  shift, and go to state 31
+    FLOAT_VALUE   shift, and go to state 32
+    ID            shift, and go to state 115
+    CHAR_VALUE    shift, and go to state 34
+    NOT           shift, and go to state 35
+    '-'           shift, and go to state 36
+    '('           shift, and go to state 37
+    '{'           shift, and go to state 116
+
+    $default  reduce using rule 22 (STMTS)
+
+    FUNCTION_INVOCATION  go to state 38
+    STMTS                go to state 147
+    STMT                 go to state 118
+    V_DECLARE            go to state 119
+    SIMPLE_STMT          go to state 120
+    BLOCK                go to state 121
+    VAL_DECLARE          go to state 15
+    VAR_DECLARE          go to state 16
+    EXPR                 go to state 122
+    VALUE                go to state 40
+    CONDITIONAL_STMT     go to state 123
+    IF_STMT              go to state 124
+    LOOP_STMT            go to state 125
+    WHILE_STMT           go to state 126
+    FOR_STMT             go to state 127
+
+
+state 137
+
+    5 FUNCTION_RETURN: RETURN . EXPR
+    6                | RETURN .
+
+    BOOL_VALUE    shift, and go to state 29
+    INT_VALUE     shift, and go to state 30
+    STRING_VALUE  shift, and go to state 31
+    FLOAT_VALUE   shift, and go to state 32
+    ID            shift, and go to state 33
+    CHAR_VALUE    shift, and go to state 34
+    NOT           shift, and go to state 35
+    '-'           shift, and go to state 36
+    '('           shift, and go to state 37
+
+    $default  reduce using rule 6 (FUNCTION_RETURN)
+
+    FUNCTION_INVOCATION  go to state 38
+    EXPR                 go to state 148
+    VALUE                go to state 40
+
+
+state 138
+
+    9 FUNCTION_BLOCK: '{' @3 STMTS FUNCTION_RETURN . '}'
+
+    '}'  shift, and go to state 149
+
+
+state 139
+
+   21 STMTS: STMT STMTS .
+
+    $default  reduce using rule 21 (STMTS)
+
+
+state 140
+
+   86 ELSE_STMT: ELSE . @7 SIMPLE_STMT
+   87          | ELSE . BLOCK
+   88          | ELSE . IF_STMT
+   89          | ELSE . IF_STMT ELSE_STMT
+
+    IF   shift, and go to state 110
+    '{'  shift, and go to state 116
+
+    $default  reduce using rule 85 (@7)
+
+    BLOCK    go to state 150
+    IF_STMT  go to state 151
+    @7       go to state 152
+
+
+state 141
+
+   81 CONDITIONAL_STMT: IF_STMT ELSE_STMT .
+
+    $default  reduce using rule 81 (CONDITIONAL_STMT)
+
+
+state 142
+
+   96 FOR_STMT: FOR '(' ID . LT '-' EXPR TO EXPR ')' @9 SIMPLE_STMT
+   97         | FOR '(' ID . LT '-' EXPR TO EXPR ')' BLOCK
+
+    LT  shift, and go to state 153
+
+
+state 143
+
+   52 EXPR: EXPR . '+' EXPR
+   53     | EXPR . '-' EXPR
+   54     | EXPR . '*' EXPR
+   55     | EXPR . '/' EXPR
+   56     | EXPR . '%' EXPR
+   58     | EXPR . OR_OP EXPR
+   59     | EXPR . AND_OP EXPR
+   60     | EXPR . LT EXPR
+   61     | EXPR . LE EXPR
+   62     | EXPR . EQ EXPR
+   63     | EXPR . GT EXPR
+   64     | EXPR . GE EXPR
+   65     | EXPR . NE EXPR
+   83 IF_STMT: IF '(' EXPR . ')' @6 SIMPLE_STMT
+   84        | IF '(' EXPR . ')' BLOCK
+
+    OR_OP   shift, and go to state 57
+    AND_OP  shift, and go to state 58
+    NE      shift, and go to state 59
+    GE      shift, and go to state 60
+    GT      shift, and go to state 61
+    EQ      shift, and go to state 62
+    LE      shift, and go to state 63
+    LT      shift, and go to state 64
+    '+'     shift, and go to state 65
+    '-'     shift, and go to state 66
+    '*'     shift, and go to state 67
+    '/'     shift, and go to state 68
+    '%'     shift, and go to state 69
+    ')'     shift, and go to state 154
+
+
+state 144
+
+   52 EXPR: EXPR . '+' EXPR
+   53     | EXPR . '-' EXPR
+   54     | EXPR . '*' EXPR
+   55     | EXPR . '/' EXPR
+   56     | EXPR . '%' EXPR
+   58     | EXPR . OR_OP EXPR
+   59     | EXPR . AND_OP EXPR
+   60     | EXPR . LT EXPR
+   61     | EXPR . LE EXPR
+   62     | EXPR . EQ EXPR
+   63     | EXPR . GT EXPR
+   64     | EXPR . GE EXPR
+   65     | EXPR . NE EXPR
+   93 WHILE_STMT: WHILE '(' EXPR . ')' @8 SIMPLE_STMT
+   94           | WHILE '(' EXPR . ')' BLOCK
+
+    OR_OP   shift, and go to state 57
+    AND_OP  shift, and go to state 58
+    NE      shift, and go to state 59
+    GE      shift, and go to state 60
+    GT      shift, and go to state 61
+    EQ      shift, and go to state 62
+    LE      shift, and go to state 63
+    LT      shift, and go to state 64
+    '+'     shift, and go to state 65
+    '-'     shift, and go to state 66
+    '*'     shift, and go to state 67
+    '/'     shift, and go to state 68
+    '%'     shift, and go to state 69
+    ')'     shift, and go to state 155
+
+
+state 145
+
+   30 SIMPLE_STMT: ID ASSIGN EXPR .
+   52 EXPR: EXPR . '+' EXPR
+   53     | EXPR . '-' EXPR
+   54     | EXPR . '*' EXPR
+   55     | EXPR . '/' EXPR
+   56     | EXPR . '%' EXPR
+   58     | EXPR . OR_OP EXPR
+   59     | EXPR . AND_OP EXPR
+   60     | EXPR . LT EXPR
+   61     | EXPR . LE EXPR
+   62     | EXPR . EQ EXPR
+   63     | EXPR . GT EXPR
+   64     | EXPR . GE EXPR
+   65     | EXPR . NE EXPR
+
+    OR_OP   shift, and go to state 57
+    AND_OP  shift, and go to state 58
+    NE      shift, and go to state 59
+    GE      shift, and go to state 60
+    GT      shift, and go to state 61
+    EQ      shift, and go to state 62
+    LE      shift, and go to state 63
+    LT      shift, and go to state 64
+    '+'     shift, and go to state 65
+    '-'     shift, and go to state 66
+    '*'     shift, and go to state 67
+    '/'     shift, and go to state 68
+    '%'     shift, and go to state 69
+
+    '-'       [reduce using rule 30 (SIMPLE_STMT)]
+    $default  reduce using rule 30 (SIMPLE_STMT)
+
+
+state 146
+
+   31 SIMPLE_STMT: ID '[' EXPR . ']' ASSIGN EXPR
+   52 EXPR: EXPR . '+' EXPR
+   53     | EXPR . '-' EXPR
+   54     | EXPR . '*' EXPR
+   55     | EXPR . '/' EXPR
+   56     | EXPR . '%' EXPR
+   58     | EXPR . OR_OP EXPR
+   59     | EXPR . AND_OP EXPR
+   60     | EXPR . LT EXPR
+   61     | EXPR . LE EXPR
+   62     | EXPR . EQ EXPR
+   63     | EXPR . GT EXPR
+   64     | EXPR . GE EXPR
+   65     | EXPR . NE EXPR
+   68     | ID '[' EXPR . ']'
+
+    OR_OP   shift, and go to state 57
+    AND_OP  shift, and go to state 58
+    NE      shift, and go to state 59
+    GE      shift, and go to state 60
+    GT      shift, and go to state 61
+    EQ      shift, and go to state 62
+    LE      shift, and go to state 63
+    LT      shift, and go to state 64
+    '+'     shift, and go to state 65
+    '-'     shift, and go to state 66
+    '*'     shift, and go to state 67
+    '/'     shift, and go to state 68
+    '%'     shift, and go to state 69
+    ']'     shift, and go to state 156
+
+
+state 147
+
+   37 BLOCK: '{' @4 STMTS . '}'
+
+    '}'  shift, and go to state 157
+
+
+state 148
+
+    5 FUNCTION_RETURN: RETURN EXPR .
+   52 EXPR: EXPR . '+' EXPR
+   53     | EXPR . '-' EXPR
+   54     | EXPR . '*' EXPR
+   55     | EXPR . '/' EXPR
+   56     | EXPR . '%' EXPR
+   58     | EXPR . OR_OP EXPR
+   59     | EXPR . AND_OP EXPR
+   60     | EXPR . LT EXPR
+   61     | EXPR . LE EXPR
+   62     | EXPR . EQ EXPR
+   63     | EXPR . GT EXPR
+   64     | EXPR . GE EXPR
+   65     | EXPR . NE EXPR
+
+    OR_OP   shift, and go to state 57
+    AND_OP  shift, and go to state 58
+    NE      shift, and go to state 59
+    GE      shift, and go to state 60
+    GT      shift, and go to state 61
+    EQ      shift, and go to state 62
+    LE      shift, and go to state 63
+    LT      shift, and go to state 64
+    '+'     shift, and go to state 65
+    '-'     shift, and go to state 66
+    '*'     shift, and go to state 67
+    '/'     shift, and go to state 68
+    '%'     shift, and go to state 69
+
+    $default  reduce using rule 5 (FUNCTION_RETURN)
+
+
+state 149
+
+    9 FUNCTION_BLOCK: '{' @3 STMTS FUNCTION_RETURN '}' .
+
+    $default  reduce using rule 9 (FUNCTION_BLOCK)
+
+
+state 150
+
+   87 ELSE_STMT: ELSE BLOCK .
+
+    $default  reduce using rule 87 (ELSE_STMT)
+
+
+state 151
+
+   88 ELSE_STMT: ELSE IF_STMT .
+   89          | ELSE IF_STMT . ELSE_STMT
+
+    ELSE  shift, and go to state 140
+
+    $default  reduce using rule 88 (ELSE_STMT)
+
+    ELSE_STMT  go to state 158
+
+
+state 152
+
+   86 ELSE_STMT: ELSE @7 . SIMPLE_STMT
+
+    PRINT         shift, and go to state 111
+    PRINTLN       shift, and go to state 112
+    READ          shift, and go to state 113
+    VAL           shift, and go to state 10
+    VAR           shift, and go to state 11
+    BOOL_VALUE    shift, and go to state 29
+    INT_VALUE     shift, and go to state 30
+    STRING_VALUE  shift, and go to state 31
+    FLOAT_VALUE   shift, and go to state 32
+    ID            shift, and go to state 115
+    CHAR_VALUE    shift, and go to state 34
+    NOT           shift, and go to state 35
+    '-'           shift, and go to state 36
+    '('           shift, and go to state 37
+
+    FUNCTION_INVOCATION  go to state 38
+    V_DECLARE            go to state 119
+    SIMPLE_STMT          go to state 159
+    VAL_DECLARE          go to state 15
+    VAR_DECLARE          go to state 16
+    EXPR                 go to state 122
+    VALUE                go to state 40
+
+
+state 153
+
+   96 FOR_STMT: FOR '(' ID LT . '-' EXPR TO EXPR ')' @9 SIMPLE_STMT
+   97         | FOR '(' ID LT . '-' EXPR TO EXPR ')' BLOCK
+
+    '-'  shift, and go to state 160
+
+
+state 154
+
+   83 IF_STMT: IF '(' EXPR ')' . @6 SIMPLE_STMT
+   84        | IF '(' EXPR ')' . BLOCK
+
+    '{'  shift, and go to state 116
+
+    $default  reduce using rule 82 (@6)
+
+    BLOCK  go to state 161
+    @6     go to state 162
+
+
+state 155
+
+   93 WHILE_STMT: WHILE '(' EXPR ')' . @8 SIMPLE_STMT
+   94           | WHILE '(' EXPR ')' . BLOCK
+
+    '{'  shift, and go to state 116
+
+    $default  reduce using rule 92 (@8)
+
+    BLOCK  go to state 163
+    @8     go to state 164
+
+
+state 156
+
+   31 SIMPLE_STMT: ID '[' EXPR ']' . ASSIGN EXPR
+   68 EXPR: ID '[' EXPR ']' .
+
+    ASSIGN  shift, and go to state 165
+
+    $default  reduce using rule 68 (EXPR)
+
+
+state 157
+
+   37 BLOCK: '{' @4 STMTS '}' .
+
+    $default  reduce using rule 37 (BLOCK)
+
+
+state 158
+
+   89 ELSE_STMT: ELSE IF_STMT ELSE_STMT .
+
+    $default  reduce using rule 89 (ELSE_STMT)
+
+
+state 159
+
+   86 ELSE_STMT: ELSE @7 SIMPLE_STMT .
+
+    $default  reduce using rule 86 (ELSE_STMT)
+
+
+state 160
+
+   96 FOR_STMT: FOR '(' ID LT '-' . EXPR TO EXPR ')' @9 SIMPLE_STMT
+   97         | FOR '(' ID LT '-' . EXPR TO EXPR ')' BLOCK
+
+    BOOL_VALUE    shift, and go to state 29
+    INT_VALUE     shift, and go to state 30
+    STRING_VALUE  shift, and go to state 31
+    FLOAT_VALUE   shift, and go to state 32
+    ID            shift, and go to state 33
+    CHAR_VALUE    shift, and go to state 34
+    NOT           shift, and go to state 35
+    '-'           shift, and go to state 36
+    '('           shift, and go to state 37
+
+    FUNCTION_INVOCATION  go to state 38
+    EXPR                 go to state 166
+    VALUE                go to state 40
+
+
+state 161
+
+   84 IF_STMT: IF '(' EXPR ')' BLOCK .
+
+    $default  reduce using rule 84 (IF_STMT)
+
+
+state 162
+
+   83 IF_STMT: IF '(' EXPR ')' @6 . SIMPLE_STMT
+
+    PRINT         shift, and go to state 111
+    PRINTLN       shift, and go to state 112
+    READ          shift, and go to state 113
+    VAL           shift, and go to state 10
+    VAR           shift, and go to state 11
+    BOOL_VALUE    shift, and go to state 29
+    INT_VALUE     shift, and go to state 30
+    STRING_VALUE  shift, and go to state 31
+    FLOAT_VALUE   shift, and go to state 32
+    ID            shift, and go to state 115
+    CHAR_VALUE    shift, and go to state 34
+    NOT           shift, and go to state 35
+    '-'           shift, and go to state 36
+    '('           shift, and go to state 37
+
+    FUNCTION_INVOCATION  go to state 38
+    V_DECLARE            go to state 119
+    SIMPLE_STMT          go to state 167
+    VAL_DECLARE          go to state 15
+    VAR_DECLARE          go to state 16
+    EXPR                 go to state 122
+    VALUE                go to state 40
+
+
+state 163
+
+   94 WHILE_STMT: WHILE '(' EXPR ')' BLOCK .
+
+    $default  reduce using rule 94 (WHILE_STMT)
+
+
+state 164
+
+   93 WHILE_STMT: WHILE '(' EXPR ')' @8 . SIMPLE_STMT
+
+    PRINT         shift, and go to state 111
+    PRINTLN       shift, and go to state 112
+    READ          shift, and go to state 113
+    VAL           shift, and go to state 10
+    VAR           shift, and go to state 11
+    BOOL_VALUE    shift, and go to state 29
+    INT_VALUE     shift, and go to state 30
+    STRING_VALUE  shift, and go to state 31
+    FLOAT_VALUE   shift, and go to state 32
+    ID            shift, and go to state 115
+    CHAR_VALUE    shift, and go to state 34
+    NOT           shift, and go to state 35
+    '-'           shift, and go to state 36
+    '('           shift, and go to state 37
+
+    FUNCTION_INVOCATION  go to state 38
+    V_DECLARE            go to state 119
+    SIMPLE_STMT          go to state 168
+    VAL_DECLARE          go to state 15
+    VAR_DECLARE          go to state 16
+    EXPR                 go to state 122
+    VALUE                go to state 40
+
+
+state 165
+
+   31 SIMPLE_STMT: ID '[' EXPR ']' ASSIGN . EXPR
+
+    BOOL_VALUE    shift, and go to state 29
+    INT_VALUE     shift, and go to state 30
+    STRING_VALUE  shift, and go to state 31
+    FLOAT_VALUE   shift, and go to state 32
+    ID            shift, and go to state 33
+    CHAR_VALUE    shift, and go to state 34
+    NOT           shift, and go to state 35
+    '-'           shift, and go to state 36
+    '('           shift, and go to state 37
+
+    FUNCTION_INVOCATION  go to state 38
+    EXPR                 go to state 169
+    VALUE                go to state 40
+
+
+state 166
+
+   52 EXPR: EXPR . '+' EXPR
+   53     | EXPR . '-' EXPR
+   54     | EXPR . '*' EXPR
+   55     | EXPR . '/' EXPR
+   56     | EXPR . '%' EXPR
+   58     | EXPR . OR_OP EXPR
+   59     | EXPR . AND_OP EXPR
+   60     | EXPR . LT EXPR
+   61     | EXPR . LE EXPR
+   62     | EXPR . EQ EXPR
+   63     | EXPR . GT EXPR
+   64     | EXPR . GE EXPR
+   65     | EXPR . NE EXPR
+   96 FOR_STMT: FOR '(' ID LT '-' EXPR . TO EXPR ')' @9 SIMPLE_STMT
+   97         | FOR '(' ID LT '-' EXPR . TO EXPR ')' BLOCK
+
+    TO      shift, and go to state 170
+    OR_OP   shift, and go to state 57
+    AND_OP  shift, and go to state 58
+    NE      shift, and go to state 59
+    GE      shift, and go to state 60
+    GT      shift, and go to state 61
+    EQ      shift, and go to state 62
+    LE      shift, and go to state 63
+    LT      shift, and go to state 64
+    '+'     shift, and go to state 65
+    '-'     shift, and go to state 66
+    '*'     shift, and go to state 67
+    '/'     shift, and go to state 68
+    '%'     shift, and go to state 69
+
+
+state 167
+
+   83 IF_STMT: IF '(' EXPR ')' @6 SIMPLE_STMT .
+
+    $default  reduce using rule 83 (IF_STMT)
+
+
+state 168
+
+   93 WHILE_STMT: WHILE '(' EXPR ')' @8 SIMPLE_STMT .
+
+    $default  reduce using rule 93 (WHILE_STMT)
+
+
+state 169
+
+   31 SIMPLE_STMT: ID '[' EXPR ']' ASSIGN EXPR .
+   52 EXPR: EXPR . '+' EXPR
+   53     | EXPR . '-' EXPR
+   54     | EXPR . '*' EXPR
+   55     | EXPR . '/' EXPR
+   56     | EXPR . '%' EXPR
+   58     | EXPR . OR_OP EXPR
+   59     | EXPR . AND_OP EXPR
+   60     | EXPR . LT EXPR
+   61     | EXPR . LE EXPR
+   62     | EXPR . EQ EXPR
+   63     | EXPR . GT EXPR
+   64     | EXPR . GE EXPR
+   65     | EXPR . NE EXPR
+
+    OR_OP   shift, and go to state 57
+    AND_OP  shift, and go to state 58
+    NE      shift, and go to state 59
+    GE      shift, and go to state 60
+    GT      shift, and go to state 61
+    EQ      shift, and go to state 62
+    LE      shift, and go to state 63
+    LT      shift, and go to state 64
+    '+'     shift, and go to state 65
+    '-'     shift, and go to state 66
+    '*'     shift, and go to state 67
+    '/'     shift, and go to state 68
+    '%'     shift, and go to state 69
+
+    '-'       [reduce using rule 31 (SIMPLE_STMT)]
+    $default  reduce using rule 31 (SIMPLE_STMT)
+
+
+state 170
+
+   96 FOR_STMT: FOR '(' ID LT '-' EXPR TO . EXPR ')' @9 SIMPLE_STMT
+   97         | FOR '(' ID LT '-' EXPR TO . EXPR ')' BLOCK
+
+    BOOL_VALUE    shift, and go to state 29
+    INT_VALUE     shift, and go to state 30
+    STRING_VALUE  shift, and go to state 31
+    FLOAT_VALUE   shift, and go to state 32
+    ID            shift, and go to state 33
+    CHAR_VALUE    shift, and go to state 34
+    NOT           shift, and go to state 35
+    '-'           shift, and go to state 36
+    '('           shift, and go to state 37
+
+    FUNCTION_INVOCATION  go to state 38
+    EXPR                 go to state 171
+    VALUE                go to state 40
+
+
+state 171
+
+   52 EXPR: EXPR . '+' EXPR
+   53     | EXPR . '-' EXPR
+   54     | EXPR . '*' EXPR
+   55     | EXPR . '/' EXPR
+   56     | EXPR . '%' EXPR
+   58     | EXPR . OR_OP EXPR
+   59     | EXPR . AND_OP EXPR
+   60     | EXPR . LT EXPR
+   61     | EXPR . LE EXPR
+   62     | EXPR . EQ EXPR
+   63     | EXPR . GT EXPR
+   64     | EXPR . GE EXPR
+   65     | EXPR . NE EXPR
+   96 FOR_STMT: FOR '(' ID LT '-' EXPR TO EXPR . ')' @9 SIMPLE_STMT
+   97         | FOR '(' ID LT '-' EXPR TO EXPR . ')' BLOCK
+
+    OR_OP   shift, and go to state 57
+    AND_OP  shift, and go to state 58
+    NE      shift, and go to state 59
+    GE      shift, and go to state 60
+    GT      shift, and go to state 61
+    EQ      shift, and go to state 62
+    LE      shift, and go to state 63
+    LT      shift, and go to state 64
+    '+'     shift, and go to state 65
+    '-'     shift, and go to state 66
+    '*'     shift, and go to state 67
+    '/'     shift, and go to state 68
+    '%'     shift, and go to state 69
+    ')'     shift, and go to state 172
+
+
+state 172
+
+   96 FOR_STMT: FOR '(' ID LT '-' EXPR TO EXPR ')' . @9 SIMPLE_STMT
+   97         | FOR '(' ID LT '-' EXPR TO EXPR ')' . BLOCK
+
+    '{'  shift, and go to state 116
+
+    $default  reduce using rule 95 (@9)
+
+    BLOCK  go to state 173
+    @9     go to state 174
+
+
+state 173
+
+   97 FOR_STMT: FOR '(' ID LT '-' EXPR TO EXPR ')' BLOCK .
+
+    $default  reduce using rule 97 (FOR_STMT)
+
+
+state 174
+
+   96 FOR_STMT: FOR '(' ID LT '-' EXPR TO EXPR ')' @9 . SIMPLE_STMT
+
+    PRINT         shift, and go to state 111
+    PRINTLN       shift, and go to state 112
+    READ          shift, and go to state 113
+    VAL           shift, and go to state 10
+    VAR           shift, and go to state 11
+    BOOL_VALUE    shift, and go to state 29
+    INT_VALUE     shift, and go to state 30
+    STRING_VALUE  shift, and go to state 31
+    FLOAT_VALUE   shift, and go to state 32
+    ID            shift, and go to state 115
+    CHAR_VALUE    shift, and go to state 34
+    NOT           shift, and go to state 35
+    '-'           shift, and go to state 36
+    '('           shift, and go to state 37
+
+    FUNCTION_INVOCATION  go to state 38
+    V_DECLARE            go to state 119
+    SIMPLE_STMT          go to state 175
+    VAL_DECLARE          go to state 15
+    VAR_DECLARE          go to state 16
+    EXPR                 go to state 122
+    VALUE                go to state 40
+
+
+state 175
+
+   96 FOR_STMT: FOR '(' ID LT '-' EXPR TO EXPR ')' @9 SIMPLE_STMT .
+
+    $default  reduce using rule 96 (FOR_STMT)

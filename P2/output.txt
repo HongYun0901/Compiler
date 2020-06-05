@@ -334,3 +334,271 @@ id: a	type: variable
 declare methods
 Reducing to program
 
+declare an id to objet type
+int value
+value 
+VAR ID : DATA_TYPE ASSIGN EXPR
+int value
+value 
+VAR ID : DATA_TYPE ASSIGN EXPR
+int value
+value 
+VAR ID : DATA_TYPE ASSIGN EXPR
+VAR ID ':' DATA_TYPE
+create an function id
+ARGS empty
+BLOCK START
+ID
+int value
+value 
+EXPR GT EXPR
+BLOCK START
+ID
+ID ASSIGN EXPR
+ID
+ID
+EXPR + EXPR
+ID ASSIGN EXPR
+ID
+ID ASSIGN EXPR
+ID
+int value
+value 
+EXPR - EXPR
+ID ASSIGN EXPR
+BLOCK END
+--------------dump--------------
+----------index:1-----------
+id: FNminus1	type: variable
+id: Fn	type: variable
+id: fib	type: object
+id: main	type: function
+id: n	type: variable
+id: temp	type: variable
+----------------------------
+--------------------------------
+ while with block
+string value
+value 
+ID
+BLOCK END
+--------------dump--------------
+----------index:1-----------
+id: FNminus1	type: variable
+id: Fn	type: variable
+id: fib	type: object
+id: main	type: function
+id: n	type: variable
+id: temp	type: variable
+----------------------------
+--------------------------------
+declare method end
+Saveing function arguments and inside id map
+size check : 0
+size check : 0
+1
+OBJECT ID BLOCK
+Parsing Success 
+--------------dump--------------
+----------index:1-----------
+id: FNminus1	type: variable
+id: Fn	type: variable
+id: fib	type: object
+id: main	type: function
+id: n	type: variable
+id: temp	type: variable
+----------------------------
+--------------------------------
+declare an id to objet type
+int value
+value 
+VAL ID ASSIGN EXPR
+VAR ID
+create an function id
+ID : DataType
+ID : DataType
+ARG
+ARG , ARGS
+BLOCK START
+int value
+value 
+BLOCK END
+--------------dump--------------
+----------index:1-----------
+id: a	type: const
+id: add	type: function
+id: c	type: variable
+id: example	type: object
+----------------------------
+----------index:2-----------
+id: a	type: variable
+id: b	type: variable
+----------------------------
+--------------------------------
+declare method end
+Saveing function arguments and inside id map
+size check : 2
+size check : 0
+0
+id : b type : int
+id : a type : int
+create an function id
+ARGS empty
+BLOCK START
+VAR ID ':' DATA_TYPE
+VAR ID ':' DATA_TYPE
+ID
+Warning: c has not init
+ID
+Warning: b has not init
+EXPR - EXPR
+ID ASSIGN EXPR
+'x' 
+ char value
+value 
+VAL ID : DATA_TYPE ASSIGN EXPR
+ID
+int value
+value 
+check arugment start
+checking argument...
+call function invocation
+parameter nums : 2
+type : int
+type : int
+ID ASSIGN EXPR
+Warning: unknownType!!!
+ID
+int value
+value 
+EXPR GT EXPR
+Warning: beside operator may have unknownType
+ID
+- EXPR
+Warning: beside operator may have unknownType
+--------------dump--------------
+----------index:1-----------
+id: a	type: const
+id: add	type: function
+id: c	type: variable
+id: example	type: object
+id: main	type: function
+----------------------------
+----------index:2-----------
+id: b	type: variable
+id: c	type: variable
+id: x	type: const
+----------------------------
+--------------------------------
+ID
+--------------dump--------------
+----------index:1-----------
+id: a	type: const
+id: add	type: function
+id: c	type: variable
+id: example	type: object
+id: main	type: function
+----------------------------
+----------index:2-----------
+id: b	type: variable
+id: c	type: variable
+id: x	type: const
+----------------------------
+--------------------------------
+string value
+value 
+BLOCK END
+--------------dump--------------
+----------index:1-----------
+id: a	type: const
+id: add	type: function
+id: c	type: variable
+id: example	type: object
+id: main	type: function
+----------------------------
+----------index:2-----------
+id: b	type: variable
+id: c	type: variable
+id: x	type: const
+----------------------------
+--------------------------------
+declare method end
+Saveing function arguments and inside id map
+size check : 0
+size check : 0
+1
+int value
+value 
+VAL ID ASSIGN EXPR
+OBJECT ID BLOCK
+Parsing Success 
+--------------dump--------------
+----------index:1-----------
+id: a	type: const
+id: add	type: function
+id: c	type: variable
+id: example	type: object
+id: main	type: function
+id: x	type: const
+----------------------------
+--------------------------------
+declare an id to objet type
+int value
+value 
+VAL ID ASSIGN EXPR
+VAR ID
+create an function id
+ID : DataType
+ID : DataType
+ARG
+ARG , ARGS
+BLOCK START
+int value
+value 
+BLOCK END
+--------------dump--------------
+----------index:1-----------
+id: a	type: const
+id: add	type: function
+id: c	type: variable
+id: example	type: object
+----------------------------
+----------index:2-----------
+id: a	type: variable
+id: b	type: variable
+----------------------------
+--------------------------------
+declare method end
+function return type is bool
+Saveing function arguments and inside id map
+size check : 2
+size check : 0
+0
+id : b type : int
+id : a type : int
+create an function id
+ARGS empty
+BLOCK START
+VAR ID ':' DATA_TYPE
+VAR ID ':' DATA_TYPE
+ID
+Warning: c has not init
+ID
+Warning: b has not init
+EXPR - EXPR
+ID ASSIGN EXPR
+'x' 
+ char value
+value 
+VAL ID : DATA_TYPE ASSIGN EXPR
+ID
+int value
+value 
+check arugment start
+checking argument...
+call function invocation
+parameter nums : 2
+type : int
+type : int
+ID ASSIGN EXPR
+ (c already assigen other data type)

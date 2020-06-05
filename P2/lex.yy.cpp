@@ -1356,7 +1356,7 @@ YY_RULE_SETUP
 #line 356 "lex.l"
 {
         LIST;
-        printf("%d:%s\n", linenum+1, buf);
+        printf("%d:%s\n", linenum, buf);
         printf("bad character:'%s'\n",yytext);
         exit(-1);
         }
