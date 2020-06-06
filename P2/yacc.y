@@ -310,8 +310,10 @@ STMT : SIMPLE_STMT
      | LOOP_STMT 
     ;
 
-V_DECLARE : VAL_DECLARE
-          | VAR_DECLARE;
+
+V_DECLARE : VAR_DECLARE 
+           | VAL_DECLARE 
+           
 
 
 
@@ -389,7 +391,7 @@ SIMPLE_STMT : V_DECLARE
 BLOCK : '{' {
         Trace("BLOCK START");
         tables.push();
-      } STMTS 
+      }  STMTS 
       '}' {
           Trace("BLOCK END");
             $$ =  new map<string,idInfo*>();
@@ -405,7 +407,7 @@ BLOCK : '{' {
 
 
 OBJ_CONTENTS : 
-             | FUNCTION OBJ_CONTENTS
+             |FUNCTION OBJ_CONTENTS
              | V_DECLARE OBJ_CONTENTS
              ;
 
@@ -896,7 +898,6 @@ EXPR : '(' EXPR ')' {
         }
         $$ = buf;
     }
-   
     | ID '[' EXPR ']' {
         Trace("ID [ EXPR ]");
         idInfo* buf = tables.lookup(*$1);
@@ -921,8 +922,6 @@ EXPR : '(' EXPR ')' {
         Trace("value ")
         $$ = $1;
     }
-
-
 
 
 // define keyword data type
@@ -979,7 +978,6 @@ IF_STMT : IF '(' EXPR ')' {
         } SIMPLE_STMT {
             tables.dump();
             tables.pop();
-
         }
         | IF '(' EXPR ')' BLOCK
 
@@ -1006,13 +1004,19 @@ WHILE_STMT : WHILE '(' EXPR ')' {
                 tables.dump();
                 tables.pop();
                 Trace(" while without block");
-                if($3->valueType != boolType){
+                if($3->valueType == unknownType){
+                    Warning("unknownType!!!!");
+                }
+                else if($3->valueType != boolType){
                     yyerror("while EXPR must be boolean");
                 }
            }
            | WHILE '(' EXPR ')' BLOCK{
                 Trace(" while with block");
-                if($3->valueType != boolType){
+                if($3->valueType == unknownType){
+                    Warning("unknownType!!!!");
+                }
+                else if($3->valueType != boolType){
                     yyerror("while EXPR must be boolean");
                 }
            }
@@ -1025,13 +1029,19 @@ FOR_STMT : FOR '(' ID LT '-' EXPR TO EXPR ')' {
                 tables.dump();
                 tables.pop();
                 Trace("for stmt without block");
-            if($6->valueType != intType || $8->valueType != intType){
+            if($6->valueType == unknownType || $8->valueType == unknownType){
+                Warning("unknownType!!!");
+            }
+            else if($6->valueType != intType || $8->valueType != intType){
                 yyerror("for loop args must be int");
             }
          }
          | FOR '(' ID LT '-' EXPR TO EXPR ')' BLOCK {
              Trace("for stmt with block");
-             if($6->valueType != intType || $8->valueType != intType){
+             if($6->valueType == unknownType || $8->valueType == unknownType){
+                Warning("unknownType!!!");
+             }
+             else if($6->valueType != intType || $8->valueType != intType){
                 yyerror("for loop args must be int");
             }
          }

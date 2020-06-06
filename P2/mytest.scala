@@ -13,12 +13,14 @@ object example {
         x
         main()
         val c = 5
+
+        val z = 3 - -2
         val b:boolean = true
         if(b)
             return false
         else
             return true
-        return 3
+        return
         
     }
 
