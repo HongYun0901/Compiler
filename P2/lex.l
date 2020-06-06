@@ -17,7 +17,7 @@ using namespace std;
 
 
 
-int linenum = 1;
+int linenum = 0;
 int charnum = 0;
 char buf[MAX_LINE_LENG];
 
@@ -183,7 +183,7 @@ var   {
     LIST;
     return VAR;
 }
-while   {
+while  {
     LIST;
     return WHILE;
 }
@@ -300,7 +300,6 @@ while   {
 <COMMENT>\n {
     LIST;
     linenum++;
-    // printf("%d: %s", linenum++, buf);
     buf[0] = '\0';
 }
 
@@ -346,7 +345,6 @@ while   {
 \n      {
         LIST;
         linenum++;
-        // printf("%d: %s", linenum++, buf);
         buf[0] = '\0';
         charnum = 0;
         }

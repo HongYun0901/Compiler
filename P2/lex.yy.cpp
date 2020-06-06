@@ -576,7 +576,7 @@ using namespace std;
 
 
 
-int linenum = 1;
+int linenum = 0;
 int charnum = 0;
 char buf[MAX_LINE_LENG];
 
@@ -1288,13 +1288,12 @@ YY_RULE_SETUP
 {
     LIST;
     linenum++;
-    // printf("%d: %s", linenum++, buf);
     buf[0] = '\0';
 }
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 307 "lex.l"
+#line 306 "lex.l"
 {
     char ch = getc(yyin);
     if(ch=='"'){
@@ -1337,23 +1336,22 @@ YY_RULE_SETUP
 case 52:
 /* rule 52 can match eol */
 YY_RULE_SETUP
-#line 346 "lex.l"
+#line 345 "lex.l"
 {
         LIST;
         linenum++;
-        // printf("%d: %s", linenum++, buf);
         buf[0] = '\0';
         charnum = 0;
         }
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 354 "lex.l"
+#line 352 "lex.l"
 {LIST;}
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 356 "lex.l"
+#line 354 "lex.l"
 {
         LIST;
         printf("%d:%s\n", linenum, buf);
@@ -1363,10 +1361,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 362 "lex.l"
+#line 360 "lex.l"
 ECHO;
 	YY_BREAK
-#line 1370 "lex.yy.cpp"
+#line 1368 "lex.yy.cpp"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(COMMENT):
 	yyterminate();
@@ -2364,7 +2362,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 362 "lex.l"
+#line 360 "lex.l"
 
 
 

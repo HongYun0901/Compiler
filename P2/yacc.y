@@ -6,8 +6,8 @@
 // #define Error(t)    {printf(t);printf("\n");exit(-1);}
 #define Warning(t)  {cout << "Warning: " <<  t << endl;} 
 void yyerror(string s){
-   cout << buf << " (" << s  << ')' << endl;
-   exit(-1);
+   cout << "error at line: " << linenum  << " (" << s  << ')' << endl;
+  // exit(-1);
 }
 SymbolTableVector tables;
 
@@ -102,18 +102,6 @@ SymbolTableVector tables;
 %nonassoc UMINUS
 
 %%
-//start : ALL {
-//        Trace("Reducing to program\n");
-//    }
-//   ;
-
-//ALL : STMTS ALL
-//    | FUNCTION ALL
-//    | PROGRAM ALL
-//    | 
-//   ;
-
-
 // Program 
 PROGRAM : OBJECT ID {
             Trace("declare an id to objet type");
@@ -125,139 +113,6 @@ PROGRAM : OBJECT ID {
         } OBJ_BLOCK {
             Trace("OBJECT ID BLOCK");
         };
-
-
-// methods
-FUNCTION : DEF ID {
-            Trace("create an function id");
-            int result = tables.vec[tables.top].insert(*$2,functionType);
-            if(result == -1){
-                yyerror(*$2 + " already exists");
-            }
-            tables.push();
-        } '(' ARGS ')' FUNCTION_OPTIONAL BLOCK {
-            Trace("declare method end");
-            idInfo * id = tables.lookup(*$2);
-            if($7 != unknownType && $7 != valueTypeError){
-                cout << "function return type is " << valueType2Str($7) << endl;
-                id->returnType = $7;
-                // check return value is same as declared 
-               // if((*$8)["return"]->value->valueType != $7){
-                    // yyerror("function type is different from declared");
-                   // Warning("function return type is different from declared");
-               // }
-            }
-            Trace("Saveing function arguments and inside id map");
-            id->argumentsInfo = tables.vec[tables.top].idMap;
-            // here is record return 
-            // id->insideIdMap = *$8;
-            cout << "size check : "<< id->argumentsInfo.size() << endl;
-            // the answer include return idinfo
-            cout << "size check : "<< id->insideIdMap.size() << endl;
-            tables.pop();
-            cout << $5->empty() << endl;
-            for(int i = 0; i < $5->size(); ++i){
-                cout << "id : " << (*$5)[i]->first << " type : " << valueType2Str((*$5)[i]->second) << endl;
-            }
-            // store the function declare arguments sequence
-            // can check when function invocation
-            id->argumentsInfoSeq = *$5;
-        }
-
-// return stmt declare
-// FUNCTION_RETURN : RETURN EXPR {
-//                     Trace("FUNCTION HAS RETURN VALUE");
-//                     $$ = $2;
-//                 }
-//                 | RETURN {
-//                     Trace("FUNCTION HAS NO RETURN VALUE");
-//                     $$ = new valueInfo();
-//                 }
-//                 | {
-//                     Trace("FUNCTION HAS NO RETURN VALUE");
-//                     $$ = new valueInfo();
-//                 }
-// function block(last must be return or not)
-// FUNCTION_BLOCK : '{' {
-//         Trace("FUNCTION BLOCK START");
-//         tables.push();
-//       } STMTS  '}' {
-//           Trace("FUNCTION BLOCK END");
-//             $$ =  new map<string,idInfo*>();
-//           *$$ = tables.vec[tables.top].idMap;
-//          //  judge return
-//           // (*$$)["return"] =  new idInfo();
-//           // (*$$)["return"]->value = $4;
-//           tables.dump();
-//           if(tables.pop() == -1){
-//               yyerror("symbol table error");
-//           }
-//       }
-
-// can specify return type or not
-FUNCTION_OPTIONAL : {
-                    $$ = unknownType;
-                  }
-                  | ':' DATA_TYPE {
-                    $$ = $2;
-                  }
-                 ;
-
-// function invocation
-FUNCTION_INVOCATION : ID '(' COMMA_SEP_EXPR ')' {
-                        Trace("call function invocation");
-                        idInfo* id = tables.lookup(*$1);
-                        if(id == NULL){
-                            yyerror(*$1 + "doesn't exist");
-                        }
-                        if(id->idType != functionType){
-                            yyerror(*$1 + "is not a function");
-                        }
-                        cout << "parameter nums : " << $3->size() << endl;
-                        for(int i = 0; i < $3->size(); ++i){
-                            cout << "type : " << valueType2Str((*$3)[i]->valueType) << endl;
-                        }
-                        // check parameter is same as declared 
-                        if($3->size()!= id->argumentsInfo.size()){
-                            yyerror("parameter nums error");
-                        }
-                        // check type and assign
-                        for(int i = 0; i < $3->size(); ++i){
-                            if((*$3)[i]->valueType!=id->argumentsInfoSeq[i]->second){
-                                yyerror("parameter type error");
-                            }
-                            // call by reference?...
-                            id->argumentsInfo[id->argumentsInfoSeq[i]->first]->value =  (*$3)[i];
-                        }
-                        valueInfo* buf = new valueInfo();
-                        // here need to push id's tow idmap into idmap
-                        // $$ = id->insideIdMap["return"]->value; 
-                        $$ = new valueInfo();
-                        //if(id->returnType!=unknownType){
-                           // $$->valueType = id->returnType;
-                       // }
-                        $$->valueType = id->returnType;
-                        
-                    }
-
-// comma-separated expressions
-COMMA_SEP_EXPR : {
-                    Trace("check arugment start");
-                    vector<valueInfo*>* buf = new vector<valueInfo*>();
-                    $$ = buf;
-                }
-               | EXPR ',' COMMA_SEP_EXPR {
-                   Trace("checking argument...");
-                   $3->push_back($1);
-                   $$ = $3;
-               }
-               | EXPR {
-                   Trace("check arugment start");
-                    vector<valueInfo*>* buf = new vector<valueInfo*>();
-                    buf->push_back($1);
-                    $$ = buf;
-               }
-               ;
 
 
 
@@ -287,6 +142,7 @@ ARGS : {
 // argument
 ARG : ID ':' DATA_TYPE {
         Trace("ID : DataType");
+        cout << "when arg table top is" << tables.top << endl;
         int result = tables.vec[tables.top].insert(*$1,variableType,$3);
         if(result == -1){
             yyerror("id has been used");
@@ -297,17 +153,114 @@ ARG : ID ':' DATA_TYPE {
         $$ = p;
     }
 
+
+
+
+// methods
+FUNCTION : DEF ID {
+            Trace("create an function id");
+            int result = tables.vec[tables.top].insert(*$2,functionType);
+            if(result == -1){
+                yyerror(*$2 + " already exists");
+            }
+            cout << "method id is " << *$2 << endl;
+            tables.push();
+        } '(' ARGS {
+            idInfo *id = tables.lookup(*$2);
+            id->argumentsInfoSeq = *$5;
+            id->argumentsInfo = tables.vec[tables.top].idMap;
+        } ')' FUNCTION_OPTIONAL BLOCK {
+            Trace("declare method end");
+            idInfo *id = tables.lookup(*$2);
+            cout << id->id << "$8" << valueType2Str($8) << endl;
+            if($8 != unknownType && $8 != valueTypeError){
+                cout << *$2 <<  " in declare  return type is " << valueType2Str($8) << endl;
+                id->returnType = $8;
+            }
+            cout << id->id << "in declare" << &(id) << endl;
+            cout << id->id << "$8" << valueType2Str(id->returnType) << endl;
+            cout << "size check : "<< id->argumentsInfoSeq.size() << endl;
+            for(int i = 0; i < $5->size(); ++i){
+                cout << "id : " << (*$5)[i]->first << " type : " << valueType2Str((*$5)[i]->second) << endl;
+            }
+            tables.pop(); 
+            
+        }
+
+
+
+// can specify return type or not
+FUNCTION_OPTIONAL : {
+                    $$ = unknownType;
+                  }
+                  | ':' DATA_TYPE {
+                    $$ = $2;
+                    Trace(": DataType");
+                  }
+                 ;
+
+// function invocation
+FUNCTION_INVOCATION : ID '(' COMMA_SEP_EXPR ')' {
+                        Trace("call function invocation");
+                        idInfo* id = tables.lookup(*$1);
+                        cout << id->id << "in invocation" << &(id) << endl;
+                        if(id == NULL){
+                            yyerror(*$1 + "doesn't exist");
+                        }
+                        if(id->idType != functionType){
+                            yyerror(*$1 + "is not a function");
+                        }
+                        cout << "parameter nums : " << $3->size() << endl;
+                        for(int i = 0; i < $3->size(); ++i){
+                            cout << "type : " << valueType2Str((*$3)[i]->valueType) << endl;
+                        }
+
+                        cout << $3->size() << " " << id->argumentsInfoSeq.size() << endl;
+                        // check parameter is same as declared 
+                        if($3->size() != id->argumentsInfo.size()){
+                            yyerror("parameter nums error");
+                        }
+                        // check type
+                        for(int i = 0; i < $3->size(); ++i){
+                            if((*$3)[i]->valueType!= id->argumentsInfoSeq[i]->second){
+                                yyerror("parameter type error");
+                            }
+                        }
+                        $$ = new valueInfo();
+                        cout << *$1 << " return type is :" << valueType2Str(id->returnType) << endl;
+                        $$->valueType = id->returnType;
+                        
+                    }
+
+// comma-separated expressions
+COMMA_SEP_EXPR : {
+                    Trace("check arugment start");
+                    vector<valueInfo*>* buf = new vector<valueInfo*>();
+                    $$ = buf;
+                }
+               | EXPR ',' COMMA_SEP_EXPR {
+                   Trace("checking argument...");
+                   $3->push_back($1);
+                   $$ = $3;
+               }
+               | EXPR {
+                   Trace("check arugment start");
+                    vector<valueInfo*>* buf = new vector<valueInfo*>();
+                    buf->push_back($1);
+                    $$ = buf;
+               }
+               ;
+
 // define stmts
 STMTS : STMT 
       | STMT STMTS 
-      |
       ;
 
 // define stmt
-STMT : SIMPLE_STMT 
-     | BLOCK 
+STMT : BLOCK 
      | CONDITIONAL_STMT 
      | LOOP_STMT 
+     | SIMPLE_STMT
     ;
 
 
@@ -315,76 +268,6 @@ V_DECLARE : VAR_DECLARE
            | VAL_DECLARE 
            
 
-
-
-// define simple stmt simple stmt include declare
-SIMPLE_STMT : V_DECLARE
-            | RETURN
-            | RETURN EXPR;
-            | ID ASSIGN EXPR {
-                Trace("ID ASSIGN EXPR");
-                idInfo* buf = new idInfo();
-                // buf = tables.vec[tables.top].lookup(*$1);
-                buf = tables.lookup(*$1);
-                if(buf == NULL){
-                    yyerror(*$1 + " doesn't exist");
-                }
-
-                if(buf->idType != variableType){
-                    yyerror(*$1 + " can not be assign");
-                }
-                if(buf->hasInit){
-                    if($3->valueType == intType && buf->value->valueType == floatType){
-                        *(buf->value) = *$3;
-                    }
-                    else if($3->valueType == floatType && buf->value->valueType == intType){
-                        *(buf->value) = *$3;
-                    }
-                    else if($3->valueType == unknownType){
-                        Warning("unknownType!!!");
-                    }
-                    else if(buf->value->valueType != $3->valueType){
-                        yyerror(*$1 + " already assigen other data type");
-                    }
-                    *(buf->value) = *$3;
-                }
-                else{
-                    buf->value = new valueInfo();
-                    *(buf->value) = *$3;
-                    buf->hasInit = true;
-                }
-            }
-            | ID '[' EXPR ']' ASSIGN EXPR {
-                Trace("ID '[' EXPR ']' ASSIGN EXPR");
-                // idInfo* buf = tables.vec[tables.top].lookup(*$1);
-                idInfo* buf = tables.lookup(*$1);
-                if(buf == NULL){
-                    yyerror("id does not exist");
-                }
-                if(buf->idType != arrayType){
-                    yyerror(*$1 + " is not an array");
-                }
-                if($3->valueType == unknownType){
-                    Warning("unknownType!!!!");
-                }
-                else if($3->valueType != intType){
-                    yyerror("only can assess int index");
-                }
-                else if($3->intval >= buf->arraySize || $3->intval <0){
-                    yyerror("access array out of range");
-                }
-                if(buf->arrayValueType != $6->valueType){
-                    yyerror("assign different value type in array");
-                }
-                else{
-                    *(buf->arrayValue[$3->intval]) = *($6);
-                }
-            }
-            | PRINT  EXPR 
-            | PRINTLN  EXPR 
-            | READ ID 
-            | EXPR
-            ; 
 
 // define block but in this block cant declare methods
 // example u cant define method in method
@@ -405,20 +288,15 @@ BLOCK : '{' {
 // object block can declare methods  and stmts inside
 // example u can define a methods in object
 
-
 OBJ_CONTENTS : 
-             |FUNCTION OBJ_CONTENTS
+             | FUNCTION OBJ_CONTENTS
              | V_DECLARE OBJ_CONTENTS
              ;
 
 OBJ_BLOCK : '{' {
-        // tables.push();
       } OBJ_CONTENTS 
       '}' {
-          // tables.dump();
-          //if(tables.pop() == -1){
-          //    yyerror("symbol table error");
-          //}
+          
       }
 
 
@@ -487,6 +365,78 @@ VAR_DECLARE : VAR ID ASSIGN EXPR {
                 }
             }
 
+
+
+// define simple stmt simple stmt include declare
+SIMPLE_STMT : V_DECLARE
+            | ID ASSIGN EXPR {
+                Trace("ID ASSIGN EXPR");
+                idInfo* buf = new idInfo();
+                // buf = tables.vec[tables.top].lookup(*$1);
+                buf = tables.lookup(*$1);
+                if(buf == NULL){
+                    yyerror(*$1 + " doesn't exist");
+                }
+
+                if(buf->idType != variableType){
+                    yyerror(*$1 + " can not be assign");
+                }
+                if(buf->hasInit){
+                    if($3->valueType == intType && buf->value->valueType == floatType){
+                        *(buf->value) = *$3;
+                    }
+                    else if($3->valueType == floatType && buf->value->valueType == intType){
+                        *(buf->value) = *$3;
+                    }
+                    else if($3->valueType == unknownType){
+                        Warning("unknownType!!!");
+                    }
+                    else if(buf->value->valueType != $3->valueType){
+                        yyerror(*$1 + " already assigen other data type");
+                    }
+                    *(buf->value) = *$3;
+                }
+                else{
+                    buf->value = new valueInfo();
+                    *(buf->value) = *$3;
+                    buf->hasInit = true;
+                }
+            }
+            | ID '[' EXPR ']' ASSIGN EXPR {
+                Trace("ID '[' EXPR ']' ASSIGN EXPR");
+                // idInfo* buf = tables.vec[tables.top].lookup(*$1);
+                idInfo* buf = tables.lookup(*$1);
+                if(buf == NULL){
+                    yyerror("id does not exist");
+                }
+                if(buf->idType != arrayType){
+                    yyerror(*$1 + " is not an array");
+                }
+                if($3->valueType == unknownType){
+                    Warning("unknownType!!!!");
+                }
+                else if($3->valueType != intType){
+                    yyerror("only can assess int index");
+                }
+                else if($3->intval >= buf->arraySize || $3->intval <0){
+                    yyerror("access array out of range");
+                }
+                if(buf->arrayValueType != $6->valueType){
+                    yyerror("assign different value type in array");
+                }
+                else{
+                    *(buf->arrayValue[$3->intval]) = *($6);
+                }
+            }
+            | PRINT  EXPR 
+            | PRINTLN  EXPR 
+            | READ ID 
+            | EXPR
+            | RETURN EXPR
+            | RETURN 
+            
+            
+
 //  define expr
 EXPR : '(' EXPR ')' {
         $$ = $2;
@@ -550,19 +500,19 @@ EXPR : '(' EXPR ')' {
         valueInfo* buf = new valueInfo();
         if($1->valueType==intType && $3->valueType==intType){
             buf->valueType = intType;
-            buf->intval = ($1->intval + $3->intval);
+            //buf->intval = ($1->intval + $3->intval);
         }
         else if($1->valueType==floatType && $3->valueType==intType){
             buf->valueType = floatType;
-            buf->floatval = ($1->floatval + (float)$3->intval);
+            //buf->floatval = ($1->floatval + (float)$3->intval);
         }
         else if($1->valueType==intType && $3->valueType==floatType){
             buf->valueType = floatType;
-            buf->floatval = ((float)$1->intval + $3->floatval);
+            //buf->floatval = ((float)$1->intval + $3->floatval);
         }
         else if($1->valueType==floatType && $3->valueType==floatType){
             buf->valueType = floatType;
-            buf->floatval = ($1->floatval + $3->floatval);
+            //buf->floatval = ($1->floatval + $3->floatval);
         }
         else if($1->valueType==unknownType || $3->valueType==unknownType){
             Warning("beside operator may have unknownType");
@@ -916,7 +866,8 @@ EXPR : '(' EXPR ')' {
             yyerror("access out of range");
         }
         // get id array value
-        $$ = buf->arrayValue[$3->intval];
+        $$ = new valueInfo();
+        $$->valueType = buf->arrayValueType;
     }
     | VALUE {
         Trace("value ")
@@ -1011,7 +962,7 @@ WHILE_STMT : WHILE '(' EXPR ')' {
                     yyerror("while EXPR must be boolean");
                 }
            }
-           | WHILE '(' EXPR ')' BLOCK{
+           | WHILE '(' EXPR ')' BLOCK {
                 Trace(" while with block");
                 if($3->valueType == unknownType){
                     Warning("unknownType!!!!");
@@ -1064,8 +1015,9 @@ int main(int argc, char *argv[])
     /* perform parsing */
     if (yyparse() == 1)                /* parsing */
         yyerror("Parsing error !");     /* syntax error */
-
-
-    printf("Parsing Success \n");
+    else{
+        printf("Parsing Success \n");
+    }
+    
     tables.dump();
 }

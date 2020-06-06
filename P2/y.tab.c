@@ -531,7 +531,7 @@ static const yytype_int8 yyrhs[] =
       58,    70,    -1,    84,    -1,    -1,    72,    58,    71,    -1,
       72,    -1,    38,    57,    85,    -1,    74,    -1,    74,    73,
       -1,    -1,    76,    -1,    77,    -1,    87,    -1,    92,    -1,
-      82,    -1,    83,    -1,    75,    -1,    25,    -1,    25,    84,
+      83,    -1,    82,    -1,    75,    -1,    25,    -1,    25,    84,
       -1,    38,    33,    84,    -1,    38,    59,    84,    60,    33,
       84,    -1,    21,    84,    -1,    22,    84,    -1,    23,    38,
       -1,    84,    -1,    -1,    61,    78,    73,    62,    -1,    -1,
@@ -565,14 +565,14 @@ static const yytype_uint16 yyrline[] =
 {
        0,   118,   118,   118,   131,   131,   198,   201,   207,   244,
      249,   254,   266,   273,   279,   288,   301,   302,   303,   307,
-     308,   309,   310,   313,   314,   319,   320,   321,   322,   355,
-     381,   382,   383,   384,   389,   389,   407,   408,   409,   412,
-     412,   424,   431,   442,   450,   458,   472,   479,   489,   492,
-     524,   545,   546,   574,   602,   630,   658,   686,   702,   718,
-     744,   772,   802,   828,   853,   884,   900,   920,   930,   933,
-     936,   940,   944,   950,   954,   958,   962,   966,   973,   974,
-     976,   976,   984,   986,   986,   992,   993,   994,   999,  1000,
-    1003,  1003,  1013,  1021,  1021,  1032
+     308,   309,   310,   314,   315,   321,   322,   323,   324,   357,
+     383,   384,   385,   386,   391,   391,   409,   410,   411,   414,
+     414,   426,   433,   444,   452,   460,   474,   481,   491,   494,
+     526,   547,   548,   576,   604,   632,   660,   688,   704,   720,
+     746,   774,   804,   830,   855,   886,   901,   921,   929,   932,
+     935,   939,   943,   949,   953,   957,   961,   965,   972,   973,
+     975,   975,   982,   984,   984,   990,   991,   992,   997,   998,
+    1001,  1001,  1014,  1025,  1025,  1039
 };
 #endif
 
@@ -649,7 +649,7 @@ static const yytype_uint8 yyr2[] =
 static const yytype_uint8 yydefact[] =
 {
        0,     0,     0,     2,     1,     0,    39,     3,    36,     0,
-       0,     0,    36,    36,     0,    23,    24,     4,     0,    47,
+       0,     0,    36,    36,     0,    24,    23,     4,     0,    47,
       37,    38,    40,     0,     0,     0,     0,     0,    12,    75,
       74,    73,    76,    49,    77,     0,     0,     0,    51,    41,
       67,    71,    68,    72,    70,    69,     0,    43,    44,     0,
@@ -1815,7 +1815,7 @@ yyreduce:
     break;
 
   case 28:
-#line 322 "yacc.y"
+#line 324 "yacc.y"
     {
                 Trace("ID ASSIGN EXPR");
                 idInfo* buf = new idInfo();
@@ -1852,7 +1852,7 @@ yyreduce:
     break;
 
   case 29:
-#line 355 "yacc.y"
+#line 357 "yacc.y"
     {
                 Trace("ID '[' EXPR ']' ASSIGN EXPR");
                 // idInfo* buf = tables.vec[tables.top].lookup(*$1);
@@ -1882,7 +1882,7 @@ yyreduce:
     break;
 
   case 34:
-#line 389 "yacc.y"
+#line 391 "yacc.y"
     {
         Trace("BLOCK START");
         tables.push();
@@ -1890,7 +1890,7 @@ yyreduce:
     break;
 
   case 35:
-#line 393 "yacc.y"
+#line 395 "yacc.y"
     {
           Trace("BLOCK END");
             (yyval.idMap) =  new map<string,idInfo*>();
@@ -1903,14 +1903,14 @@ yyreduce:
     break;
 
   case 39:
-#line 412 "yacc.y"
+#line 414 "yacc.y"
     {
         // tables.push();
       }
     break;
 
   case 40:
-#line 415 "yacc.y"
+#line 417 "yacc.y"
     {
           // tables.dump();
           //if(tables.pop() == -1){
@@ -1920,7 +1920,7 @@ yyreduce:
     break;
 
   case 41:
-#line 424 "yacc.y"
+#line 426 "yacc.y"
     {
                 Trace("VAL ID ASSIGN EXPR");
                 int result = tables.vec[tables.top].insert(*(yyvsp[(2) - (4)].stringval),constType,(yyvsp[(4) - (4)].value));
@@ -1931,7 +1931,7 @@ yyreduce:
     break;
 
   case 42:
-#line 431 "yacc.y"
+#line 433 "yacc.y"
     {
                 Trace("VAL ID : DATA_TYPE ASSIGN EXPR");
                 if((yyvsp[(4) - (6)].valueType) != (yyvsp[(6) - (6)].value)->valueType){
@@ -1945,7 +1945,7 @@ yyreduce:
     break;
 
   case 43:
-#line 442 "yacc.y"
+#line 444 "yacc.y"
     {
                 Trace("VAR ID ASSIGN EXPR");
                 // declare var with value
@@ -1957,7 +1957,7 @@ yyreduce:
     break;
 
   case 44:
-#line 450 "yacc.y"
+#line 452 "yacc.y"
     {
                 Trace("VAR ID ':' DATA_TYPE");
                 // declare var but only have type
@@ -1969,7 +1969,7 @@ yyreduce:
     break;
 
   case 45:
-#line 458 "yacc.y"
+#line 460 "yacc.y"
     {
                 Trace("VAR ID : DATA_TYPE ASSIGN EXPR");
                 if((yyvsp[(6) - (6)].value)->valueType == unknownType){
@@ -1987,7 +1987,7 @@ yyreduce:
     break;
 
   case 46:
-#line 472 "yacc.y"
+#line 474 "yacc.y"
     {
                 Trace("VAR ID : DATA_TYPE [ INT_VALUE ]");
                 int result = tables.vec[tables.top].insert(*(yyvsp[(2) - (7)].stringval),arrayType,(yyvsp[(4) - (7)].valueType),(yyvsp[(6) - (7)].intval));
@@ -1998,7 +1998,7 @@ yyreduce:
     break;
 
   case 47:
-#line 479 "yacc.y"
+#line 481 "yacc.y"
     {
                 Trace("VAR ID");
                 // declare unknownType var
@@ -2010,14 +2010,14 @@ yyreduce:
     break;
 
   case 48:
-#line 489 "yacc.y"
+#line 491 "yacc.y"
     {
         (yyval.value) = (yyvsp[(2) - (3)].value);
     }
     break;
 
   case 49:
-#line 492 "yacc.y"
+#line 494 "yacc.y"
     {
         Trace("ID");
         idInfo* buf = tables.lookup(*(yyvsp[(1) - (1)].stringval));
@@ -2053,7 +2053,7 @@ yyreduce:
     break;
 
   case 50:
-#line 524 "yacc.y"
+#line 526 "yacc.y"
     {
         Trace("- EXPR")
         valueInfo* buf = new valueInfo();
@@ -2078,7 +2078,7 @@ yyreduce:
     break;
 
   case 52:
-#line 546 "yacc.y"
+#line 548 "yacc.y"
     {
         Trace("EXPR + EXPR");
         valueInfo* buf = new valueInfo();
@@ -2110,7 +2110,7 @@ yyreduce:
     break;
 
   case 53:
-#line 574 "yacc.y"
+#line 576 "yacc.y"
     {
         Trace("EXPR - EXPR");
         valueInfo* buf = new valueInfo();
@@ -2142,7 +2142,7 @@ yyreduce:
     break;
 
   case 54:
-#line 602 "yacc.y"
+#line 604 "yacc.y"
     {
         Trace("EXPR * EXPR");
         valueInfo* buf = new valueInfo();
@@ -2174,7 +2174,7 @@ yyreduce:
     break;
 
   case 55:
-#line 630 "yacc.y"
+#line 632 "yacc.y"
     {
         Trace("EXPR / EXPR");
         valueInfo* buf = new valueInfo();
@@ -2206,7 +2206,7 @@ yyreduce:
     break;
 
   case 56:
-#line 658 "yacc.y"
+#line 660 "yacc.y"
     {
         Trace("EXPR / EXPR");
         valueInfo* buf = new valueInfo();
@@ -2238,7 +2238,7 @@ yyreduce:
     break;
 
   case 57:
-#line 686 "yacc.y"
+#line 688 "yacc.y"
     {
         Trace("EXPR OR_OP EXPR");
         valueInfo* buf = new valueInfo();
@@ -2258,7 +2258,7 @@ yyreduce:
     break;
 
   case 58:
-#line 702 "yacc.y"
+#line 704 "yacc.y"
     {
         Trace("EXPR AND_OP EXPR");
         valueInfo* buf = new valueInfo();
@@ -2278,7 +2278,7 @@ yyreduce:
     break;
 
   case 59:
-#line 718 "yacc.y"
+#line 720 "yacc.y"
     {
         Trace("EXPR LT EXPR");
         valueInfo* buf = new valueInfo();
@@ -2308,7 +2308,7 @@ yyreduce:
     break;
 
   case 60:
-#line 744 "yacc.y"
+#line 746 "yacc.y"
     {
         Trace("EXPR LE EXPR");
         valueInfo* buf = new valueInfo();
@@ -2340,7 +2340,7 @@ yyreduce:
     break;
 
   case 61:
-#line 772 "yacc.y"
+#line 774 "yacc.y"
     {
         Trace("EXPR EQ EXPR");
         valueInfo* buf = new valueInfo();
@@ -2374,7 +2374,7 @@ yyreduce:
     break;
 
   case 62:
-#line 802 "yacc.y"
+#line 804 "yacc.y"
     {
         Trace("EXPR GT EXPR");
         valueInfo* buf = new valueInfo();
@@ -2404,7 +2404,7 @@ yyreduce:
     break;
 
   case 63:
-#line 828 "yacc.y"
+#line 830 "yacc.y"
     {
         Trace("EXPR GE EXPR");
         valueInfo* buf = new valueInfo();
@@ -2433,7 +2433,7 @@ yyreduce:
     break;
 
   case 64:
-#line 853 "yacc.y"
+#line 855 "yacc.y"
     {
         Trace("EXPR NE EXPR");
         valueInfo* buf = new valueInfo();
@@ -2468,7 +2468,7 @@ yyreduce:
     break;
 
   case 65:
-#line 884 "yacc.y"
+#line 886 "yacc.y"
     {
         Trace("NOT EXPR");
         valueInfo* buf = new valueInfo();
@@ -2487,7 +2487,7 @@ yyreduce:
     break;
 
   case 66:
-#line 900 "yacc.y"
+#line 901 "yacc.y"
     {
         Trace("ID [ EXPR ]");
         idInfo* buf = tables.lookup(*(yyvsp[(1) - (4)].stringval));
@@ -2511,7 +2511,7 @@ yyreduce:
     break;
 
   case 67:
-#line 920 "yacc.y"
+#line 921 "yacc.y"
     {
         Trace("value ")
         (yyval.value) = (yyvsp[(1) - (1)].value);
@@ -2519,21 +2519,21 @@ yyreduce:
     break;
 
   case 68:
-#line 930 "yacc.y"
+#line 929 "yacc.y"
     {
             (yyval.valueType) = charType;
          }
     break;
 
   case 69:
-#line 933 "yacc.y"
+#line 932 "yacc.y"
     {
              (yyval.valueType) = stringType;
          }
     break;
 
   case 70:
-#line 936 "yacc.y"
+#line 935 "yacc.y"
     {
              (yyval.valueType) = intType;
 
@@ -2541,7 +2541,7 @@ yyreduce:
     break;
 
   case 71:
-#line 940 "yacc.y"
+#line 939 "yacc.y"
     {
              (yyval.valueType) = boolType;
 
@@ -2549,14 +2549,14 @@ yyreduce:
     break;
 
   case 72:
-#line 944 "yacc.y"
+#line 943 "yacc.y"
     {
             (yyval.valueType) = floatType;
          }
     break;
 
   case 73:
-#line 950 "yacc.y"
+#line 949 "yacc.y"
     {
         Trace("string value");
         (yyval.value) = stringValue((yyvsp[(1) - (1)].stringval));
@@ -2564,7 +2564,7 @@ yyreduce:
     break;
 
   case 74:
-#line 954 "yacc.y"
+#line 953 "yacc.y"
     {
         Trace("int value");
         (yyval.value) = intValue((yyvsp[(1) - (1)].intval));
@@ -2572,7 +2572,7 @@ yyreduce:
     break;
 
   case 75:
-#line 958 "yacc.y"
+#line 957 "yacc.y"
     {
         Trace(" boolean value");
         (yyval.value) = boolValue((yyvsp[(1) - (1)].boolval));
@@ -2580,7 +2580,7 @@ yyreduce:
     break;
 
   case 76:
-#line 962 "yacc.y"
+#line 961 "yacc.y"
     {
             Trace(" float value");
             (yyval.value)  = floatValue((yyvsp[(1) - (1)].floatval));
@@ -2588,7 +2588,7 @@ yyreduce:
     break;
 
   case 77:
-#line 966 "yacc.y"
+#line 965 "yacc.y"
     {
           Trace(" char value");
           (yyval.value)  = charValue((yyvsp[(1) - (1)].charval));
@@ -2596,7 +2596,7 @@ yyreduce:
     break;
 
   case 80:
-#line 976 "yacc.y"
+#line 975 "yacc.y"
     {
             tables.push();
 
@@ -2604,23 +2604,22 @@ yyreduce:
     break;
 
   case 81:
-#line 979 "yacc.y"
+#line 978 "yacc.y"
     {
             tables.dump();
             tables.pop();
-
         }
     break;
 
   case 83:
-#line 986 "yacc.y"
+#line 984 "yacc.y"
     {
             tables.push();
         }
     break;
 
   case 84:
-#line 988 "yacc.y"
+#line 986 "yacc.y"
     {
             tables.dump();
             tables.pop();
@@ -2628,36 +2627,42 @@ yyreduce:
     break;
 
   case 90:
-#line 1003 "yacc.y"
+#line 1001 "yacc.y"
     {
                     tables.push();
                 }
     break;
 
   case 91:
-#line 1005 "yacc.y"
+#line 1003 "yacc.y"
     {
                 tables.dump();
                 tables.pop();
                 Trace(" while without block");
-                if((yyvsp[(3) - (6)].value)->valueType != boolType){
+                if((yyvsp[(3) - (6)].value)->valueType == unknownType){
+                    Warning("unknownType!!!!");
+                }
+                else if((yyvsp[(3) - (6)].value)->valueType != boolType){
                     yyerror("while EXPR must be boolean");
                 }
            }
     break;
 
   case 92:
-#line 1013 "yacc.y"
+#line 1014 "yacc.y"
     {
                 Trace(" while with block");
-                if((yyvsp[(3) - (5)].value)->valueType != boolType){
+                if((yyvsp[(3) - (5)].value)->valueType == unknownType){
+                    Warning("unknownType!!!!");
+                }
+                else if((yyvsp[(3) - (5)].value)->valueType != boolType){
                     yyerror("while EXPR must be boolean");
                 }
            }
     break;
 
   case 93:
-#line 1021 "yacc.y"
+#line 1025 "yacc.y"
     {
                 tables.push();
 
@@ -2665,22 +2670,28 @@ yyreduce:
     break;
 
   case 94:
-#line 1024 "yacc.y"
+#line 1028 "yacc.y"
     {
                 tables.dump();
                 tables.pop();
                 Trace("for stmt without block");
-            if((yyvsp[(6) - (11)].value)->valueType != intType || (yyvsp[(8) - (11)].value)->valueType != intType){
+            if((yyvsp[(6) - (11)].value)->valueType == unknownType || (yyvsp[(8) - (11)].value)->valueType == unknownType){
+                Warning("unknownType!!!");
+            }
+            else if((yyvsp[(6) - (11)].value)->valueType != intType || (yyvsp[(8) - (11)].value)->valueType != intType){
                 yyerror("for loop args must be int");
             }
          }
     break;
 
   case 95:
-#line 1032 "yacc.y"
+#line 1039 "yacc.y"
     {
              Trace("for stmt with block");
-             if((yyvsp[(6) - (10)].value)->valueType != intType || (yyvsp[(8) - (10)].value)->valueType != intType){
+             if((yyvsp[(6) - (10)].value)->valueType == unknownType || (yyvsp[(8) - (10)].value)->valueType == unknownType){
+                Warning("unknownType!!!");
+             }
+             else if((yyvsp[(6) - (10)].value)->valueType != intType || (yyvsp[(8) - (10)].value)->valueType != intType){
                 yyerror("for loop args must be int");
             }
          }
@@ -2688,7 +2699,7 @@ yyreduce:
 
 
 /* Line 1267 of yacc.c.  */
-#line 2692 "y.tab.c"
+#line 2703 "y.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -2902,7 +2913,7 @@ yyreturn:
 }
 
 
-#line 1039 "yacc.y"
+#line 1049 "yacc.y"
 
 int main(int argc, char *argv[])
 {
