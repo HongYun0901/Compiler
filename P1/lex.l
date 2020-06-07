@@ -11,7 +11,7 @@
 #include <limits.h>
 #include <string.h>
 #include <stdlib.h>
-
+#include <stdbool.h>
 
 
 int linenum = 1;
@@ -204,8 +204,11 @@ while   {
 }
 
 {char} {
+    char tmp[1024];
     LIST;
-    printf("get char %c \n",yytext[1]);
+    sscanf(yytext,"%s",tmp);
+    printf("%s \n",tmp);
+
 }
 
 

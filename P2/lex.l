@@ -1,7 +1,7 @@
 %{
 // #define LIST_NO_PRINT     strcat(buf,yytext)
-#define LIST    {/*printf("%s",yytext);*/ charnum+=yyleng;}
-#define MYPRINT   {printf("%d ",++linenum); buf[0]=0;charnum=0;}
+#define LIST    {/*printf("%s",yytext);*/}
+#define MYPRINT   {printf("%d ",++linenum); buf[0]=0;}
 #define token(t) {LIST; printf("<%s>\n",t);}
 #define tokenInteger(t,i) {LIST; printf("<%s:%d>\n",t,i);}
 #define tokenDouble(t,i) {LIST; printf("<%s:%lf>\n",t,i);}
@@ -17,8 +17,7 @@ using namespace std;
 
 
 
-int linenum = 0;
-int charnum = 0;
+int linenum = 1;
 char buf[MAX_LINE_LENG];
 
 %}
@@ -346,7 +345,6 @@ while  {
         LIST;
         linenum++;
         buf[0] = '\0';
-        charnum = 0;
         }
 
 [ \t]*  {LIST;}

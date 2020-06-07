@@ -2,16 +2,18 @@
 #include <iostream>
 #include "main.h"
 #include "lex.yy.cpp"
-#define Trace(t)        {printf(t);printf("\n");}
+#define Trace(t)        {printf("%d  ",linenum);printf(t);printf("\n");}
 // #define Error(t)    {printf(t);printf("\n");exit(-1);}
-#define Warning(t)  {cout << "Warning: " <<  t << endl;} 
+#define Warning(t)  {cout << "Warning at line: " << linenum << " :" <<  t << endl;} 
 void yyerror(string s){
    cout << "error at line: " << linenum  << " (" << s  << ')' << endl;
   // exit(-1);
 }
 SymbolTableVector tables;
 
+extern int linenum;
 
+int methodNumCount = 0;
 
 %}
 
@@ -99,19 +101,33 @@ SymbolTableVector tables;
 %left LT LE EQ GT GE NE
 %left '+' '-'
 %left '*' '/' '%'
+
 %nonassoc UMINUS
 
+%start PROGRAM
 %%
 // Program 
-PROGRAM : OBJECT ID {
+PROGRAM : OBJECT_DECLARE PROGRAM
+        | 
+        
+
+OBJECT_DECLARE : OBJECT ID {
             Trace("declare an id to objet type");
+            tables.push();
             int result = tables.vec[tables.top].insert(*$2,objectType);
             if(result == -1){
                 yyerror(*$2 + " already exists");
             }
-            //tables.push();
+        
         } OBJ_BLOCK {
             Trace("OBJECT ID BLOCK");
+            if(methodNumCount == 0){
+                yyerror("object must contain one method");
+
+            }
+            methodNumCount = 0;
+            tables.dump();
+            tables.pop();
         };
 
 
@@ -167,23 +183,22 @@ FUNCTION : DEF ID {
             tables.push();
         } '(' ARGS {
             idInfo *id = tables.lookup(*$2);
+            cout << "after lookup " <<  id->id << " address " << &id << " " << tables.top << endl;
+
             id->argumentsInfoSeq = *$5;
             id->argumentsInfo = tables.vec[tables.top].idMap;
-        } ')' FUNCTION_OPTIONAL BLOCK {
+        } ')' FUNCTION_OPTIONAL {
+            idInfo *id = tables.lookup(*$2);
+            id->returnType = $8;
+        } BLOCK {
             Trace("declare method end");
             idInfo *id = tables.lookup(*$2);
-            cout << id->id << "$8" << valueType2Str($8) << endl;
-            if($8 != unknownType && $8 != valueTypeError){
-                cout << *$2 <<  " in declare  return type is " << valueType2Str($8) << endl;
-                id->returnType = $8;
-            }
-            cout << id->id << "in declare" << &(id) << endl;
-            cout << id->id << "$8" << valueType2Str(id->returnType) << endl;
-            cout << "size check : "<< id->argumentsInfoSeq.size() << endl;
+             cout << "size check : "<< id->argumentsInfoSeq.size() << endl;
             for(int i = 0; i < $5->size(); ++i){
                 cout << "id : " << (*$5)[i]->first << " type : " << valueType2Str((*$5)[i]->second) << endl;
             }
             tables.pop(); 
+            methodNumCount ++ ;
             
         }
 
@@ -203,7 +218,7 @@ FUNCTION_OPTIONAL : {
 FUNCTION_INVOCATION : ID '(' COMMA_SEP_EXPR ')' {
                         Trace("call function invocation");
                         idInfo* id = tables.lookup(*$1);
-                        cout << id->id << "in invocation" << &(id) << endl;
+                        cout << "after lookup " <<  id->id << " address " << &id << " " << tables.top << endl;
                         if(id == NULL){
                             yyerror(*$1 + "doesn't exist");
                         }
@@ -227,7 +242,6 @@ FUNCTION_INVOCATION : ID '(' COMMA_SEP_EXPR ')' {
                             }
                         }
                         $$ = new valueInfo();
-                        cout << *$1 << " return type is :" << valueType2Str(id->returnType) << endl;
                         $$->valueType = id->returnType;
                         
                     }
@@ -288,16 +302,18 @@ BLOCK : '{' {
 // object block can declare methods  and stmts inside
 // example u can define a methods in object
 
-OBJ_CONTENTS : 
-             | FUNCTION OBJ_CONTENTS
-             | V_DECLARE OBJ_CONTENTS
-             ;
 
-OBJ_BLOCK : '{' {
-      } OBJ_CONTENTS 
-      '}' {
-          
-      }
+
+
+
+OBJ_CONTENTS : FUNCTION OBJ_CONTENTS
+             | V_DECLARE OBJ_CONTENTS
+             | 
+
+
+OBJ_BLOCK : '{' OBJ_CONTENTS  '}' {
+            
+        }
 
 
 // constant variables declarations
@@ -371,9 +387,7 @@ VAR_DECLARE : VAR ID ASSIGN EXPR {
 SIMPLE_STMT : V_DECLARE
             | ID ASSIGN EXPR {
                 Trace("ID ASSIGN EXPR");
-                idInfo* buf = new idInfo();
-                // buf = tables.vec[tables.top].lookup(*$1);
-                buf = tables.lookup(*$1);
+                idInfo* buf = tables.lookup(*$1);
                 if(buf == NULL){
                     yyerror(*$1 + " doesn't exist");
                 }
@@ -404,7 +418,6 @@ SIMPLE_STMT : V_DECLARE
             }
             | ID '[' EXPR ']' ASSIGN EXPR {
                 Trace("ID '[' EXPR ']' ASSIGN EXPR");
-                // idInfo* buf = tables.vec[tables.top].lookup(*$1);
                 idInfo* buf = tables.lookup(*$1);
                 if(buf == NULL){
                     yyerror("id does not exist");
@@ -431,7 +444,6 @@ SIMPLE_STMT : V_DECLARE
             | PRINT  EXPR 
             | PRINTLN  EXPR 
             | READ ID 
-            | EXPR
             | RETURN EXPR
             | RETURN 
             
@@ -469,7 +481,7 @@ EXPR : '(' EXPR ')' {
         // check has init or not
         else if(!buf->hasInit){
             // yyerror(*$1 + " has not init");
-            Warning(*$1 + " has not init");
+            Warning(*$1 + " may  has not been init");
         }
         $$ = buf->value;
     }
@@ -835,13 +847,15 @@ EXPR : '(' EXPR ')' {
     }
     | NOT EXPR {
         Trace("NOT EXPR");
+        cout << valueType2Str($2->valueType) << endl;
         valueInfo* buf = new valueInfo();
         buf->valueType = boolType;
-        if($2->valueType==unknownType){
-            Warning("beside operator may have unknownType");
-        }
-        else if($2->valueType != boolType){
+        
+        if($2->valueType != boolType){
             yyerror("NOT EXPR type error");
+        }
+        else if($2->valueType == unknownType){
+            Warning("beside operator may have unknownType");
         }
         else{
             buf->boolval = !($2->boolval);

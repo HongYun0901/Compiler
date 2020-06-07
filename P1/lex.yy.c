@@ -568,7 +568,7 @@ char *yytext;
 #include <limits.h>
 #include <string.h>
 #include <stdlib.h>
-
+#include <stdbool.h>
 
 
 int linenum = 1;
@@ -1137,21 +1137,25 @@ case 35:
 YY_RULE_SETUP
 #line 206 "lex.l"
 {
+    printf("char\n");
+    char tmp[1024];
     LIST;
-    printf("get char %c \n",yytext[1]);
+    sscanf(yytext,"%s",tmp);
+    printf("%s \n",tmp);
+
 }
 	YY_BREAK
 /* comment */
 case 36:
 YY_RULE_SETUP
-#line 214 "lex.l"
+#line 218 "lex.l"
 {
     LIST;
 }
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 218 "lex.l"
+#line 222 "lex.l"
 {
     LIST;
     BEGIN COMMENT;
@@ -1160,7 +1164,7 @@ YY_RULE_SETUP
 /* begin c comment status */
 case 38:
 YY_RULE_SETUP
-#line 223 "lex.l"
+#line 227 "lex.l"
 {
     LIST;
     BEGIN INITIAL;
@@ -1168,7 +1172,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 227 "lex.l"
+#line 231 "lex.l"
 {
     LIST;
 }
@@ -1176,7 +1180,7 @@ YY_RULE_SETUP
 case 40:
 /* rule 40 can match eol */
 YY_RULE_SETUP
-#line 230 "lex.l"
+#line 234 "lex.l"
 {
     LIST;
     printf("%d: %s", linenum++, buf);
@@ -1185,7 +1189,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 236 "lex.l"
+#line 240 "lex.l"
 {
     char ch = input();
     if(ch=='"'){
@@ -1240,7 +1244,7 @@ YY_RULE_SETUP
 case 42:
 /* rule 42 can match eol */
 YY_RULE_SETUP
-#line 287 "lex.l"
+#line 291 "lex.l"
 {
         LIST;
         printf("%d: %s", linenum++, buf);
@@ -1249,12 +1253,12 @@ YY_RULE_SETUP
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 293 "lex.l"
+#line 297 "lex.l"
 {LIST;}
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 295 "lex.l"
+#line 299 "lex.l"
 {
         LIST;
         printf("%d:%s\n", linenum, buf);
@@ -1264,10 +1268,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 301 "lex.l"
+#line 305 "lex.l"
 ECHO;
 	YY_BREAK
-#line 1271 "lex.yy.c"
+#line 1275 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(COMMENT):
 case YY_STATE_EOF(STRING):
@@ -2266,7 +2270,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 301 "lex.l"
+#line 305 "lex.l"
 
 
 

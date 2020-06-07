@@ -1,586 +1,208 @@
-declare an id to objet type
- boolean value
-value 
-VAL ID ASSIGN EXPR
- boolean value
-value 
-VAR ID ASSIGN EXPR
- boolean value
-value 
-VAR ID : DATA_TYPE ASSIGN EXPR
-int value
-value 
-VAR ID ASSIGN EXPR
-VAR ID ':' DATA_TYPE
-'c' 
- char value
-value 
-VAR ID ASSIGN EXPR
-string value
-value 
-VAR ID ASSIGN EXPR
- boolean value
-value 
-VAL ID ASSIGN EXPR
-VAR ID : DATA_TYPE [ INT_VALUE ]
-create an function id
-method id is correct
-ID : DataType
-when arg table top is1
-ID : DataType
-when arg table top is1
-ID : DataType
-when arg table top is1
-ID : DataType
-when arg table top is1
-ID : DataType
-when arg table top is1
-ARG
-ARG , ARGS
-ARG , ARGS
-ARG , ARGS
-ARG , ARGS
-: DataType
-BLOCK START
-ID
-Warning: b has not init
-BLOCK START
-ID
-Warning: i has not init
-int value
-value 
-EXPR + EXPR
-ID ASSIGN EXPR
-ID
-int value
-value 
-EXPR - EXPR
-ID ASSIGN EXPR
-ID
-int value
-value 
-EXPR LT EXPR
-BLOCK START
-ID
-int value
-value 
-EXPR / EXPR
-ID ASSIGN EXPR
-ID
-int value
-value 
-EXPR * EXPR
-ID ASSIGN EXPR
-BLOCK END
---------------dump--------------
-----------index:1-----------
-id: False	type: const
-id: True	type: const
-id: axottest	type: object
-id: ba	type: variable
-id: bb	type: variable
-id: ca	type: variable
-id: correct	type: function
-id: fabtable	type: array
-id: ia	type: variable
-id: ib	type: variable
-id: sa	type: variable
-----------------------------
-----------index:2-----------
-id: b	type: variable
-id: c	type: variable
-id: i	type: variable
-id: s	type: variable
-id: test	type: variable
-----------------------------
---------------------------------
-ID
-Warning: s has not init
-string value
-value 
-EXPR EQ EXPR
-ID
-Warning: s has not init
-ID
-Warning: s has not init
-EXPR EQ EXPR
-ID
-Warning: s has not init
-ID
-Warning: s has not init
-EXPR NE EXPR
-NOT EXPR
-EXPR AND_OP EXPR
-EXPR OR_OP EXPR
-BLOCK START
-'b' 
- char value
-value 
-ID ASSIGN EXPR
-BLOCK END
---------------dump--------------
-----------index:1-----------
-id: False	type: const
-id: True	type: const
-id: axottest	type: object
-id: ba	type: variable
-id: bb	type: variable
-id: ca	type: variable
-id: correct	type: function
-id: fabtable	type: array
-id: ia	type: variable
-id: ib	type: variable
-id: sa	type: variable
-----------------------------
-----------index:2-----------
-id: b	type: variable
-id: c	type: variable
-id: i	type: variable
-id: s	type: variable
-id: test	type: variable
-----------------------------
---------------------------------
-BLOCK START
-'c' 
- char value
-value 
-ID ASSIGN EXPR
-BLOCK END
---------------dump--------------
-----------index:1-----------
-id: False	type: const
-id: True	type: const
-id: axottest	type: object
-id: ba	type: variable
-id: bb	type: variable
-id: ca	type: variable
-id: correct	type: function
-id: fabtable	type: array
-id: ia	type: variable
-id: ib	type: variable
-id: sa	type: variable
-----------------------------
-----------index:2-----------
-id: b	type: variable
-id: c	type: variable
-id: i	type: variable
-id: s	type: variable
-id: test	type: variable
-----------------------------
---------------------------------
-BLOCK END
---------------dump--------------
-----------index:1-----------
-id: False	type: const
-id: True	type: const
-id: axottest	type: object
-id: ba	type: variable
-id: bb	type: variable
-id: ca	type: variable
-id: correct	type: function
-id: fabtable	type: array
-id: ia	type: variable
-id: ib	type: variable
-id: sa	type: variable
-----------------------------
-----------index:2-----------
-id: b	type: variable
-id: c	type: variable
-id: i	type: variable
-id: s	type: variable
-id: test	type: variable
-----------------------------
---------------------------------
- while with block
-int value
-value 
-int value
-value 
-BLOCK START
- boolean value
-value 
-ID ASSIGN EXPR
-ID
- boolean value
-value 
-EXPR GE EXPR
-error at line: 33 (EXPR GE EXPR TYPE ERROR)
-BLOCK START
- boolean value
-value 
-ID ASSIGN EXPR
-BLOCK END
---------------dump--------------
-----------index:1-----------
-id: False	type: const
-id: True	type: const
-id: axottest	type: object
-id: ba	type: variable
-id: bb	type: variable
-id: ca	type: variable
-id: correct	type: function
-id: fabtable	type: array
-id: ia	type: variable
-id: ib	type: variable
-id: sa	type: variable
-----------------------------
-----------index:2-----------
-id: b	type: variable
-id: c	type: variable
-id: i	type: variable
-id: s	type: variable
-id: test	type: variable
-----------------------------
---------------------------------
-ID
-int value
-value 
-EXPR LE EXPR
-int value
-value 
-ID ASSIGN EXPR
---------------dump--------------
-----------index:1-----------
-id: False	type: const
-id: True	type: const
-id: axottest	type: object
-id: ba	type: variable
-id: bb	type: variable
-id: ca	type: variable
-id: correct	type: function
-id: fabtable	type: array
-id: ia	type: variable
-id: ib	type: variable
-id: sa	type: variable
-----------------------------
-----------index:2-----------
-id: b	type: variable
-id: c	type: variable
-id: i	type: variable
-id: s	type: variable
-id: test	type: variable
-----------------------------
---------------------------------
-BLOCK END
---------------dump--------------
-----------index:1-----------
-id: False	type: const
-id: True	type: const
-id: axottest	type: object
-id: ba	type: variable
-id: bb	type: variable
-id: ca	type: variable
-id: correct	type: function
-id: fabtable	type: array
-id: ia	type: variable
-id: ib	type: variable
-id: sa	type: variable
-----------------------------
-----------index:2-----------
-id: b	type: variable
-id: c	type: variable
-id: i	type: variable
-id: s	type: variable
-id: test	type: variable
-----------------------------
---------------------------------
-for stmt with block
-ID
-Warning: s has not init
-BLOCK END
---------------dump--------------
-----------index:1-----------
-id: False	type: const
-id: True	type: const
-id: axottest	type: object
-id: ba	type: variable
-id: bb	type: variable
-id: ca	type: variable
-id: correct	type: function
-id: fabtable	type: array
-id: ia	type: variable
-id: ib	type: variable
-id: sa	type: variable
-----------------------------
-----------index:2-----------
-id: b	type: variable
-id: c	type: variable
-id: i	type: variable
-id: s	type: variable
-id: test	type: variable
-----------------------------
---------------------------------
-declare method end
-correct$8string
-correct in declare  return type is string
-correctin declare0x7ffee94b59b0
-correct$8string
-size check : 5
-id : test type : int
-id : b type : bool
-id : i type : int
-id : c type : char
-id : s type : string
-create an function id
-method id is fab
-ID : DataType
-when arg table top is1
-ARG
-: DataType
-BLOCK START
-ID
-Warning: n has not init
-ID [ EXPR ]
-int value
-value 
-- EXPR
-EXPR NE EXPR
-BLOCK START
-ID
-Warning: n has not init
-ID [ EXPR ]
-BLOCK END
---------------dump--------------
-----------index:1-----------
-id: False	type: const
-id: True	type: const
-id: axottest	type: object
-id: ba	type: variable
-id: bb	type: variable
-id: ca	type: variable
-id: correct	type: function
-id: fab	type: function
-id: fabtable	type: array
-id: ia	type: variable
-id: ib	type: variable
-id: sa	type: variable
-----------------------------
-----------index:2-----------
-id: n	type: variable
-----------------------------
---------------------------------
-ID
-Warning: n has not init
-int value
-value 
-EXPR LT EXPR
-BLOCK START
-ID
-Warning: n has not init
-ID
-Warning: n has not init
-ID '[' EXPR ']' ASSIGN EXPR
-BLOCK END
---------------dump--------------
-----------index:1-----------
-id: False	type: const
-id: True	type: const
-id: axottest	type: object
-id: ba	type: variable
-id: bb	type: variable
-id: ca	type: variable
-id: correct	type: function
-id: fab	type: function
-id: fabtable	type: array
-id: ia	type: variable
-id: ib	type: variable
-id: sa	type: variable
-----------------------------
-----------index:2-----------
-id: n	type: variable
-----------------------------
---------------------------------
-BLOCK START
-ID
-Warning: n has not init
-ID
-Warning: n has not init
-int value
-value 
-EXPR - EXPR
-check arugment start
-call function invocation
-fabin invocation0x7ffee94b5928
-parameter nums : 1
-type : int
-1 1
-fab return type is :unknown
-ID
-Warning: n has not init
-int value
-value 
-EXPR - EXPR
-check arugment start
-call function invocation
-fabin invocation0x7ffee94b5928
-parameter nums : 1
-type : int
-1 1
-fab return type is :unknown
-EXPR + EXPR
-Warning: beside operator may have unknownType
-ID '[' EXPR ']' ASSIGN EXPR
-error at line: 54 (assign different value type in array)
-BLOCK END
---------------dump--------------
-----------index:1-----------
-id: False	type: const
-id: True	type: const
-id: axottest	type: object
-id: ba	type: variable
-id: bb	type: variable
-id: ca	type: variable
-id: correct	type: function
-id: fab	type: function
-id: fabtable	type: array
-id: ia	type: variable
-id: ib	type: variable
-id: sa	type: variable
-----------------------------
-----------index:2-----------
-id: n	type: variable
-----------------------------
---------------------------------
-ID
-Warning: n has not init
-ID [ EXPR ]
-BLOCK END
---------------dump--------------
-----------index:1-----------
-id: False	type: const
-id: True	type: const
-id: axottest	type: object
-id: ba	type: variable
-id: bb	type: variable
-id: ca	type: variable
-id: correct	type: function
-id: fab	type: function
-id: fabtable	type: array
-id: ia	type: variable
-id: ib	type: variable
-id: sa	type: variable
-----------------------------
-----------index:2-----------
-id: n	type: variable
-----------------------------
---------------------------------
-declare method end
-fab$8int
-fab in declare  return type is int
-fabin declare0x7ffee94b59b0
-fab$8int
-size check : 1
-id : n type : int
-create an function id
+1  declare an id to objet type
+2   boolean value
+2  value 
+3  VAL ID : DATA_TYPE ASSIGN EXPR
+3  create an function id
 method id is main
-ARGS empty
-BLOCK START
-int value
-value 
-VAR ID ASSIGN EXPR
-int value
-value 
-int value
-value 
-ID
-int value
-value 
-- EXPR
-ID '[' EXPR ']' ASSIGN EXPR
+3  ARGS empty
+after lookup main address 0x7ffeed33f9b8 2
+3  BLOCK START
+5  int value
+5  value 
+6  VAL ID : DATA_TYPE ASSIGN EXPR
+6  string value
+6  value 
+7   float value
+7  value 
+8  VAR ID : DATA_TYPE ASSIGN EXPR
+8  BLOCK END
 --------------dump--------------
 ----------index:1-----------
-id: False	type: const
-id: True	type: const
-id: axottest	type: object
-id: ba	type: variable
-id: bb	type: variable
-id: ca	type: variable
-id: correct	type: function
-id: fab	type: function
-id: fabtable	type: array
-id: ia	type: variable
-id: ib	type: variable
+id: HelloWorld	type: object
+id: c	type: const
 id: main	type: function
-id: sa	type: variable
 ----------------------------
 ----------index:2-----------
-id: i	type: variable
+id: a	type: const
+id: f	type: variable	 type:float
 ----------------------------
 --------------------------------
-for stmt without block
-ID
-ID
-ID
-ID
-ID
-Warning: ib has not init
-check arugment start
-checking argument...
-checking argument...
-checking argument...
-checking argument...
-call function invocation
-correctin invocation0x7ffee94b5928
-parameter nums : 5
-type : int
-type : bool
-type : int
-type : char
-type : string
-5 5
-correct return type is :string
-ID ASSIGN EXPR
-int value
-value 
-check arugment start
-call function invocation
-fabin invocation0x7ffee94b5928
-parameter nums : 1
-type : int
-1 1
-fab return type is :int
-BLOCK END
---------------dump--------------
-----------index:1-----------
-id: False	type: const
-id: True	type: const
-id: axottest	type: object
-id: ba	type: variable
-id: bb	type: variable
-id: ca	type: variable
-id: correct	type: function
-id: fab	type: function
-id: fabtable	type: array
-id: ia	type: variable
-id: ib	type: variable
-id: main	type: function
-id: sa	type: variable
-----------------------------
-----------index:2-----------
-id: i	type: variable
-----------------------------
---------------------------------
-declare method end
-main$8unknown
-mainin declare0x7ffee94b59b0
-main$8unknown
+8  declare method end
 size check : 0
-OBJECT ID BLOCK
+9  string value
+9  value 
+10  VAR ID : DATA_TYPE ASSIGN EXPR
+10  OBJECT ID BLOCK
+--------------dump--------------
+----------index:1-----------
+id: HelloWorld	type: object
+id: c	type: const
+id: d	type: variable	 type:string
+id: main	type: function
+----------------------------
+--------------------------------
+12  declare an id to objet type
+13   boolean value
+13  value 
+14  VAL ID : DATA_TYPE ASSIGN EXPR
+14  create an function id
+method id is main
+14  ARGS empty
+after lookup main address 0x7ffeed33f9b8 2
+14  BLOCK START
+16  int value
+16  value 
+17  VAL ID : DATA_TYPE ASSIGN EXPR
+17  string value
+17  value 
+18   float value
+18  value 
+19  VAR ID : DATA_TYPE ASSIGN EXPR
+19  BLOCK END
+--------------dump--------------
+----------index:1-----------
+id: c	type: const
+id: main	type: function
+id: test	type: object
+----------------------------
+----------index:2-----------
+id: a	type: const
+id: f	type: variable	 type:float
+----------------------------
+--------------------------------
+19  declare method end
+size check : 0
+20  string value
+20  value 
+21  VAR ID : DATA_TYPE ASSIGN EXPR
+21  OBJECT ID BLOCK
+--------------dump--------------
+----------index:1-----------
+id: c	type: const
+id: d	type: variable	 type:string
+id: main	type: function
+id: test	type: object
+----------------------------
+--------------------------------
+23  declare an id to objet type
+25  OBJECT ID BLOCK
+error at line: 25 (object must contain one method)
+--------------dump--------------
+----------index:1-----------
+id: XD	type: object
+----------------------------
+--------------------------------
 Parsing Success 
 --------------dump--------------
+--------------------------------
+1  declare an id to objet type
+2   boolean value
+2  value 
+3  VAL ID : DATA_TYPE ASSIGN EXPR
+3  create an function id
+method id is main
+3  ARGS empty
+after lookup main address 0x7ffee07ab9b8 2
+3  BLOCK START
+5  int value
+5  value 
+6  VAL ID : DATA_TYPE ASSIGN EXPR
+6  string value
+6  value 
+7   float value
+7  value 
+8  VAR ID : DATA_TYPE ASSIGN EXPR
+8  BLOCK END
+--------------dump--------------
 ----------index:1-----------
-id: False	type: const
-id: True	type: const
-id: axottest	type: object
-id: ba	type: variable
-id: bb	type: variable
-id: ca	type: variable
-id: correct	type: function
-id: fab	type: function
-id: fabtable	type: array
-id: ia	type: variable
-id: ib	type: variable
+id: HelloWorld	type: object
+id: c	type: const
 id: main	type: function
-id: sa	type: variable
 ----------------------------
+----------index:2-----------
+id: a	type: const
+id: f	type: variable	 type:float
+----------------------------
+--------------------------------
+8  declare method end
+size check : 0
+9  string value
+9  value 
+10  VAR ID : DATA_TYPE ASSIGN EXPR
+10  OBJECT ID BLOCK
+--------------dump--------------
+----------index:1-----------
+id: HelloWorld	type: object
+id: c	type: const
+id: d	type: variable	 type:string
+id: main	type: function
+----------------------------
+--------------------------------
+12  declare an id to objet type
+13   boolean value
+13  value 
+14  VAL ID : DATA_TYPE ASSIGN EXPR
+14  create an function id
+method id is main
+14  ARGS empty
+after lookup main address 0x7ffee07ab9b8 2
+14  BLOCK START
+16  int value
+16  value 
+17  VAL ID : DATA_TYPE ASSIGN EXPR
+17  string value
+17  value 
+18   float value
+18  value 
+19  VAR ID : DATA_TYPE ASSIGN EXPR
+19  BLOCK END
+--------------dump--------------
+----------index:1-----------
+id: c	type: const
+id: main	type: function
+id: test	type: object
+----------------------------
+----------index:2-----------
+id: a	type: const
+id: f	type: variable	 type:float
+----------------------------
+--------------------------------
+19  declare method end
+size check : 0
+20  string value
+20  value 
+21  VAR ID : DATA_TYPE ASSIGN EXPR
+21  OBJECT ID BLOCK
+--------------dump--------------
+----------index:1-----------
+id: c	type: const
+id: d	type: variable	 type:string
+id: main	type: function
+id: test	type: object
+----------------------------
+--------------------------------
+23  declare an id to objet type
+24  create an function id
+method id is test
+24  ARGS empty
+after lookup test address 0x7ffee07ab9b8 2
+24  BLOCK START
+26  BLOCK END
+--------------dump--------------
+----------index:1-----------
+id: XD	type: object
+id: test	type: function
+----------------------------
+--------------------------------
+26  declare method end
+size check : 0
+28  OBJECT ID BLOCK
+--------------dump--------------
+----------index:1-----------
+id: XD	type: object
+id: test	type: function
+----------------------------
+--------------------------------
+Parsing Success 
+--------------dump--------------
 --------------------------------

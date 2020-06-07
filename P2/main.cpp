@@ -128,6 +128,7 @@ int SymbolTable::insert(string id, int idType)
     buf->id = id;
     buf->value = NULL;
     buf->hasInit = false;
+    //buf->returnType = intType;
     idMap[id] = buf;
     return 1;
 }
@@ -181,6 +182,9 @@ void SymbolTableVector::dump()
             for (it = vec[i].idMap.begin(); it != vec[i].idMap.end(); it++)
             {
                 cout << "id: " << it->first << "\ttype: " << idType2Str(it->second->idType);
+                if(it->second->idType ==variableType){
+                    cout << "\t type:" << valueType2Str(it->second->value->valueType);
+                }
                 cout << endl;
             }
             cout << "----------------------------" << endl;
