@@ -117,6 +117,7 @@ OBJECT_DECLARE : OBJECT ID {
             int result = tables.vec[tables.top].insert(*$2,objectType);
             if(result == -1){
                 yyerror(*$2 + " already exists");
+                
             }
         
         } OBJ_BLOCK {
@@ -178,6 +179,8 @@ FUNCTION : DEF ID {
             int result = tables.vec[tables.top].insert(*$2,functionType);
             if(result == -1){
                 yyerror(*$2 + " already exists");
+                *$2 = "_" + *$2;
+                tables.vec[tables.top].insert(*$2,functionType);
             }
             cout << "method id is " << *$2 << endl;
             tables.push();

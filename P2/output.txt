@@ -5,7 +5,7 @@
 3  create an function id
 method id is main
 3  ARGS empty
-after lookup main address 0x7ffeed33f9b8 2
+after lookup main address 0x7ffee8706988 2
 3  BLOCK START
 5  int value
 5  value 
@@ -29,93 +29,25 @@ id: f	type: variable	 type:float
 --------------------------------
 8  declare method end
 size check : 0
-9  string value
-9  value 
-10  VAR ID : DATA_TYPE ASSIGN EXPR
-10  OBJECT ID BLOCK
---------------dump--------------
-----------index:1-----------
-id: HelloWorld	type: object
-id: c	type: const
-id: d	type: variable	 type:string
-id: main	type: function
-----------------------------
---------------------------------
-12  declare an id to objet type
-13   boolean value
+9  create an function id
+error at line: 9 (main already exists)
+method id is _main
+9  ARGS empty
+after lookup _main address 0x7ffee8706988 2
+9  BLOCK START
+11  int value
+11  value 
+12  VAL ID : DATA_TYPE ASSIGN EXPR
+12  string value
+12  value 
+13   float value
 13  value 
-14  VAL ID : DATA_TYPE ASSIGN EXPR
-14  create an function id
-method id is main
-14  ARGS empty
-after lookup main address 0x7ffeed33f9b8 2
-14  BLOCK START
-16  int value
-16  value 
-17  VAL ID : DATA_TYPE ASSIGN EXPR
-17  string value
-17  value 
-18   float value
-18  value 
-19  VAR ID : DATA_TYPE ASSIGN EXPR
-19  BLOCK END
---------------dump--------------
-----------index:1-----------
-id: c	type: const
-id: main	type: function
-id: test	type: object
-----------------------------
-----------index:2-----------
-id: a	type: const
-id: f	type: variable	 type:float
-----------------------------
---------------------------------
-19  declare method end
-size check : 0
-20  string value
-20  value 
-21  VAR ID : DATA_TYPE ASSIGN EXPR
-21  OBJECT ID BLOCK
---------------dump--------------
-----------index:1-----------
-id: c	type: const
-id: d	type: variable	 type:string
-id: main	type: function
-id: test	type: object
-----------------------------
---------------------------------
-23  declare an id to objet type
-25  OBJECT ID BLOCK
-error at line: 25 (object must contain one method)
---------------dump--------------
-----------index:1-----------
-id: XD	type: object
-----------------------------
---------------------------------
-Parsing Success 
---------------dump--------------
---------------------------------
-1  declare an id to objet type
-2   boolean value
-2  value 
-3  VAL ID : DATA_TYPE ASSIGN EXPR
-3  create an function id
-method id is main
-3  ARGS empty
-after lookup main address 0x7ffee07ab9b8 2
-3  BLOCK START
-5  int value
-5  value 
-6  VAL ID : DATA_TYPE ASSIGN EXPR
-6  string value
-6  value 
-7   float value
-7  value 
-8  VAR ID : DATA_TYPE ASSIGN EXPR
-8  BLOCK END
+14  VAR ID : DATA_TYPE ASSIGN EXPR
+14  BLOCK END
 --------------dump--------------
 ----------index:1-----------
 id: HelloWorld	type: object
+id: _main	type: function
 id: c	type: const
 id: main	type: function
 ----------------------------
@@ -124,83 +56,19 @@ id: a	type: const
 id: f	type: variable	 type:float
 ----------------------------
 --------------------------------
-8  declare method end
+14  declare method end
 size check : 0
-9  string value
-9  value 
-10  VAR ID : DATA_TYPE ASSIGN EXPR
-10  OBJECT ID BLOCK
+15  string value
+15  value 
+16  VAR ID : DATA_TYPE ASSIGN EXPR
+16  OBJECT ID BLOCK
 --------------dump--------------
 ----------index:1-----------
 id: HelloWorld	type: object
+id: _main	type: function
 id: c	type: const
 id: d	type: variable	 type:string
 id: main	type: function
-----------------------------
---------------------------------
-12  declare an id to objet type
-13   boolean value
-13  value 
-14  VAL ID : DATA_TYPE ASSIGN EXPR
-14  create an function id
-method id is main
-14  ARGS empty
-after lookup main address 0x7ffee07ab9b8 2
-14  BLOCK START
-16  int value
-16  value 
-17  VAL ID : DATA_TYPE ASSIGN EXPR
-17  string value
-17  value 
-18   float value
-18  value 
-19  VAR ID : DATA_TYPE ASSIGN EXPR
-19  BLOCK END
---------------dump--------------
-----------index:1-----------
-id: c	type: const
-id: main	type: function
-id: test	type: object
-----------------------------
-----------index:2-----------
-id: a	type: const
-id: f	type: variable	 type:float
-----------------------------
---------------------------------
-19  declare method end
-size check : 0
-20  string value
-20  value 
-21  VAR ID : DATA_TYPE ASSIGN EXPR
-21  OBJECT ID BLOCK
---------------dump--------------
-----------index:1-----------
-id: c	type: const
-id: d	type: variable	 type:string
-id: main	type: function
-id: test	type: object
-----------------------------
---------------------------------
-23  declare an id to objet type
-24  create an function id
-method id is test
-24  ARGS empty
-after lookup test address 0x7ffee07ab9b8 2
-24  BLOCK START
-26  BLOCK END
---------------dump--------------
-----------index:1-----------
-id: XD	type: object
-id: test	type: function
-----------------------------
---------------------------------
-26  declare method end
-size check : 0
-28  OBJECT ID BLOCK
---------------dump--------------
-----------index:1-----------
-id: XD	type: object
-id: test	type: function
 ----------------------------
 --------------------------------
 Parsing Success 
