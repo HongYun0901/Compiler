@@ -127,6 +127,15 @@ OBJECT_DECLARE : OBJECT ID {
 
             }
             methodNumCount = 0;
+            if(tables.vec[tables.top].idMap.find("main") == tables.vec[tables.top].idMap.end() ){
+                    yyerror("must declare main function");
+            }
+            else{
+                idInfo *buf = tables.vec[tables.top].idMap["main"];
+                if(buf->idType != functionType){
+                    yyerror("must declare main function");
+                }
+            }
             tables.dump();
             tables.pop();
         };
@@ -186,7 +195,7 @@ FUNCTION : DEF ID {
             tables.push();
         } '(' ARGS {
             idInfo *id = tables.lookup(*$2);
-            cout << "after lookup " <<  id->id << " address " << &id << " " << tables.top << endl;
+           // cout << "after lookup " <<  id->id << " address " << &id << " " << tables.top << endl;
 
             id->argumentsInfoSeq = *$5;
             id->argumentsInfo = tables.vec[tables.top].idMap;
@@ -221,7 +230,7 @@ FUNCTION_OPTIONAL : {
 FUNCTION_INVOCATION : ID '(' COMMA_SEP_EXPR ')' {
                         Trace("call function invocation");
                         idInfo* id = tables.lookup(*$1);
-                        cout << "after lookup " <<  id->id << " address " << &id << " " << tables.top << endl;
+                        //cout << "after lookup " <<  id->id << " address " << &id << " " << tables.top << endl;
                         if(id == NULL){
                             yyerror(*$1 + "doesn't exist");
                         }

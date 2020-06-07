@@ -1,0 +1,108 @@
+1  declare an id to objet type
+2   boolean value
+2  value 
+3  VAL ID : DATA_TYPE ASSIGN EXPR
+4  VAR ID ':' DATA_TYPE
+4  create an function id
+error at line: 4 (main already exists)
+method id is main(error)
+4  ARGS empty
+4  BLOCK START
+5  int value
+5  value 
+6  VAR ID ASSIGN EXPR
+6  BLOCK END
+--------------dump--------------
+----------index:1-----------
+id: HelloWorld	type: object
+id: c	type: const
+id: main	type: variable	 type:int
+id: main(error)	type: function
+----------------------------
+----------index:2-----------
+id: test	type: variable	 type:int
+----------------------------
+--------------------------------
+6  declare method end
+size check : 0
+8  string value
+8  value 
+9  VAR ID : DATA_TYPE ASSIGN EXPR
+9  OBJECT ID BLOCK
+error at line: 9 (must declare main function)
+--------------dump--------------
+----------index:1-----------
+id: HelloWorld	type: object
+id: c	type: const
+id: d	type: variable	 type:string
+id: main	type: variable	 type:int
+id: main(error)	type: function
+----------------------------
+--------------------------------
+12  declare an id to objet type
+13   boolean value
+13  value 
+14  VAL ID : DATA_TYPE ASSIGN EXPR
+14  create an function id
+method id is main
+14  ARGS empty
+14  BLOCK START
+16  int value
+16  value 
+17  VAL ID : DATA_TYPE ASSIGN EXPR
+17  string value
+17  value 
+18   float value
+18  value 
+19  VAR ID : DATA_TYPE ASSIGN EXPR
+19  BLOCK END
+--------------dump--------------
+----------index:1-----------
+id: Hibro	type: object
+id: c	type: const
+id: main	type: function
+----------------------------
+----------index:2-----------
+id: a	type: const
+id: f	type: variable	 type:float
+----------------------------
+--------------------------------
+19  declare method end
+size check : 0
+20  create an function id
+method id is HelloWorld
+20  ARGS empty
+20  BLOCK START
+21  int value
+21  value 
+22  VAR ID ASSIGN EXPR
+22  BLOCK END
+--------------dump--------------
+----------index:1-----------
+id: HelloWorld	type: function
+id: Hibro	type: object
+id: c	type: const
+id: main	type: function
+----------------------------
+----------index:2-----------
+id: test	type: variable	 type:int
+----------------------------
+--------------------------------
+22  declare method end
+size check : 0
+24  string value
+24  value 
+25  VAR ID : DATA_TYPE ASSIGN EXPR
+25  OBJECT ID BLOCK
+--------------dump--------------
+----------index:1-----------
+id: HelloWorld	type: function
+id: Hibro	type: object
+id: c	type: const
+id: d	type: variable	 type:string
+id: main	type: function
+----------------------------
+--------------------------------
+Parsing Success 
+--------------dump--------------
+--------------------------------
