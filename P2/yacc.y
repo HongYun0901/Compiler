@@ -449,9 +449,7 @@ SIMPLE_STMT : V_DECLARE
                 if(buf->arrayValueType != $6->valueType){
                     yyerror("assign different value type in array");
                 }
-                else{
-                    *(buf->arrayValue[$3->intval]) = *($6);
-                }
+                
             }
             | PRINT  EXPR 
             | PRINTLN  EXPR 
@@ -886,6 +884,7 @@ EXPR : '(' EXPR ')' {
         // cant find id
         if(buf == NULL){
             yyerror("cant find " + *$1);
+
         }
         if(buf->idType != arrayType){
             yyerror("ID is not an array");
@@ -899,6 +898,7 @@ EXPR : '(' EXPR ')' {
         }
         // get id array value
         $$ = new valueInfo();
+        
         $$->valueType = buf->arrayValueType;
     }
     | VALUE {

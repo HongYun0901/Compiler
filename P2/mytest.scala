@@ -4,8 +4,9 @@ object HelloWorld {
       var test = 3
         var a:int 
         var b:int[100]
-        a = b[0]
-        a = b
+        /*a = b[0]
+		a = b[101]*/
+		//val c:int[100]
   }
 
 
@@ -76,10 +77,11 @@ object axottest{
 		{
 			return fabtable[n]
 		}
-
+		return false
 		if(n < 2)
 		{ 
 			fabtable[n] = n 
+			return 3
 		}
 		else{
 			fabtable[n] = fab(n-1) + fab(n-2)
