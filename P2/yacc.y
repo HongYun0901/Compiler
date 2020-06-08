@@ -495,7 +495,13 @@ EXPR : '(' EXPR ')' {
             // yyerror(*$1 + " has not init");
             Warning(*$1 + " may  has not been init");
         }
-        $$ = buf->value;
+        if(buf->value == NULL){
+            $$ = new valueInfo();
+        }
+        else{
+            $$ = buf->value;
+
+        }
     }
     | '-' EXPR %prec UMINUS {
         Trace("- EXPR")

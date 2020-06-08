@@ -2,60 +2,68 @@
 2   boolean value
 2  value 
 3  VAL ID : DATA_TYPE ASSIGN EXPR
-4  VAR ID ':' DATA_TYPE
-4  create an function id
-error at line: 4 (main already exists)
-method id is main(error)
-4  ARGS empty
-4  BLOCK START
-5  int value
-5  value 
-6  VAR ID ASSIGN EXPR
-6  BLOCK END
+3  create an function id
+method id is main
+3  ARGS empty
+3  BLOCK START
+4  int value
+4  value 
+5  VAR ID ASSIGN EXPR
+6  VAR ID ':' DATA_TYPE
+6  VAR ID : DATA_TYPE [ INT_VALUE ]
+7  int value
+7  value 
+7  ID [ EXPR ]
+8  ID ASSIGN EXPR
+9  ID
+error at line: 9 (b is array make grammar error)
+Warning at line: 9 :b may  has not been init
+9  ID ASSIGN EXPR
+error at line: 9 (a already assigen other data type)
+9  BLOCK END
 --------------dump--------------
 ----------index:1-----------
 id: HelloWorld	type: object
 id: c	type: const
-id: main	type: variable	 type:int
-id: main(error)	type: function
+id: main	type: function
 ----------------------------
 ----------index:2-----------
+id: a	type: variable	 type:error
+id: b	type: array
 id: test	type: variable	 type:int
 ----------------------------
 --------------------------------
-6  declare method end
+9  declare method end
 size check : 0
-8  string value
-8  value 
-9  VAR ID : DATA_TYPE ASSIGN EXPR
-9  OBJECT ID BLOCK
-error at line: 9 (must declare main function)
+12  string value
+12  value 
+13  VAR ID : DATA_TYPE ASSIGN EXPR
+13  OBJECT ID BLOCK
 --------------dump--------------
 ----------index:1-----------
 id: HelloWorld	type: object
 id: c	type: const
 id: d	type: variable	 type:string
-id: main	type: variable	 type:int
-id: main(error)	type: function
+id: main	type: function
 ----------------------------
 --------------------------------
-12  declare an id to objet type
-13   boolean value
-13  value 
-14  VAL ID : DATA_TYPE ASSIGN EXPR
-14  create an function id
-method id is main
-14  ARGS empty
-14  BLOCK START
-16  int value
-16  value 
-17  VAL ID : DATA_TYPE ASSIGN EXPR
-17  string value
+16  declare an id to objet type
+17   boolean value
 17  value 
-18   float value
-18  value 
-19  VAR ID : DATA_TYPE ASSIGN EXPR
-19  BLOCK END
+18  VAL ID : DATA_TYPE ASSIGN EXPR
+18  create an function id
+method id is main
+18  ARGS empty
+18  BLOCK START
+20  int value
+20  value 
+21  VAL ID : DATA_TYPE ASSIGN EXPR
+21  string value
+21  value 
+22   float value
+22  value 
+23  VAR ID : DATA_TYPE ASSIGN EXPR
+23  BLOCK END
 --------------dump--------------
 ----------index:1-----------
 id: Hibro	type: object
@@ -67,16 +75,16 @@ id: a	type: const
 id: f	type: variable	 type:float
 ----------------------------
 --------------------------------
-19  declare method end
+23  declare method end
 size check : 0
-20  create an function id
+24  create an function id
 method id is HelloWorld
-20  ARGS empty
-20  BLOCK START
-21  int value
-21  value 
-22  VAR ID ASSIGN EXPR
-22  BLOCK END
+24  ARGS empty
+24  BLOCK START
+25  int value
+25  value 
+26  VAR ID ASSIGN EXPR
+26  BLOCK END
 --------------dump--------------
 ----------index:1-----------
 id: HelloWorld	type: function
@@ -88,12 +96,12 @@ id: main	type: function
 id: test	type: variable	 type:int
 ----------------------------
 --------------------------------
-22  declare method end
+26  declare method end
 size check : 0
-24  string value
-24  value 
-25  VAR ID : DATA_TYPE ASSIGN EXPR
-25  OBJECT ID BLOCK
+28  string value
+28  value 
+29  VAR ID : DATA_TYPE ASSIGN EXPR
+29  OBJECT ID BLOCK
 --------------dump--------------
 ----------index:1-----------
 id: HelloWorld	type: function
@@ -101,6 +109,571 @@ id: Hibro	type: object
 id: c	type: const
 id: d	type: variable	 type:string
 id: main	type: function
+----------------------------
+--------------------------------
+30  declare an id to objet type
+32   boolean value
+32  value 
+34  VAL ID ASSIGN EXPR
+34   boolean value
+34  value 
+35  VAR ID ASSIGN EXPR
+35   boolean value
+35  value 
+36  VAR ID : DATA_TYPE ASSIGN EXPR
+36  int value
+36  value 
+37  VAR ID ASSIGN EXPR
+38  VAR ID ':' DATA_TYPE
+'c' 
+38   char value
+38  value 
+39  VAR ID ASSIGN EXPR
+39  string value
+39  value 
+41  VAR ID ASSIGN EXPR
+41   boolean value
+41  value 
+42  VAL ID ASSIGN EXPR
+42  VAR ID : DATA_TYPE [ INT_VALUE ]
+44  create an function id
+method id is correct
+44  ID : DataType
+when arg table top is2
+44  ID : DataType
+when arg table top is2
+44  ID : DataType
+when arg table top is2
+44  ID : DataType
+when arg table top is2
+44  ID : DataType
+when arg table top is2
+44  ARG
+44  ARG , ARGS
+44  ARG , ARGS
+44  ARG , ARGS
+44  ARG , ARGS
+44  : DataType
+45  BLOCK START
+47  ID
+Warning at line: 47 :b may  has not been init
+47  BLOCK START
+48  ID
+Warning at line: 48 :i may  has not been init
+48  int value
+48  value 
+49  EXPR + EXPR
+49  ID ASSIGN EXPR
+49  ID
+49  int value
+49  value 
+50  EXPR - EXPR
+50  ID ASSIGN EXPR
+50  ID
+50  int value
+50  value 
+50  EXPR LT EXPR
+50  BLOCK START
+51  ID
+51  int value
+51  value 
+51  EXPR / EXPR
+52  ID ASSIGN EXPR
+52  ID
+52  int value
+52  value 
+52  EXPR * EXPR
+53  ID ASSIGN EXPR
+53  BLOCK END
+--------------dump--------------
+----------index:1-----------
+id: False	type: const
+id: True	type: const
+id: axottest	type: object
+id: ba	type: variable	 type:bool
+id: bb	type: variable	 type:bool
+id: ca	type: variable	 type:char
+id: correct	type: function
+id: fabtable	type: array
+id: ia	type: variable	 type:int
+id: ib	type: variable	 type:int
+id: sa	type: variable	 type:string
+----------------------------
+----------index:2-----------
+id: b	type: variable	 type:bool
+id: c	type: variable	 type:char
+id: i	type: variable	 type:int
+id: s	type: variable	 type:string
+id: test	type: variable	 type:int
+----------------------------
+--------------------------------
+54  ID
+Warning at line: 54 :s may  has not been init
+54  string value
+54  value 
+54  EXPR EQ EXPR
+54  ID
+Warning at line: 54 :s may  has not been init
+54  ID
+Warning at line: 54 :s may  has not been init
+54  EXPR EQ EXPR
+54  ID
+Warning at line: 54 :s may  has not been init
+54  ID
+Warning at line: 54 :s may  has not been init
+54  EXPR NE EXPR
+54  NOT EXPR
+bool
+54  EXPR AND_OP EXPR
+54  EXPR OR_OP EXPR
+54  BLOCK START
+'b' 
+55   char value
+55  value 
+56  ID ASSIGN EXPR
+56  BLOCK END
+--------------dump--------------
+----------index:1-----------
+id: False	type: const
+id: True	type: const
+id: axottest	type: object
+id: ba	type: variable	 type:bool
+id: bb	type: variable	 type:bool
+id: ca	type: variable	 type:char
+id: correct	type: function
+id: fabtable	type: array
+id: ia	type: variable	 type:int
+id: ib	type: variable	 type:int
+id: sa	type: variable	 type:string
+----------------------------
+----------index:2-----------
+id: b	type: variable	 type:bool
+id: c	type: variable	 type:char
+id: i	type: variable	 type:int
+id: s	type: variable	 type:string
+id: test	type: variable	 type:int
+----------------------------
+--------------------------------
+57  BLOCK START
+'c' 
+58   char value
+58  value 
+59  ID ASSIGN EXPR
+59  BLOCK END
+--------------dump--------------
+----------index:1-----------
+id: False	type: const
+id: True	type: const
+id: axottest	type: object
+id: ba	type: variable	 type:bool
+id: bb	type: variable	 type:bool
+id: ca	type: variable	 type:char
+id: correct	type: function
+id: fabtable	type: array
+id: ia	type: variable	 type:int
+id: ib	type: variable	 type:int
+id: sa	type: variable	 type:string
+----------------------------
+----------index:2-----------
+id: b	type: variable	 type:bool
+id: c	type: variable	 type:char
+id: i	type: variable	 type:int
+id: s	type: variable	 type:string
+id: test	type: variable	 type:int
+----------------------------
+--------------------------------
+60  BLOCK END
+--------------dump--------------
+----------index:1-----------
+id: False	type: const
+id: True	type: const
+id: axottest	type: object
+id: ba	type: variable	 type:bool
+id: bb	type: variable	 type:bool
+id: ca	type: variable	 type:char
+id: correct	type: function
+id: fabtable	type: array
+id: ia	type: variable	 type:int
+id: ib	type: variable	 type:int
+id: sa	type: variable	 type:string
+----------------------------
+----------index:2-----------
+id: b	type: variable	 type:bool
+id: c	type: variable	 type:char
+id: i	type: variable	 type:int
+id: s	type: variable	 type:string
+id: test	type: variable	 type:int
+----------------------------
+--------------------------------
+60   while with block
+62  int value
+62  value 
+62  int value
+62  value 
+62  BLOCK START
+63   boolean value
+63  value 
+64  ID ASSIGN EXPR
+64  ID
+64   boolean value
+64  value 
+64  EXPR GE EXPR
+error at line: 64 (EXPR GE EXPR TYPE ERROR)
+64  BLOCK START
+65   boolean value
+65  value 
+66  ID ASSIGN EXPR
+66  BLOCK END
+--------------dump--------------
+----------index:1-----------
+id: False	type: const
+id: True	type: const
+id: axottest	type: object
+id: ba	type: variable	 type:bool
+id: bb	type: variable	 type:bool
+id: ca	type: variable	 type:char
+id: correct	type: function
+id: fabtable	type: array
+id: ia	type: variable	 type:int
+id: ib	type: variable	 type:int
+id: sa	type: variable	 type:string
+----------------------------
+----------index:2-----------
+id: b	type: variable	 type:bool
+id: c	type: variable	 type:char
+id: i	type: variable	 type:int
+id: s	type: variable	 type:string
+id: test	type: variable	 type:int
+----------------------------
+--------------------------------
+67  ID
+67  int value
+67  value 
+67  EXPR LE EXPR
+68  int value
+68  value 
+69  ID ASSIGN EXPR
+--------------dump--------------
+----------index:1-----------
+id: False	type: const
+id: True	type: const
+id: axottest	type: object
+id: ba	type: variable	 type:bool
+id: bb	type: variable	 type:bool
+id: ca	type: variable	 type:char
+id: correct	type: function
+id: fabtable	type: array
+id: ia	type: variable	 type:int
+id: ib	type: variable	 type:int
+id: sa	type: variable	 type:string
+----------------------------
+----------index:2-----------
+id: b	type: variable	 type:bool
+id: c	type: variable	 type:char
+id: i	type: variable	 type:int
+id: s	type: variable	 type:string
+id: test	type: variable	 type:int
+----------------------------
+--------------------------------
+69  BLOCK END
+--------------dump--------------
+----------index:1-----------
+id: False	type: const
+id: True	type: const
+id: axottest	type: object
+id: ba	type: variable	 type:bool
+id: bb	type: variable	 type:bool
+id: ca	type: variable	 type:char
+id: correct	type: function
+id: fabtable	type: array
+id: ia	type: variable	 type:int
+id: ib	type: variable	 type:int
+id: sa	type: variable	 type:string
+----------------------------
+----------index:2-----------
+id: b	type: variable	 type:bool
+id: c	type: variable	 type:char
+id: i	type: variable	 type:int
+id: s	type: variable	 type:string
+id: test	type: variable	 type:int
+----------------------------
+--------------------------------
+69  for stmt with block
+71  ID
+Warning at line: 71 :s may  has not been init
+71  BLOCK END
+--------------dump--------------
+----------index:1-----------
+id: False	type: const
+id: True	type: const
+id: axottest	type: object
+id: ba	type: variable	 type:bool
+id: bb	type: variable	 type:bool
+id: ca	type: variable	 type:char
+id: correct	type: function
+id: fabtable	type: array
+id: ia	type: variable	 type:int
+id: ib	type: variable	 type:int
+id: sa	type: variable	 type:string
+----------------------------
+----------index:2-----------
+id: b	type: variable	 type:bool
+id: c	type: variable	 type:char
+id: i	type: variable	 type:int
+id: s	type: variable	 type:string
+id: test	type: variable	 type:int
+----------------------------
+--------------------------------
+71  declare method end
+size check : 5
+id : test type : int
+id : b type : bool
+id : i type : int
+id : c type : char
+id : s type : string
+73  create an function id
+method id is fab
+73  ID : DataType
+when arg table top is2
+73  ARG
+73  : DataType
+74  BLOCK START
+75  ID
+Warning at line: 75 :n may  has not been init
+75  ID [ EXPR ]
+75  int value
+75  value 
+75  - EXPR
+75  EXPR NE EXPR
+76  BLOCK START
+77  ID
+Warning at line: 77 :n may  has not been init
+77  ID [ EXPR ]
+78  BLOCK END
+--------------dump--------------
+----------index:1-----------
+id: False	type: const
+id: True	type: const
+id: axottest	type: object
+id: ba	type: variable	 type:bool
+id: bb	type: variable	 type:bool
+id: ca	type: variable	 type:char
+id: correct	type: function
+id: fab	type: function
+id: fabtable	type: array
+id: ia	type: variable	 type:int
+id: ib	type: variable	 type:int
+id: sa	type: variable	 type:string
+----------------------------
+----------index:2-----------
+id: n	type: variable	 type:int
+----------------------------
+--------------------------------
+80  ID
+Warning at line: 80 :n may  has not been init
+80  int value
+80  value 
+80  EXPR LT EXPR
+81  BLOCK START
+82  ID
+Warning at line: 82 :n may  has not been init
+83  ID
+Warning at line: 83 :n may  has not been init
+83  ID '[' EXPR ']' ASSIGN EXPR
+83  BLOCK END
+--------------dump--------------
+----------index:1-----------
+id: False	type: const
+id: True	type: const
+id: axottest	type: object
+id: ba	type: variable	 type:bool
+id: bb	type: variable	 type:bool
+id: ca	type: variable	 type:char
+id: correct	type: function
+id: fab	type: function
+id: fabtable	type: array
+id: ia	type: variable	 type:int
+id: ib	type: variable	 type:int
+id: sa	type: variable	 type:string
+----------------------------
+----------index:2-----------
+id: n	type: variable	 type:int
+----------------------------
+--------------------------------
+84  BLOCK START
+85  ID
+Warning at line: 85 :n may  has not been init
+85  ID
+Warning at line: 85 :n may  has not been init
+85  int value
+85  value 
+85  EXPR - EXPR
+85  check arugment start
+85  call function invocation
+parameter nums : 1
+type : int
+1 1
+85  ID
+Warning at line: 85 :n may  has not been init
+85  int value
+85  value 
+85  EXPR - EXPR
+85  check arugment start
+85  call function invocation
+parameter nums : 1
+type : int
+1 1
+86  EXPR + EXPR
+86  ID '[' EXPR ']' ASSIGN EXPR
+86  BLOCK END
+--------------dump--------------
+----------index:1-----------
+id: False	type: const
+id: True	type: const
+id: axottest	type: object
+id: ba	type: variable	 type:bool
+id: bb	type: variable	 type:bool
+id: ca	type: variable	 type:char
+id: correct	type: function
+id: fab	type: function
+id: fabtable	type: array
+id: ia	type: variable	 type:int
+id: ib	type: variable	 type:int
+id: sa	type: variable	 type:string
+----------------------------
+----------index:2-----------
+id: n	type: variable	 type:int
+----------------------------
+--------------------------------
+87  ID
+Warning at line: 87 :n may  has not been init
+87  ID [ EXPR ]
+88  BLOCK END
+--------------dump--------------
+----------index:1-----------
+id: False	type: const
+id: True	type: const
+id: axottest	type: object
+id: ba	type: variable	 type:bool
+id: bb	type: variable	 type:bool
+id: ca	type: variable	 type:char
+id: correct	type: function
+id: fab	type: function
+id: fabtable	type: array
+id: ia	type: variable	 type:int
+id: ib	type: variable	 type:int
+id: sa	type: variable	 type:string
+----------------------------
+----------index:2-----------
+id: n	type: variable	 type:int
+----------------------------
+--------------------------------
+88  declare method end
+size check : 1
+id : n type : int
+91  create an function id
+method id is main
+91  ARGS empty
+92  BLOCK START
+93  int value
+93  value 
+94  VAR ID ASSIGN EXPR
+94  int value
+94  value 
+94  int value
+94  value 
+95  ID
+95  int value
+95  value 
+95  - EXPR
+97  ID '[' EXPR ']' ASSIGN EXPR
+--------------dump--------------
+----------index:1-----------
+id: False	type: const
+id: True	type: const
+id: axottest	type: object
+id: ba	type: variable	 type:bool
+id: bb	type: variable	 type:bool
+id: ca	type: variable	 type:char
+id: correct	type: function
+id: fab	type: function
+id: fabtable	type: array
+id: ia	type: variable	 type:int
+id: ib	type: variable	 type:int
+id: main	type: function
+id: sa	type: variable	 type:string
+----------------------------
+----------index:2-----------
+id: i	type: variable	 type:int
+----------------------------
+--------------------------------
+97  for stmt without block
+97  ID
+97  ID
+97  ID
+97  ID
+97  ID
+Warning at line: 97 :ib may  has not been init
+97  check arugment start
+97  checking argument...
+97  checking argument...
+97  checking argument...
+97  checking argument...
+97  call function invocation
+parameter nums : 5
+type : int
+type : bool
+type : int
+type : char
+type : string
+5 5
+99  ID ASSIGN EXPR
+99  int value
+99  value 
+99  check arugment start
+99  call function invocation
+parameter nums : 1
+type : int
+1 1
+100  BLOCK END
+--------------dump--------------
+----------index:1-----------
+id: False	type: const
+id: True	type: const
+id: axottest	type: object
+id: ba	type: variable	 type:bool
+id: bb	type: variable	 type:bool
+id: ca	type: variable	 type:char
+id: correct	type: function
+id: fab	type: function
+id: fabtable	type: array
+id: ia	type: variable	 type:int
+id: ib	type: variable	 type:int
+id: main	type: function
+id: sa	type: variable	 type:string
+----------------------------
+----------index:2-----------
+id: i	type: variable	 type:int
+----------------------------
+--------------------------------
+100  declare method end
+size check : 0
+101  OBJECT ID BLOCK
+--------------dump--------------
+----------index:1-----------
+id: False	type: const
+id: True	type: const
+id: axottest	type: object
+id: ba	type: variable	 type:bool
+id: bb	type: variable	 type:bool
+id: ca	type: variable	 type:char
+id: correct	type: function
+id: fab	type: function
+id: fabtable	type: array
+id: ia	type: variable	 type:int
+id: ib	type: variable	 type:int
+id: main	type: function
+id: sa	type: variable	 type:string
 ----------------------------
 --------------------------------
 Parsing Success 
