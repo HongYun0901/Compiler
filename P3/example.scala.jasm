@@ -1,0 +1,142 @@
+class example{
+		sipush 5
+		sipush 3
+		sipush 4
+		imul
+		iadd
+	field static int a
+		putstatic int example.a
+		sipush 1
+	field static int x
+		putstatic int example.x
+		sipush 1
+		sipush 3
+		isub
+		iflt
+	field static int c
+		putstatic int example.c
+		sipush 0
+		istore 0
+		sipush 0
+		istore 1
+	method public static int add(int,int)
+	max_stack 15
+	max_locals 15
+	{
+		iload 0
+		iload 1
+		iadd
+		ireturn
+	}
+		sipush 0
+		istore 0
+		sipush 0
+		istore 1
+		sipush 0
+		istore 2
+	method public static void test(java.lang.String,char,int)
+	max_stack 15
+	max_locals 15
+	{
+		sipush 3
+		istore 3
+		sipush 4
+		istore 2
+		iload 3
+		istore 2
+		return
+	}
+	method public static void main(java.lang.String[])
+	max_stack 15
+	max_locals 15
+	{
+		sipush 0
+		istore 0
+		sipush 0
+		istore 1
+		sipush 3
+		istore 2
+		iload 0
+		iload 1
+		isub
+		istore 0
+		istore 3
+		iload 0
+		sipush 10
+		invokestatic int example.add(int,int)
+		istore 0
+		ldc "123"
+		sipush 1
+		invokestatic int example.test(java.lang.String,char,int)
+		istore 4
+		iload 0
+		sipush 5
+		isub
+		iflt
+		ifeq L1
+		sipush 4
+		istore 0
+		sipush 1
+		ifeq L3
+		sipush 7
+		istore 0
+		sipush 0
+		ifeq L5
+		sipush 9
+		istore 0
+		goto L4
+	L5:
+		sipush 0
+		ifeq L6
+		iload 2
+		iload 2
+		iadd
+		istore 2
+		goto L4
+	L4:
+		goto L2
+	L3:
+		sipush 99
+		istore 0
+		goto L2
+	L2:
+		sipush 0
+		istore 5
+		goto L0
+	L1:
+		iload 0
+		sipush 10
+		isub
+		ifgt
+		ifeq L7
+		sipush 5
+		istore 0
+		goto L0
+	L7:
+		iload 0
+		sipush 2
+		isub
+		ifgt
+		ifeq L8
+		sipush 3
+		istore 0
+		goto L0
+	L8:
+		iload 0
+		sipush 3
+		isub
+		ifgt
+		ifeq L9
+		sipush 2
+		istore 0
+		goto L0
+	L9:
+		sipush 5
+		istore 0
+		goto L0
+	L0:
+		sipush 3
+		istore 2
+		return
+	}
+}
