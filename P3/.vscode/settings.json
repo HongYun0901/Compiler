@@ -3,6 +3,7 @@
         "iosfwd": "cpp",
         "__locale": "cpp",
         "ios": "cpp",
-        "map": "cpp"
+        "map": "cpp",
+        "iostream": "cpp"
     }
 }

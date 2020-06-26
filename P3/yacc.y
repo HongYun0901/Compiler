@@ -20,16 +20,19 @@ int labelCount = 0;
 
 
 
-vector<int> ifEndVector;
-vector<int> ifJudgeVector;
-
-vector<int> labelsVector;
-int ifcount = 0;
 
 vector<vector<int>> ifLabelsVector;
 bool elseifFlag = false;
 
+bool valFlag = false;
+
+vector<vector<int>> loopLabelsVector;
+vector<vector<int>> forLabelsVector;
+vector<idInfo*> forIdVector;
+
+
 int varStackID = 0;
+int tabCounts = 1;
 ofstream jbfile;
 string className = "";
 bool returnFlag = false;
@@ -109,7 +112,7 @@ bool ifEndFlag = false;
 %type <valueInfoVec> COMMA_SEP_EXPR 
 // %type <idMap>  FUNCTION_BLOCK
 
-%type <boolval> BLOCK_OR_SIMPLE
+%type <boolval> BLOCK_OR_SIMPLE while_block_or_simplestmt for_block_or_simplestmt
 
 %type <idMap> BLOCK 
 
@@ -146,6 +149,8 @@ OBJECT_DECLARE : OBJECT ID {
         
         } OBJ_BLOCK {
             Trace("OBJECT ID BLOCK");
+            tables.dump();
+
             if(methodNumCount == 0){
                 yyerror("object must contain one method");
 
@@ -201,14 +206,7 @@ ARG : ID ':' DATA_TYPE {
             yyerror("id has been used");
         }
         idInfo* id = tables.lookup(*$1);
-        if(tables.top == GLOBAL){
-            jbGlobalVar(*$1);
-        }
-        else{
-            jbPushInt(0);
-            id->stackID = varStackID;
-            jbStore(varStackID++);
-        }
+        id->stackID = varStackID++;
         pair<string,int>* p = new pair<string,int>();
         p->first = *$1;
         p->second = $3;
@@ -234,8 +232,6 @@ FUNCTION : DEF ID {
 
         } '(' ARGS {
             idInfo *id = tables.lookup(*$2);
-           // cout << "after lookup " <<  id->id << " address " << &id << " " << tables.top << endl;
-
             id->argumentsInfoSeq = *$5;
             id->argumentsInfo = tables.vec[tables.top].idMap;
         } ')' FUNCTION_OPTIONAL {
@@ -272,8 +268,6 @@ FUNCTION : DEF ID {
                     }
                     jbfile << "\tmax_stack 15" << endl << "\tmax_locals 15" << endl; 
                     jbfile << "\t{" << endl;
-
-
             }
 
             
@@ -281,7 +275,6 @@ FUNCTION : DEF ID {
         } BLOCK {
             Trace("declare method end");
             idInfo *id = tables.lookup(*$2);
-             cout << "size check : "<< id->argumentsInfoSeq.size() << endl;
             for(int i = 0; i < $5->size(); ++i){
                 cout << "id : " << (*$5)[i]->first << " type : " << valueType2Str((*$5)[i]->second) << endl;
             }
@@ -310,10 +303,11 @@ FUNCTION_OPTIONAL : {
                  ;
 
 // function invocation
-FUNCTION_INVOCATION : ID {tables.push(tables.functionSymbolTables[*$1]);} '(' COMMA_SEP_EXPR ')' {
+FUNCTION_INVOCATION : ID {
+                        // tables.push(tables.functionSymbolTables[*$1]);
+                    } '(' COMMA_SEP_EXPR ')' {
                         Trace("call function invocation");
-                        
-
+                    
                         idInfo* id = tables.lookup(*$1);
                         //cout << "after lookup " <<  id->id << " address " << &id << " " << tables.top << endl;
                         if(id == NULL){
@@ -350,10 +344,8 @@ FUNCTION_INVOCATION : ID {tables.push(tables.functionSymbolTables[*$1]);} '(' CO
                                 jbfile << "," <<  valueType2Str((*$4)[i]->valueType);
                             }
                         }
-
                         jbfile << ")" << endl;
                         
-                        tables.pop();
                         
                     }
 
@@ -434,19 +426,8 @@ VAL_DECLARE : VAL ID ASSIGN EXPR{
                 }
 
                 idInfo *id = tables.lookup(*$2);
-                
 
-                if(tables.top == GLOBAL){
-                    jbGlobalVar(*$2);
-                    jbfile << "\t\tputstatic int " << className << "." << *$2 << endl;
-
-                }
-                else{
-                    id->stackID = varStackID;
-                    jbStore(varStackID++);
-                }
-
-
+                id->value = $4;
 
             }
             | VAL ID ':' DATA_TYPE ASSIGN EXPR {
@@ -460,16 +441,7 @@ VAL_DECLARE : VAL ID ASSIGN EXPR{
                 }
 
                 idInfo *id = tables.lookup(*$2);
-
-                if(tables.top == GLOBAL){
-                    jbGlobalVar(*$2);
-                    jbfile << "\t\tputstatic int " << className << "." << *$2 << endl;
-
-                }
-                else{
-                    id->stackID = varStackID;
-                    jbStore(varStackID++);
-                }
+                id->value = $6;
             }
 
 VAR_DECLARE : VAR ID ASSIGN EXPR {
@@ -701,14 +673,33 @@ EXPR : '(' EXPR ')' {
         else{
             $$ = buf->value;
             int val; 
-            
-            // is global
-            if(buf->stackID == -1){
-                jbfile << "\t\tgetstatic int " << className << "." << *$1 << endl;
+
+            if(buf->idType == constType){
+                if(buf->value->valueType){
+                    val = buf->value->intval;
+                    jbPushInt(val);
+                }
+                else if( buf->value->valueType == boolType){
+                    val = buf->value->boolval ? 1 : 0;
+                    jbPushInt(val);
+                }
+                else if(buf->value->valueType == stringType){
+                    jbfile << "\t\tldc " << "\"" << buf->value->stringval << "\"" << endl;
+                }
             }
             else{
-                jbLoad(buf->stackID);
+                // is global
+                if(buf->stackID == -1){
+                    jbfile << "\t\tgetstatic int " << className << "." << *$1 << endl;
+                }
+                else{
+                    jbLoad(buf->stackID);
+                }
+
             }
+
+            
+            
         }
     }
     | '-' EXPR %prec UMINUS {
@@ -1162,8 +1153,7 @@ DATA_TYPE : CHAR {
 VALUE : STRING_VALUE {
         Trace("string value");
         $$ = stringValue($1);
-        jbfile << "\t\tldc " << "\"" << *$1 << "\"" << endl;
-        
+        jbfile << "\t\tldc "  << *$1  << endl;
     }
       | INT_VALUE {
         Trace("int value");
@@ -1191,19 +1181,21 @@ VALUE : STRING_VALUE {
 
 BLOCK_OR_SIMPLE : BLOCK {
                     $$ = false;
-                    
-                    vector<int> top = ifLabelsVector[ifLabelsVector.size()-1];
-                    int l = top[0];
-                    jbfile << "\t\tgoto L" << l << endl;
-                }
-                | SIMPLE_STMT {
-                    tables.push();
-                    $$ = true;
 
                     vector<int> top = ifLabelsVector[ifLabelsVector.size()-1];
                     int l = top[0];
                     jbfile << "\t\tgoto L" << l << endl;
                 }
+                | PUSH SIMPLE_STMT {
+                    $$ = true;
+                    vector<int> top = ifLabelsVector[ifLabelsVector.size()-1];
+                    int l = top[0];
+                    jbfile << "\t\tgoto L" << l << endl;
+                }
+
+PUSH : {
+    tables.push();
+}
 
 if_dosomething : {
     //      這次數是一般的 if 近來
@@ -1253,10 +1245,7 @@ IF_STMT : IF '(' EXPR ')' if_dosomething BLOCK_OR_SIMPLE {
             ifLabelsVector[ifLabelsVector.size()-1] = top;
             jbfile << "\tL" << l <<  ":" << endl;
 
-        }  ELSEIF_STMT {
-            
-            
-        }
+        }  ELSEIF_STMT 
 
 
 
@@ -1287,54 +1276,173 @@ ELSEIF_STMT : ELSE {
 LOOP_STMT : WHILE_STMT
           | FOR_STMT
 
+
+while_block_or_simplestmt : PUSH SIMPLE_STMT {
+                                $$ = true;
+                                vector<int> top = loopLabelsVector[loopLabelsVector.size()-1];
+                                int l = top[0];
+                                jbfile << "\t\tgoto Lbegin" << l << endl;
+                            }
+                          | BLOCK{
+                              $$ = false;
+                              vector<int> top = loopLabelsVector[loopLabelsVector.size()-1];
+                                int l = top[0];
+                                jbfile << "\t\tgoto Lbegin" << l << endl;
+                          }
+
 // define while stmt
-WHILE_STMT : WHILE '(' EXPR ')' {
-                    tables.push();
-                } SIMPLE_STMT {
-                // tables.dump();
-                tables.pop();
-                Trace(" while without block");
-                if($3->valueType == unknownType){
+WHILE_STMT : WHILE {
+                vector<int> buf;
+                // Lbegin
+                buf.push_back(labelCount++);
+                // Ltrue
+                buf.push_back(labelCount++);
+                // Lfalse
+                buf.push_back(labelCount++);
+                // Lexit
+                buf.push_back(labelCount++);
+                loopLabelsVector.push_back(buf);
+
+                vector<int> top = loopLabelsVector[loopLabelsVector.size()-1];
+                int l = top[0];
+                jbfile << "\t\tgoto Lbegin" << l << endl;
+                jbfile << "\tLbegin" << l << ":" << endl;
+
+            } '(' EXPR ')' {
+                vector<int> top = loopLabelsVector[loopLabelsVector.size()-1];
+                int l = top[3];
+                jbfile << "\t\tifeq Lexit" << l << endl;
+                jbfile << "\t\tgoto Ltrue" << l << endl;
+                jbfile << "\tLtrue" << l << ":" << endl;
+
+            }  while_block_or_simplestmt {
+                if($4->valueType == unknownType){
                     Warning("unknownType!!!!");
                 }
-                else if($3->valueType != boolType){
+                else if($4->valueType != boolType){
                     yyerror("while EXPR must be boolean");
                 }
-           }
-           | WHILE '(' EXPR ')' BLOCK {
-                Trace(" while with block");
-                if($3->valueType == unknownType){
-                    Warning("unknownType!!!!");
+                if($7){
+                    tables.pop();
                 }
-                else if($3->valueType != boolType){
-                    yyerror("while EXPR must be boolean");
-                }
-           }
+
+                vector<int> top = loopLabelsVector[loopLabelsVector.size()-1];
+                int l = top[3];
+                jbfile << "\tLexit" << l << ":" << endl;
+                loopLabelsVector.pop_back();
+            }
+
 
 // define for stmt
-FOR_STMT : FOR '(' ID LT '-' EXPR TO EXPR ')' {
-                tables.push();
+for_block_or_simplestmt : PUSH SIMPLE_STMT {
+                                $$ = true;
+                                vector<int> top = forLabelsVector[forLabelsVector.size()-1];
+                                idInfo *id = forIdVector[forIdVector.size()-1];
+                                jbfile << "\t\ticonst_1" << endl;
+                               // Golbal
+                                if(id->stackID == -1){
+                                    jbfile << "\t\tgetstatic int " << className << "." << id->id << endl;
+                                    jbfile << "\t\tiadd" << endl;
+                                    jbfile << "\t\tputstatic int " << className << "." << id->id << endl;
+                                }
+                                else{
+                                    jbfile << "\t\tiload " << id->stackID << endl;
+                                    jbfile << "\t\tiadd" << endl;
+                                    jbfile << "\t\tistore " << id->stackID << endl;
+                                }
+                                int l = top[0];
+                                // assign id
+                                jbfile << "\t\tgoto Lbegin" << l << endl;
+                            }
+                          | BLOCK{
+                              $$ = false;
+                              vector<int> top = forLabelsVector[forLabelsVector.size()-1];
+                              idInfo *id = forIdVector[forIdVector.size()-1];
+                                jbfile << "\t\ticonst_1" << endl;
+                               // Golbal
+                                if(id->stackID == -1){
+                                    jbfile << "\t\tgetstatic int " << className << "." << id->id << endl;
+                                    jbfile << "\t\tiadd" << endl;
+                                    jbfile << "\t\tputstatic int " << className << "." << id->id << endl;
+                                }
+                                else{
+                                    jbfile << "\t\tiload " << id->stackID << endl;
+                                    jbfile << "\t\tiadd" << endl;
+                                    jbfile << "\t\tistore " << id->stackID << endl;
+                                }
+                                int l = top[0];
+                                // assign id
+                                jbfile << "\t\tgoto Lbegin" << l << endl;
+                          }
 
-            } SIMPLE_STMT {
-                // tables.dump();
+
+FOR_STMT : FOR '(' ID {
+                vector<int> buf;
+                // Lbegin
+                buf.push_back(labelCount++);
+                // Ltrue
+                buf.push_back(labelCount++);
+                // Lfalse
+                buf.push_back(labelCount++);
+                // Lexit
+                buf.push_back(labelCount++);
+                // Lbegin_init
+                buf.push_back(labelCount++);
+
+                idInfo * id = tables.lookup(*$3);
+                if(id == NULL){
+                    yyerror(*$3 +" does not exist");
+                }
+                forIdVector.push_back(id);
+                forLabelsVector.push_back(buf);
+
+
+            }  LT '-' EXPR TO EXPR ')' {
+                if($7->valueType == unknownType || $9->valueType == unknownType){
+                    Warning("unknownType!!!");
+                }
+                else if($7->valueType != intType || $9->valueType != intType){
+                    yyerror("for loop args must be int");
+                }
+                idInfo * id = tables.lookup(*$3);
+                forLabelsVector[forLabelsVector.size()-1].push_back($9->intval);
+                vector<int> top = forLabelsVector[forLabelsVector.size()-1];
+                int l = top[0];
+                int l_init = top[4];
+                int l_exit = top[3];
+                
+                jbfile << "\t\tgoto Lbegin_init" << l_init << endl;
+                jbfile << "\tLbegin_init" << l_init << ":" << endl;
+
+                jbfile << "\t\tisub" << endl;
+                jbfile << "\t\tifeq Lbegin" << l << endl;
+                jbfile << "\t\tgoto Lexit" << l_exit << endl;
+                
+                
+                jbfile << "\tLbegin" << l << ":" << endl;
+                if(id->stackID == -1){
+                    jbfile << "\t\tgetstatic int " << className << "." << id->id << endl;
+                }
+                else{
+                    jbfile << "\t\tiload " << id->stackID << endl;
+                }
+                jbPushInt($9->intval);
+                jbfile << "\t\tisub" << endl;
+                jbfile << "\t\tifeq Lexit" << l << endl;
+                jbfile << "\t\tgoto Ltrue" << l << endl;
+                jbfile << "\tLtrue" << l << ":" << endl;
+            } for_block_or_simplestmt {
+            if($12){
                 tables.pop();
-                Trace("for stmt without block");
-            if($6->valueType == unknownType || $8->valueType == unknownType){
-                Warning("unknownType!!!");
             }
-            else if($6->valueType != intType || $8->valueType != intType){
-                yyerror("for loop args must be int");
-            }
+            vector<int> top = forLabelsVector[forLabelsVector.size()-1];
+            int l = top[3];
+            jbfile << "\tLexit" << l << ":" << endl;
+            forLabelsVector.pop_back();
+            forIdVector.pop_back();
+
          }
-         | FOR '(' ID LT '-' EXPR TO EXPR ')' BLOCK {
-             Trace("for stmt with block");
-             if($6->valueType == unknownType || $8->valueType == unknownType){
-                Warning("unknownType!!!");
-             }
-             else if($6->valueType != intType || $8->valueType != intType){
-                yyerror("for loop args must be int");
-            }
-         }
+
 
 %%
 int main(int argc, char *argv[])
@@ -1351,13 +1459,11 @@ int main(int argc, char *argv[])
         exit(1);
     }
 
-    
-
+    string filename;
     if(argc > 1){
-        string outputfileName = argv[1];
-        outputfileName += ".jasm";
-        cout << outputfileName;
-		jbfile.open(outputfileName,ios::out);
+        filename = string(argv[1]);
+        filename = filename + ".jasm";
+		jbfile.open(filename,ios::out);
     }
 	else{
         jbfile.open("example.jasm",ios::out);
@@ -1373,7 +1479,7 @@ int main(int argc, char *argv[])
         yyerror("Parsing error !");     /* syntax error */
     else{
         printf("Parsing Success \n");
+        cout << filename << endl;
     }
     
-    // tables.dump();
 }

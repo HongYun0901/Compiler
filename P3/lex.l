@@ -55,8 +55,8 @@ identifiers ({letter}({letter}|{digit})*)
 
 
 
-/* string */
-strings \"(\\.|[^"\n])*\"
+/* string strings \"(\\.|[^"\n])*\" */
+strings  (\"(\"\"|[^"\n])*\")
 
  /* char */
 char '([^'\\\n]|\\.)'
@@ -303,42 +303,30 @@ while  {
 }
 
 {strings} {
-    char ch = getc(yyin);
-    if(ch=='"'){
-        ungetc(ch, yyin);
-        yymore();
+    // char ch = input();
+    // cout << "in" << ch << endl;
+    // if(ch=='"'){
+    //     unput(ch);
+    //     yymore();
+    // }
+    // else{
         
-    }
-    else{
-        char *tmp = (char *)malloc(sizeof(char)*yyleng);
-        strcpy(tmp,yytext);
-        // 消除字串中的"" 把它變成"
-        for(int i=0;i< strlen(tmp);i++){
-            if(tmp[i]=='"' && i!= strlen(tmp)-1 && i!=0){
-                // 每次看到有""存在 開一個新的memory給新字串放，長度為原本的減1
-                char * new_tmp = (char *)malloc(sizeof(char)*(strlen(tmp)-1));
-                // 把"" 左半部拿出來
-                char *left = (char *)malloc(sizeof(char)*(i+1));
-                strncpy(left,tmp,i+1);
-                // 拿右半部
-                char *right = (char *)malloc(sizeof(char)*(strlen(tmp)-(i+2)));
-                strncpy(right,tmp+i+2,strlen(tmp)-(i+2));
-                // 拼在一起
-                strcat(new_tmp,left);
-                strcat(new_tmp,right);
-                tmp = new_tmp;
-
-            }
+    // }
+    string tmp = string(yytext);
+    string result = "";
+    for(int i=0; i< tmp.size();i++){
+        if(tmp[i]=='"' && i!= tmp.size()-1 && i!=0){
+            result += tmp[i++];
         }
-        char *result = (char *)malloc(sizeof(char)*(strlen(tmp)-2));
-        strncpy(result,tmp+1, sizeof(char)*(strlen(tmp)-2));
-        tokenString("string",result);
-        ungetc(ch, yyin);
-        free(tmp);
-        yylval.stringval = new string(result);
-        // yylval.stringval = string(result);
-        return STRING_VALUE;
+        else{
+            result += tmp[i];
+        }
+
     }
+    cout << result << endl;
+    tokenString("string",result);
+    yylval.stringval = new string(result);
+    return STRING_VALUE;
 }
 
 \n      {

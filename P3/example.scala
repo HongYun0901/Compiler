@@ -3,22 +3,15 @@
  */
 
 object example {
-  val a = 5 + 3 *4
-  var x:boolean = true
-  var c = 1 < 3
+  //val a = 5
+  var a
+  var c
 
   // function declaration
   def add (a: int, b: int): int 
   {
-    
+    var c
     return a+b
-  }
-
-  def test(a:string, b:char,c:boolean){
-     var z = 3
-     c = 4
-     c = z
-     return 
   }
 
 
@@ -26,49 +19,13 @@ object example {
   def main()
   {
     var c:int
-    var b:float 
-    val a = 3
-    c = c - b
-    val x:char = 'x'
+    a = 5
     c = add(a, 10)
-    var zz = test("123",'c',true)
-
-
-    if ( c < 5){
-      c = 4
-      if(true) {
-        c =7
-        if(false){
-          c = 9
-        }
-        else if (false){
-          a = a + a
-        }
-      }
-      else{
-        c=99
-      }
-      var asdasd:int
-        
-      
-    }
-    else if(c>10) {
-      c = 5
-    }
-    else if(c> 2){
-      c = 3
-    }
-    else if ( c > 3){
-      c = 2
-    }
-    else {
-      c = 5
-    }
-
-    a=3
-    
-
-    
+    if (c > 10)
+      print -c
+    else
+      print c
+    println ("Hello World")
 
     
   }

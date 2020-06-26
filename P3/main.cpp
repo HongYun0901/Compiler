@@ -294,25 +294,38 @@ void jbLogicalOperation(int op){
     switch (op)
     {
     case IFLT:
-        jbfile << "\t\tiflt" << endl;
+        jbfile << "\t\tiflt";
         break;
     case IFLE:
-        jbfile << "\t\tifle" << endl;
+        jbfile << "\t\tifle";
         break;
     case IFEQ:
-        jbfile << "\t\tifeq" << endl;
+        jbfile << "\t\tifeq";
         break;
     case IFGT:
-        jbfile << "\t\tifgt" << endl;
+        jbfile << "\t\tifgt";
         break;
     case IFGE:
-        jbfile << "\t\tifge" << endl;
+        jbfile << "\t\tifge";
         break;
     case IFNE:
-        jbfile << "\t\tifne" << endl;
+        jbfile << "\t\tifne";
         break;
     }
 
+    int l = labelCount++;
+    int l2 = labelCount++;
+    jbfile << " L" << l << endl;
+    jbfile << "\t\ticonst_0" << endl;
+    jbfile << "\t\tgoto L" << l2 << endl;
+    jbfile << "\tL"
+           << l
+           << ":" << endl;
+    jbfile << "\t\ticonst_1" << endl;
+    jbfile << "\t\tgoto L" << l2 << endl;
+    jbfile << "\tL"
+           << l2
+    << ":" << endl;
 }
 
 

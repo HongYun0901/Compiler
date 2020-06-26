@@ -1,12 +1,11 @@
 class example{
 	field static int a
+	field static int x
 	field static int c
 	method public static int add(int,int)
 	max_stack 15
 	max_locals 15
 	{
-		sipush 0
-		istore 2
 		iload 0
 		iload 1
 		iadd
@@ -18,37 +17,15 @@ class example{
 	{
 		sipush 0
 		istore 0
-		sipush 5
+		sipush 6
 		putstatic int example.a
 		getstatic int example.a
 		sipush 10
 		invokestatic int example.add(int,int)
-		istore 0
-		iload 0
-		sipush 10
-		isub
-		ifgt L0
-		iconst_0
-		goto L1
-	L0:
-		iconst_1
-		goto L1
-	L1:
-		ifeq L3
+		putstatic int example.c
 		getstatic java.io.PrintStream java.lang.System.out
-		iload 0
-		ineg
+		getstatic int example.c
 		invokevirtual void java.io.PrintStream.print(int)
-		goto L2
-	L3:
-		getstatic java.io.PrintStream java.lang.System.out
-		iload 0
-		invokevirtual void java.io.PrintStream.print(int)
-		goto L2
-	L2:
-		getstatic java.io.PrintStream java.lang.System.out
-		ldc "Hello World"
-		invokevirtual void java.io.PrintStream.println(java.lang.String)
 		return
 	}
 }

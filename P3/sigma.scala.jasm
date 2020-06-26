@@ -1,0 +1,98 @@
+class Sigma{
+	field static int sum
+	field static int index
+	method public static void main(java.lang.String[])
+	max_stack 15
+	max_locals 15
+	{
+		sipush 0
+		putstatic int Sigma.sum
+		sipush 0
+		putstatic int Sigma.index
+		goto Lbegin0
+	Lbegin0:
+		getstatic int Sigma.index
+		sipush 10
+		isub
+		ifle L4
+		iconst_0
+		goto L5
+	L4:
+		iconst_1
+		goto L5
+	L5:
+		ifeq Lexit3
+		goto Ltrue3
+	Ltrue3:
+		getstatic int Sigma.sum
+		getstatic int Sigma.index
+		iadd
+		putstatic int Sigma.sum
+		getstatic int Sigma.index
+		sipush 1
+		iadd
+		putstatic int Sigma.index
+		goto Lbegin0
+	Lexit3:
+		getstatic java.io.PrintStream java.lang.System.out
+		ldc "The" sum" is"
+		invokevirtual void java.io.PrintStream.print(java.lang.String)
+		getstatic java.io.PrintStream java.lang.System.out
+		getstatic int Sigma.sum
+		invokevirtual void java.io.PrintStream.println(int)
+		getstatic java.io.PrintStream java.lang.System.out
+		getstatic int Sigma.index
+		invokevirtual void java.io.PrintStream.println(int)
+		sipush 0
+		istore 0
+		sipush 1
+		sipush 10
+		goto Lbegin_init10
+	Lbegin_init10:
+		isub
+		ifeq Lbegin6
+		goto Lexit9
+	Lbegin6:
+		getstatic int Sigma.sum
+		sipush 10
+		isub
+		ifeq Lexit6
+		goto Ltrue6
+	Ltrue6:
+		getstatic int Sigma.index
+		sipush 1
+		iadd
+		putstatic int Sigma.index
+		getstatic int Sigma.sum
+		sipush 10
+		goto Lbegin_init15
+	Lbegin_init15:
+		isub
+		ifeq Lbegin11
+		goto Lexit14
+	Lbegin11:
+		iload 0
+		sipush 10
+		isub
+		ifeq Lexit11
+		goto Ltrue11
+	Ltrue11:
+		getstatic int Sigma.index
+		sipush 1
+		iadd
+		putstatic int Sigma.index
+		iconst_1
+		iload 0
+		iadd
+		istore 0
+		goto Lbegin11
+	Lexit14:
+		iconst_1
+		getstatic int Sigma.sum
+		iadd
+		putstatic int Sigma.sum
+		goto Lbegin6
+	Lexit9:
+		return
+	}
+}
