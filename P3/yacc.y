@@ -538,6 +538,7 @@ VAR_DECLARE : VAR ID ASSIGN EXPR {
                     id->stackID = varStackID;
                     jbStore(varStackID++);
                 }
+                id->value->valueType = intType;
             }
 
 
@@ -1388,6 +1389,8 @@ FOR_STMT : FOR '(' ID {
                 buf.push_back(labelCount++);
                 // Lbegin_init
                 buf.push_back(labelCount++);
+                // Lbegin_assign
+                buf.push_back(labelCount++);
 
                 idInfo * id = tables.lookup(*$3);
                 if(id == NULL){
@@ -1410,14 +1413,23 @@ FOR_STMT : FOR '(' ID {
                 int l = top[0];
                 int l_init = top[4];
                 int l_exit = top[3];
+                int l_assign = top[5];
                 
                 jbfile << "\t\tgoto Lbegin_init" << l_init << endl;
                 jbfile << "\tLbegin_init" << l_init << ":" << endl;
 
                 jbfile << "\t\tisub" << endl;
-                jbfile << "\t\tifeq Lbegin" << l << endl;
+                jbfile << "\t\tifle Lassign" << l_assign << endl;
                 jbfile << "\t\tgoto Lexit" << l_exit << endl;
-                
+                jbfile << "\tLassign" << l_assign << ":" << endl;
+                jbPushInt($7->intval);
+                if(id->stackID == -1) {
+                    jbfile << "\t\tputstatic int " << className << "." << id->id << endl;
+                }
+                else{
+                    jbfile << "\t\tistore " << id->stackID << endl;
+                }
+                jbfile << "\t\tgoto Lbegin" << l << endl;                
                 
                 jbfile << "\tLbegin" << l << ":" << endl;
                 if(id->stackID == -1){
@@ -1428,7 +1440,7 @@ FOR_STMT : FOR '(' ID {
                 }
                 jbPushInt($9->intval);
                 jbfile << "\t\tisub" << endl;
-                jbfile << "\t\tifeq Lexit" << l << endl;
+                jbfile << "\t\tifgt Lexit" << l_exit << endl;
                 jbfile << "\t\tgoto Ltrue" << l << endl;
                 jbfile << "\tLtrue" << l << ":" << endl;
             } for_block_or_simplestmt {

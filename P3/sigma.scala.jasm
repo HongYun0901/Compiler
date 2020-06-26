@@ -9,33 +9,8 @@ class Sigma{
 		putstatic int Sigma.sum
 		sipush 0
 		putstatic int Sigma.index
-		goto Lbegin0
-	Lbegin0:
-		getstatic int Sigma.index
-		sipush 10
-		isub
-		ifle L4
-		iconst_0
-		goto L5
-	L4:
-		iconst_1
-		goto L5
-	L5:
-		ifeq Lexit3
-		goto Ltrue3
-	Ltrue3:
-		getstatic int Sigma.sum
-		getstatic int Sigma.index
-		iadd
-		putstatic int Sigma.sum
-		getstatic int Sigma.index
-		sipush 1
-		iadd
-		putstatic int Sigma.index
-		goto Lbegin0
-	Lexit3:
 		getstatic java.io.PrintStream java.lang.System.out
-		ldc "The" sum" is"
+		ldc "The sum is"
 		invokevirtual void java.io.PrintStream.print(java.lang.String)
 		getstatic java.io.PrintStream java.lang.System.out
 		getstatic int Sigma.sum
@@ -45,38 +20,52 @@ class Sigma{
 		invokevirtual void java.io.PrintStream.println(int)
 		sipush 0
 		istore 0
-		sipush 1
 		sipush 10
-		goto Lbegin_init10
-	Lbegin_init10:
+		sipush 10
+		goto Lbegin_init4
+	Lbegin_init4:
 		isub
-		ifeq Lbegin6
-		goto Lexit9
-	Lbegin6:
+		ifle Lassign5
+		goto Lexit3
+	Lassign5:
+		sipush 10
+		putstatic int Sigma.sum
+		goto Lbegin0
+	Lbegin0:
 		getstatic int Sigma.sum
 		sipush 10
 		isub
-		ifeq Lexit6
-		goto Ltrue6
-	Ltrue6:
+		ifgt Lexit3
+		goto Ltrue0
+	Ltrue0:
+		getstatic java.io.PrintStream java.lang.System.out
+		getstatic int Sigma.index
+		invokevirtual void java.io.PrintStream.println(int)
 		getstatic int Sigma.index
 		sipush 1
 		iadd
 		putstatic int Sigma.index
-		getstatic int Sigma.sum
+		sipush 0
 		sipush 10
-		goto Lbegin_init15
-	Lbegin_init15:
+		goto Lbegin_init10
+	Lbegin_init10:
 		isub
-		ifeq Lbegin11
-		goto Lexit14
-	Lbegin11:
+		ifle Lassign11
+		goto Lexit9
+	Lassign11:
+		sipush 0
+		istore 0
+		goto Lbegin6
+	Lbegin6:
 		iload 0
 		sipush 10
 		isub
-		ifeq Lexit11
-		goto Ltrue11
-	Ltrue11:
+		ifgt Lexit9
+		goto Ltrue6
+	Ltrue6:
+		getstatic java.io.PrintStream java.lang.System.out
+		iload 0
+		invokevirtual void java.io.PrintStream.print(int)
 		getstatic int Sigma.index
 		sipush 1
 		iadd
@@ -85,14 +74,20 @@ class Sigma{
 		iload 0
 		iadd
 		istore 0
-		goto Lbegin11
-	Lexit14:
+		goto Lbegin6
+	Lexit9:
+		getstatic java.io.PrintStream java.lang.System.out
+		ldc "\n"
+		invokevirtual void java.io.PrintStream.print(java.lang.String)
 		iconst_1
 		getstatic int Sigma.sum
 		iadd
 		putstatic int Sigma.sum
-		goto Lbegin6
-	Lexit9:
+		goto Lbegin0
+	Lexit3:
+		getstatic java.io.PrintStream java.lang.System.out
+		getstatic int Sigma.index
+		invokevirtual void java.io.PrintStream.println(int)
 		return
 	}
 }

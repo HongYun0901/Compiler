@@ -14,20 +14,20 @@ object Sigma
   def main () {
     sum = 0
     index = 0
-    
-    while (index <= 10) {
-      sum = sum + index
-      index = index + 1
-    }
-    print ("The"" sum"" is")
+    print ("The sum is")
     println (sum)
     println(index)
-    var i 
-    for(sum <- 1 to 10){
+    var i
+    for(sum <- 10 to 10){
+      println(index)
       index = index + 1
-      for(i <- sum to 10){
+      for(i <- 0 to 10){
+        print(i)
         index = index + 1
       }
-    }
+      print("\n")
+    } 
+    println(index)
+
   }
 }
