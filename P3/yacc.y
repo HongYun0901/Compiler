@@ -1227,6 +1227,17 @@ IF_STMT : IF '(' EXPR ')' if_dosomething BLOCK_OR_SIMPLE {
                 tables.pop();
             }
             vector<int> top = ifLabelsVector[ifLabelsVector.size()-1];
+            for(int i=0;i<top.size();i++){
+                cout << top[i];
+            }
+            cout << endl;
+            cout << top.size() << endl;
+
+            if (top.size() == 2){
+                jbfile << "\tL" << top[top.size()-1] << ":" << endl;
+                jbfile << "\t\tgoto L" << top[0] << endl;
+            }
+
             int l = top[0];
             jbfile << "\tL" << l <<  ":" << endl;
             ifLabelsVector.pop_back();

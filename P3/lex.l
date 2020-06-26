@@ -323,7 +323,7 @@ while  {
         }
 
     }
-    cout << result << endl;
+    // cout << result << endl;
     tokenString("string",result);
     yylval.stringval = new string(result);
     return STRING_VALUE;

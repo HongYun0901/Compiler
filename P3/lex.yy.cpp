@@ -1311,7 +1311,7 @@ YY_RULE_SETUP
         }
 
     }
-    cout << result << endl;
+    // cout << result << endl;
     tokenString("string",result);
     yylval.stringval = new string(result);
     return STRING_VALUE;

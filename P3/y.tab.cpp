@@ -597,9 +597,9 @@ static const yytype_uint16 yyrline[] =
      624,   628,   637,   640,   706,   726,   727,   756,   786,   816,
      845,   873,   890,   908,   935,   965,   997,  1025,  1052,  1084,
     1103,  1126,  1134,  1137,  1140,  1144,  1148,  1154,  1159,  1164,
-    1169,  1173,  1183,  1190,  1197,  1201,  1222,  1234,  1234,  1255,
-    1255,  1258,  1277,  1278,  1281,  1287,  1295,  1312,  1295,  1338,
-    1358,  1380,  1403,  1380
+    1169,  1173,  1183,  1190,  1197,  1201,  1222,  1245,  1245,  1266,
+    1266,  1269,  1288,  1289,  1292,  1298,  1306,  1323,  1306,  1349,
+    1369,  1391,  1414,  1391
 };
 #endif
 
@@ -2932,6 +2932,17 @@ yyreduce:
                 tables.pop();
             }
             vector<int> top = ifLabelsVector[ifLabelsVector.size()-1];
+            for(int i=0;i<top.size();i++){
+                cout << top[i];
+            }
+            cout << endl;
+            cout << top.size() << endl;
+
+            if (top.size() == 2){
+                jbfile << "\tL" << top[top.size()-1] << ":" << endl;
+                jbfile << "\t\tgoto L" << top[0] << endl;
+            }
+
             int l = top[0];
             jbfile << "\tL" << l <<  ":" << endl;
             ifLabelsVector.pop_back();
@@ -2939,7 +2950,7 @@ yyreduce:
     break;
 
   case 87:
-#line 1234 "yacc.y"
+#line 1245 "yacc.y"
     {
             if((yyvsp[(6) - (6)].boolval)){
                 tables.pop();
@@ -2959,14 +2970,14 @@ yyreduce:
     break;
 
   case 89:
-#line 1255 "yacc.y"
+#line 1266 "yacc.y"
     {
                 elseifFlag = true;
             }
     break;
 
   case 91:
-#line 1258 "yacc.y"
+#line 1269 "yacc.y"
     {
                 if((yyvsp[(2) - (2)].boolval)){
                     tables.pop();
@@ -2979,7 +2990,7 @@ yyreduce:
     break;
 
   case 94:
-#line 1281 "yacc.y"
+#line 1292 "yacc.y"
     {
                                 (yyval.boolval) = true;
                                 vector<int> top = loopLabelsVector[loopLabelsVector.size()-1];
@@ -2989,7 +3000,7 @@ yyreduce:
     break;
 
   case 95:
-#line 1287 "yacc.y"
+#line 1298 "yacc.y"
     {
                               (yyval.boolval) = false;
                               vector<int> top = loopLabelsVector[loopLabelsVector.size()-1];
@@ -2999,7 +3010,7 @@ yyreduce:
     break;
 
   case 96:
-#line 1295 "yacc.y"
+#line 1306 "yacc.y"
     {
                 vector<int> buf;
                 // Lbegin
@@ -3021,7 +3032,7 @@ yyreduce:
     break;
 
   case 97:
-#line 1312 "yacc.y"
+#line 1323 "yacc.y"
     {
                 vector<int> top = loopLabelsVector[loopLabelsVector.size()-1];
                 int l = top[3];
@@ -3033,7 +3044,7 @@ yyreduce:
     break;
 
   case 98:
-#line 1319 "yacc.y"
+#line 1330 "yacc.y"
     {
                 if((yyvsp[(4) - (7)].value)->valueType == unknownType){
                     Warning("unknownType!!!!");
@@ -3053,7 +3064,7 @@ yyreduce:
     break;
 
   case 99:
-#line 1338 "yacc.y"
+#line 1349 "yacc.y"
     {
                                 (yyval.boolval) = true;
                                 vector<int> top = forLabelsVector[forLabelsVector.size()-1];
@@ -3077,7 +3088,7 @@ yyreduce:
     break;
 
   case 100:
-#line 1358 "yacc.y"
+#line 1369 "yacc.y"
     {
                               (yyval.boolval) = false;
                               vector<int> top = forLabelsVector[forLabelsVector.size()-1];
@@ -3101,7 +3112,7 @@ yyreduce:
     break;
 
   case 101:
-#line 1380 "yacc.y"
+#line 1391 "yacc.y"
     {
                 vector<int> buf;
                 // Lbegin
@@ -3129,7 +3140,7 @@ yyreduce:
     break;
 
   case 102:
-#line 1403 "yacc.y"
+#line 1414 "yacc.y"
     {
                 if((yyvsp[(7) - (10)].value)->valueType == unknownType || (yyvsp[(9) - (10)].value)->valueType == unknownType){
                     Warning("unknownType!!!");
@@ -3177,7 +3188,7 @@ yyreduce:
     break;
 
   case 103:
-#line 1446 "yacc.y"
+#line 1457 "yacc.y"
     {
             if((yyvsp[(12) - (12)].boolval)){
                 tables.pop();
@@ -3193,7 +3204,7 @@ yyreduce:
 
 
 /* Line 1267 of yacc.c.  */
-#line 3197 "y.tab.cpp"
+#line 3208 "y.tab.cpp"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -3407,7 +3418,7 @@ yyreturn:
 }
 
 
-#line 1459 "yacc.y"
+#line 1470 "yacc.y"
 
 int main(int argc, char *argv[])
 {

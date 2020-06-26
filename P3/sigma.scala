@@ -12,12 +12,22 @@ object Sigma
   var index: int
 
   def main () {
-    sum = 0
+    sum = 1
     index = 0
     print ("The sum is")
     println (sum)
     println(index)
-    var i
+    var i = 0
+    if(i == 0){
+      println("i = 0")
+      if(sum == 0 ){
+        println("sum=0")
+      }
+
+    }
+    else{
+      println("i!= 1 or 0 ")
+    }
     for(sum <- 10 to 10){
       println(index)
       index = index + 1
