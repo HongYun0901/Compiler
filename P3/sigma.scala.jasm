@@ -1,4 +1,5 @@
 class sigma{
+	field static int n
 	field static int sum
 	field static int index
 	method public static int fib(int)
@@ -20,8 +21,6 @@ class sigma{
 		ireturn
 		goto L2
 	L3:
-		goto L2
-	L2:
 		iload 0
 		sipush 1
 		isub
@@ -32,6 +31,9 @@ class sigma{
 		invokestatic int sigma.fib(int)
 		iadd
 		ireturn
+		goto L2
+	L2:
+		return
 	}
 	method public static void main(java.lang.String[])
 	max_stack 15
@@ -41,9 +43,32 @@ class sigma{
 		putstatic int sigma.sum
 		sipush 0
 		putstatic int sigma.index
+		sipush 1
+		putstatic int sigma.n
+		goto Lbegin4
+	Lbegin4:
+		getstatic int sigma.n
+		sipush 10
+		isub
+		ifle L8
+		iconst_0
+		goto L9
+	L8:
+		iconst_1
+		goto L9
+	L9:
+		ifeq Lexit7
+		goto Ltrue7
+	Ltrue7:
 		getstatic java.io.PrintStream java.lang.System.out
-		ldc "string haha"
-		invokevirtual void java.io.PrintStream.println(java.lang.String)
+		ldc "sadasd"
+		invokevirtual void java.io.PrintStream.print(java.lang.String)
+		getstatic int sigma.n
+		sipush 1
+		iadd
+		putstatic int sigma.n
+		goto Lbegin4
+	Lexit7:
 		getstatic java.io.PrintStream java.lang.System.out
 		ldc "The sum is"
 		invokevirtual void java.io.PrintStream.print(java.lang.String)
@@ -58,87 +83,62 @@ class sigma{
 		iload 0
 		sipush 0
 		isub
-		ifle L4
+		ifle L10
 		iconst_0
-		goto L5
-	L4:
+		goto L11
+	L10:
 		iconst_1
-		goto L5
-	L5:
-		ifeq L7
+		goto L11
+	L11:
+		ifeq L13
 		getstatic java.io.PrintStream java.lang.System.out
 		ldc "i <= 0"
 		invokevirtual void java.io.PrintStream.println(java.lang.String)
 		getstatic int sigma.sum
 		sipush 0
 		isub
-		ifeq L8
+		ifeq L14
 		iconst_0
-		goto L9
-	L8:
+		goto L15
+	L14:
 		iconst_1
-		goto L9
-	L9:
-		ifeq L11
+		goto L15
+	L15:
+		ifeq L17
 		getstatic java.io.PrintStream java.lang.System.out
 		ldc "sum=0"
 		invokevirtual void java.io.PrintStream.println(java.lang.String)
-		goto L10
-	L11:
+		goto L16
+	L17:
 		getstatic java.io.PrintStream java.lang.System.out
 		ldc "sum!=0"
 		invokevirtual void java.io.PrintStream.println(java.lang.String)
-		goto L10
-	L10:
-		goto L6
-	L7:
+		goto L16
+	L16:
+		goto L12
+	L13:
 		iload 0
 		sipush 0
 		isub
-		ifge L12
+		ifge L18
 		iconst_0
-		goto L13
-	L12:
+		goto L19
+	L18:
 		iconst_1
-		goto L13
-	L13:
-		ifeq L14
+		goto L19
+	L19:
+		ifeq L20
 		getstatic java.io.PrintStream java.lang.System.out
 		ldc "i>=0"
 		invokevirtual void java.io.PrintStream.println(java.lang.String)
-		goto L6
-	L14:
+		goto L12
+	L20:
 		getstatic java.io.PrintStream java.lang.System.out
 		ldc "i!= 1 or 0 "
 		invokevirtual void java.io.PrintStream.println(java.lang.String)
-		goto L6
-	L6:
+		goto L12
+	L12:
 		sipush 10
-		sipush 10
-		goto Lbegin_init19
-	Lbegin_init19:
-		isub
-		ifle Lassign20
-		goto Lexit18
-	Lassign20:
-		sipush 10
-		putstatic int sigma.sum
-		goto Lbegin15
-	Lbegin15:
-		getstatic int sigma.sum
-		sipush 10
-		isub
-		ifgt Lexit18
-		goto Ltrue15
-	Ltrue15:
-		getstatic java.io.PrintStream java.lang.System.out
-		getstatic int sigma.index
-		invokevirtual void java.io.PrintStream.println(int)
-		getstatic int sigma.index
-		sipush 1
-		iadd
-		putstatic int sigma.index
-		sipush 0
 		sipush 10
 		goto Lbegin_init25
 	Lbegin_init25:
@@ -146,43 +146,23 @@ class sigma{
 		ifle Lassign26
 		goto Lexit24
 	Lassign26:
-		sipush 0
-		istore 0
+		sipush 10
+		putstatic int sigma.sum
 		goto Lbegin21
 	Lbegin21:
-		iload 0
+		getstatic int sigma.sum
 		sipush 10
 		isub
 		ifgt Lexit24
 		goto Ltrue21
 	Ltrue21:
 		getstatic java.io.PrintStream java.lang.System.out
-		iload 0
-		invokevirtual void java.io.PrintStream.print(int)
+		getstatic int sigma.index
+		invokevirtual void java.io.PrintStream.println(int)
 		getstatic int sigma.index
 		sipush 1
 		iadd
 		putstatic int sigma.index
-		iconst_1
-		iload 0
-		iadd
-		istore 0
-		goto Lbegin21
-	Lexit24:
-		getstatic java.io.PrintStream java.lang.System.out
-		ldc ""
-		invokevirtual void java.io.PrintStream.println(java.lang.String)
-		iconst_1
-		getstatic int sigma.sum
-		iadd
-		putstatic int sigma.sum
-		goto Lbegin15
-	Lexit18:
-		getstatic java.io.PrintStream java.lang.System.out
-		getstatic int sigma.index
-		invokevirtual void java.io.PrintStream.println(int)
-		sipush 0
-		istore 0
 		sipush 0
 		sipush 10
 		goto Lbegin_init31
@@ -203,14 +183,60 @@ class sigma{
 	Ltrue27:
 		getstatic java.io.PrintStream java.lang.System.out
 		iload 0
-		invokestatic int sigma.fib(int)
-		invokevirtual void java.io.PrintStream.println(int)
+		invokevirtual void java.io.PrintStream.print(int)
+		getstatic int sigma.index
+		sipush 1
+		iadd
+		putstatic int sigma.index
 		iconst_1
 		iload 0
 		iadd
 		istore 0
 		goto Lbegin27
 	Lexit30:
+		getstatic java.io.PrintStream java.lang.System.out
+		ldc ""
+		invokevirtual void java.io.PrintStream.println(java.lang.String)
+		iconst_1
+		getstatic int sigma.sum
+		iadd
+		putstatic int sigma.sum
+		goto Lbegin21
+	Lexit24:
+		getstatic java.io.PrintStream java.lang.System.out
+		getstatic int sigma.index
+		invokevirtual void java.io.PrintStream.println(int)
+		sipush 0
+		istore 0
+		sipush 0
+		sipush 10
+		goto Lbegin_init37
+	Lbegin_init37:
+		isub
+		ifle Lassign38
+		goto Lexit36
+	Lassign38:
+		sipush 0
+		istore 0
+		goto Lbegin33
+	Lbegin33:
+		iload 0
+		sipush 10
+		isub
+		ifgt Lexit36
+		goto Ltrue33
+	Ltrue33:
+		getstatic java.io.PrintStream java.lang.System.out
+		iload 0
+		invokestatic int sigma.fib(int)
+		invokevirtual void java.io.PrintStream.println(int)
+		iconst_1
+		iload 0
+		iadd
+		istore 0
+		goto Lbegin33
+	Lexit36:
+		return
 		return
 	}
 }

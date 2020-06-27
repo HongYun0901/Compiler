@@ -289,6 +289,7 @@ FUNCTION : DEF ID {
             if($8 == unknownType && !returnFlag){
                 jbfile << "\t\treturn" << endl;
             }
+            jbfile << "\t\treturn" << endl;
             jbfile << "\t}" << endl;
             
         }

@@ -6,7 +6,7 @@
 object sigma
 {
   // constants and variables
-  val n = 10
+  var n
   val str = "sadasd"
   var sum: int
   var index: int
@@ -15,15 +15,19 @@ object sigma
   def fib(n:int):int {
     if(n<2)
       return n
-    //else
+    else
       return fib(n-1) + fib(n-2)
   }
 
   def main () {
     sum = 1
     index = 0
-    val str = "string haha"
-    println(str)
+    n = 1
+    while(n<=10){
+      print(str)
+      n = n + 1
+    }
+
     print ("The sum is")
     println (sum)
     println(index)
