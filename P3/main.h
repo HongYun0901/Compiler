@@ -12,7 +12,7 @@
 #include <fstream>
 
 using namespace std;
-extern ofstream jbfile;
+extern fstream jbfile;
 extern int labelCount;
 // define type by integer
 enum valueType

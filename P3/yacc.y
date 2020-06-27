@@ -30,10 +30,13 @@ vector<vector<int>> loopLabelsVector;
 vector<vector<int>> forLabelsVector;
 vector<idInfo*> forIdVector;
 
+streampos fp;
+
+
 
 int varStackID = 0;
 int tabCounts = 1;
-ofstream jbfile;
+fstream jbfile;
 string className = "";
 bool returnFlag = false;
 bool ifEndFlag = false;
@@ -418,30 +421,35 @@ OBJ_BLOCK : '{' OBJ_CONTENTS  '}'
 
 
 // constant variables declarations
-VAL_DECLARE : VAL ID ASSIGN EXPR{
+VAL_DECLARE : VAL ID {                    
+                fp = jbfile.tellg();
+            } ASSIGN EXPR{
                 Trace("VAL ID ASSIGN EXPR");
-                int result = tables.vec[tables.top].insert(*$2,constType,$4);
+                int result = tables.vec[tables.top].insert(*$2,constType,$5);
                 if(result == -1){
                     yyerror("id has been used");
                 }
 
                 idInfo *id = tables.lookup(*$2);
 
-                id->value = $4;
-
+                id->value = $5;
+                jbfile.seekg(fp);
             }
-            | VAL ID ':' DATA_TYPE ASSIGN EXPR {
+            | VAL ID ':' DATA_TYPE {
+                fp = jbfile.tellg();
+            } ASSIGN EXPR {
                 Trace("VAL ID : DATA_TYPE ASSIGN EXPR");
-                if($4 != $6->valueType){
+                if($4 != $7->valueType){
                     yyerror("data type and value type doesn't match");
                 }
-                int result = tables.vec[tables.top].insert(*$2,constType,$6);
+                int result = tables.vec[tables.top].insert(*$2,constType,$7);
                 if(result == -1){
                     yyerror("id has been used");
                 }
 
                 idInfo *id = tables.lookup(*$2);
-                id->value = $6;
+                id->value = $7;
+                jbfile.seekg(fp);
             }
 
 VAR_DECLARE : VAR ID ASSIGN EXPR {
@@ -676,16 +684,22 @@ EXPR : '(' EXPR ')' {
             int val; 
 
             if(buf->idType == constType){
-                if(buf->value->valueType){
+                cout << "get contst" << endl;
+                if(buf->value->valueType == intType){
                     val = buf->value->intval;
                     jbPushInt(val);
+                    cout << "inttype get " << endl;
                 }
                 else if( buf->value->valueType == boolType){
                     val = buf->value->boolval ? 1 : 0;
                     jbPushInt(val);
+                    cout << "bool get " << endl;
+
                 }
                 else if(buf->value->valueType == stringType){
-                    jbfile << "\t\tldc " << "\"" << buf->value->stringval << "\"" << endl;
+                    jbfile << "\t\tldc " << *(buf->value->stringval) << endl;
+                    cout << "string get " << endl;
+
                 }
             }
             else{
