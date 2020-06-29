@@ -338,7 +338,14 @@ FUNCTION_INVOCATION : ID {
                         }
                         $$ = new valueInfo();
                         $$->valueType = id->returnType;
-                        jbfile << "\t\tinvokestatic int " << className << "." << *$1 << "(" ;
+                        if(id->returnType == unknownType){
+                            jbfile << "\t\tinvokestatic void " << className << "." << *$1 << "(" ;
+
+                        }
+                        else{
+                            jbfile << "\t\tinvokestatic int " << className << "." << *$1 << "(" ;
+
+                        }
 
                         for(int i=$4->size()-1;i>=0;--i){
                             if(i == $4->size()-1){
@@ -422,8 +429,10 @@ OBJ_BLOCK : '{' OBJ_CONTENTS  '}'
 
 
 // constant variables declarations
-VAL_DECLARE : VAL ID {                    
+VAL_DECLARE : VAL ID {          
                 fp = jbfile.tellg();
+                        
+                
             } ASSIGN EXPR{
                 Trace("VAL ID ASSIGN EXPR");
                 int result = tables.vec[tables.top].insert(*$2,constType,$5);
@@ -435,6 +444,7 @@ VAL_DECLARE : VAL ID {
 
                 id->value = $5;
                 jbfile.seekg(fp);
+                
             }
             | VAL ID ':' DATA_TYPE {
                 fp = jbfile.tellg();
@@ -451,6 +461,8 @@ VAL_DECLARE : VAL ID {
                 idInfo *id = tables.lookup(*$2);
                 id->value = $7;
                 jbfile.seekg(fp);
+                 
+                
             }
 
 VAR_DECLARE : VAR ID ASSIGN EXPR {
@@ -639,6 +651,7 @@ SIMPLE_STMT : V_DECLARE
                 jbfile << "\t\treturn" << endl;
                 
             }
+            | FUNCTION_INVOCATION
             
             
 
