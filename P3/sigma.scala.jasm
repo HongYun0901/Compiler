@@ -39,6 +39,11 @@ class sigma{
 	max_stack 15
 	max_locals 15
 	{
+		getstatic java.io.PrintStream java.lang.System.out
+		iload 0
+		sipush 50
+		iadd
+		invokevirtual void java.io.PrintStream.println(int)
 		iload 0
 		putstatic int sigma.sum
 		return
@@ -278,7 +283,32 @@ class sigma{
 		invokevirtual void java.io.PrintStream.println(java.lang.String)
 		getstatic java.io.PrintStream java.lang.System.out
 		getstatic int sigma.sum
-		invokevirtual void java.io.PrintStream.print(int)
+		invokevirtual void java.io.PrintStream.println(int)
+		sipush 5
+		putstatic int sigma.sum
+		getstatic java.io.PrintStream java.lang.System.out
+		getstatic int sigma.sum
+		sipush 5
+		isub
+		ifeq L37
+		iconst_0
+		goto L38
+	L37:
+		iconst_1
+		goto L38
+	L38:
+		getstatic int sigma.sum
+		sipush 3
+		isub
+		ifeq L39
+		iconst_0
+		goto L40
+	L39:
+		iconst_1
+		goto L40
+	L40:
+		ior
+		invokevirtual void java.io.PrintStream.println(int)
 		return
 		return
 	}

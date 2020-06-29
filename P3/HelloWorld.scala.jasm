@@ -1,0 +1,133 @@
+class HelloWorld{
+	method public static void main(java.lang.String[])
+	max_stack 15
+	max_locals 15
+	{
+		getstatic java.io.PrintStream java.lang.System.out
+		ldc "Hello World"
+		invokevirtual void java.io.PrintStream.println(java.lang.String)
+		sipush 5
+		istore 0
+		iload 0
+		sipush 5
+		isub
+		ifeq L0
+		iconst_0
+		goto L1
+	L0:
+		iconst_1
+		goto L1
+	L1:
+		ifeq L3
+		sipush 6
+		istore 0
+		getstatic java.io.PrintStream java.lang.System.out
+		ldc "if 2_1 a==5"
+		invokevirtual void java.io.PrintStream.println(java.lang.String)
+		iload 0
+		sipush 4
+		isub
+		ifeq L4
+		iconst_0
+		goto L5
+	L4:
+		iconst_1
+		goto L5
+	L5:
+		ifeq L7
+		getstatic java.io.PrintStream java.lang.System.out
+		ldc "if 3_1 a==4"
+		invokevirtual void java.io.PrintStream.println(java.lang.String)
+		goto L6
+	L7:
+		getstatic java.io.PrintStream java.lang.System.out
+		ldc "else 3_1 a!=4"
+		invokevirtual void java.io.PrintStream.println(java.lang.String)
+		goto L6
+	L6:
+		goto L2
+	L3:
+		getstatic java.io.PrintStream java.lang.System.out
+		ldc "else 2_1 a!=5"
+		invokevirtual void java.io.PrintStream.println(java.lang.String)
+		goto L2
+	L2:
+		iload 0
+		sipush 5
+		isub
+		ifeq L8
+		iconst_0
+		goto L9
+	L8:
+		iconst_1
+		goto L9
+	L9:
+		ifeq L11
+		sipush 4
+		istore 0
+		getstatic java.io.PrintStream java.lang.System.out
+		ldc "if 2_2 a==5"
+		invokevirtual void java.io.PrintStream.println(java.lang.String)
+		goto L10
+	L11:
+		getstatic java.io.PrintStream java.lang.System.out
+		ldc "else 2_2 a!=5"
+		invokevirtual void java.io.PrintStream.println(java.lang.String)
+		goto L10
+	L10:
+		goto Lbegin12
+	Lbegin12:
+		iload 0
+		sipush 0
+		isub
+		ifgt L16
+		iconst_0
+		goto L17
+	L16:
+		iconst_1
+		goto L17
+	L17:
+		ifeq Lexit15
+		goto Ltrue15
+	Ltrue15:
+		sipush 0
+		istore 1
+		sipush 3
+		istore 1
+		goto Lbegin18
+	Lbegin18:
+		iload 1
+		sipush 0
+		isub
+		ifgt L22
+		iconst_0
+		goto L23
+	L22:
+		iconst_1
+		goto L23
+	L23:
+		ifeq Lexit21
+		goto Ltrue21
+	Ltrue21:
+		getstatic java.io.PrintStream java.lang.System.out
+		ldc "*"
+		invokevirtual void java.io.PrintStream.print(java.lang.String)
+		iload 1
+		sipush 1
+		isub
+		istore 1
+		goto Lbegin18
+	Lexit21:
+		getstatic java.io.PrintStream java.lang.System.out
+		ldc ""
+		invokevirtual void java.io.PrintStream.println(java.lang.String)
+		iload 0
+		sipush 1
+		isub
+		istore 0
+		goto Lbegin12
+	Lexit15:
+		return
+		return
+	}
+}

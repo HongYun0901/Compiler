@@ -21,11 +21,14 @@ object sigma
   }
 
   def myprint(n:int){
+    val a = 10+50
+    println(n+50)
     sum = n
   }
 
   def add(a:int,b:int):int{
     var sum = a+b
+
     return sum
   }
 
@@ -86,7 +89,9 @@ object sigma
     println("call void")
     myprint(10)
     println("sum is")
-    print(sum)
+    println(sum)
+    sum = 5
+    println((sum==5) || (sum==3))
   
   }
 }
