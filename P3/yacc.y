@@ -465,10 +465,15 @@ VAL_DECLARE : VAL ID {
                 
             }
 
-VAR_DECLARE : VAR ID ASSIGN EXPR {
+VAR_DECLARE : VAR ID ASSIGN {
+                if(tables.top == GLOBAL){
+                    fp = jbfile.tellg();
+                }
+
+            } EXPR {
                 Trace("VAR ID ASSIGN EXPR");
                 // declare var with value
-                int result = tables.vec[tables.top].insert(*$2,variableType,$4);
+                int result = tables.vec[tables.top].insert(*$2,variableType,$5);
                 if(result == -1){
                     yyerror("id has been used");
                 }
@@ -476,9 +481,16 @@ VAR_DECLARE : VAR ID ASSIGN EXPR {
                 
 
                 if(tables.top == GLOBAL){
-                    jbGlobalVar(*$2);
-                    jbfile << "\t\tputstatic int " << className << "." << *$2 << endl;
-
+                    
+                    jbfile.seekg(fp);
+                    int val;
+                    if($5->valueType == intType){
+                        val = $5->intval;
+                    }
+                    else if($5->valueType == boolType){
+                        val = $5->boolval ? 1 : 0;
+                    }
+                    jbfile << "\tfield static int " << *$2 << " = " << val << endl;
                 }
                 else{
                     id->stackID = varStackID;
@@ -510,16 +522,20 @@ VAR_DECLARE : VAR ID ASSIGN EXPR {
 
 
             }
-            | VAR ID ':' DATA_TYPE ASSIGN EXPR{
+            | VAR ID ':' DATA_TYPE ASSIGN {
+                if(tables.top == GLOBAL){
+                    fp = jbfile.tellg();
+                }
+            } EXPR{
                 Trace("VAR ID : DATA_TYPE ASSIGN EXPR");
-                if($6->valueType == unknownType){
+                if($7->valueType == unknownType){
                      Warning("unknownType!!!!");
                 }
-                else if($4 != $6->valueType){
+                else if($4 != $7->valueType){
                     yyerror("data type and value type doesn't match");
                 }
                 // declare var with sepcific data type and value
-                int result = tables.vec[tables.top].insert(*$2,variableType,$6);
+                int result = tables.vec[tables.top].insert(*$2,variableType,$7);
                 if(result == -1){
                     yyerror("id has been used");
                 }
@@ -527,8 +543,16 @@ VAR_DECLARE : VAR ID ASSIGN EXPR {
             
 
                 if(tables.top == GLOBAL){
-                    jbGlobalVar(*$2);
-                    jbfile << "\t\tputstatic int " << className << "." << *$2 << endl;
+                    jbfile.seekg(fp);
+                    int val;
+                    if($7->valueType == intType){
+                        val = $7->intval;
+                    }
+                    else if($7->valueType == boolType){
+                        val = $7->boolval ? 1 : 0;
+                    }
+                    jbfile << "\tfield static int " << *$2 << " = " << val << endl;
+                    
 
                 }
                 else{
@@ -846,7 +870,10 @@ EXPR : '(' EXPR ')' {
         valueInfo* buf = new valueInfo();
         if($1->valueType==intType && $3->valueType==intType){
             buf->valueType = intType;
-            buf->intval = ($1->intval / $3->intval);
+            buf->intval = 0;
+            if($3->intval != 0 && $1->intval !=0){
+              buf->intval = ($1->intval / $3->intval);
+            }
         }
         else if($1->valueType==floatType && $3->valueType==intType){
             buf->valueType = floatType;

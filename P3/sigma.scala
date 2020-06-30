@@ -11,7 +11,15 @@ object sigma
   val xx = 33
   var sum: int
   var index: int
+  var zzz : int = 5+3 * xx
+    var xxxxx = zzz - xx
+  var b = true
 
+  def div(x:int,y:int):int
+  {
+    return x/y
+  }
+  
 
   def fib(n:int):int {
     if(n<2)
@@ -20,16 +28,41 @@ object sigma
       return fib(n-1) + fib(n-2)
   }
 
-  def myprint(n:int){
-    val a = 10+50
-    println(n+50)
-    sum = n
-  }
+
+
+
 
   def add(a:int,b:int):int{
     var sum = a+b
 
     return sum
+  }
+
+  def myprint(n:int,flag:boolean){
+    var a = n+n*n
+    val c = 10000
+    print("c is ")
+    println(c)
+    println(a)
+    if(!flag){
+       println("flag false")
+       if(a < c){
+         print("a is smaller than c and a is ")
+         println(a)
+       }
+       else{
+         print("a is")
+         println(a)
+       }
+    }
+    else
+      println("flag true")
+    sum = add(sum,n)
+
+    val flag1 = false
+    val flag2 = false
+    print("flag compute ans ")
+    println(flag1 || flag2)
   }
 
   def main () {
@@ -87,11 +120,13 @@ object sigma
       println("end = 1")
 
     println("call void")
-    myprint(10)
     println("sum is")
+    val flag = false
+    myprint(10,flag)
     println(sum)
     sum = 5
     println((sum==5) || (sum==3))
-  
+
+    println(div(3,2))
   }
 }

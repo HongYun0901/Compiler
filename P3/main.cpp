@@ -262,7 +262,7 @@ void jbGlobalVar(string id ,int i){
 
 
 void jbPushInt(int i){
-    jbfile << "\t\tsipush " << i << endl;
+    jbfile << "\t\tldc " << i << endl;
 }
 
 
@@ -279,7 +279,7 @@ void jbOperation(char op){
         case '/': jbfile << "\t\tidiv" << endl; break;
         case '+': jbfile << "\t\tiadd" << endl; break;
         case '-': jbfile << "\t\tisub" << endl; break;
-        case '!': jbfile << "\t\tldc 1" << endl << "\t\tixor" << endl; break;
+        case '!': jbfile << "\t\ticonst_1" << endl << "\t\tixor" << endl; break;
         case '&': jbfile << "\t\tiand" << endl; break;
         case '|': jbfile << "\t\tior" << endl; break;
 

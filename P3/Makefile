@@ -1,3 +1,11 @@
+ifeq ($(shell uname -s), Darwin)
+	javaa := ./javaa_mac
+else
+	javaa := ./javaa
+endif
+
+
+
 all: parser
 
 parser: lex.yy.cpp y.tab.cpp main.cpp main.h
@@ -14,5 +22,5 @@ clean:
 
 run:
 	./compiler $(file).scala
-	./javaa_mac $(file).scala.jasm
+	$(javaa) $(file).scala.jasm
 	java $(file)
